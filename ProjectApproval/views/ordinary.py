@@ -47,7 +47,6 @@ class ProjectRedirect(ProjectBase, RedirectView):
         except NoReverseMatch:
             raise Http404()
         return super(ProjectRedirect, self).get(request, *args, **kwargs)
-    pass
 
 
 class ProjectList(ProjectBase, ListView):

@@ -15,13 +15,13 @@ class AddActivityForm(ModelForm):
         widget=forms.Textarea(attrs={"rows": 3}))
     activity_time_from = forms.CharField(
         label='活动开始时间',
-        widget=forms
-        .DateTimeInput(attrs={'class': 'datetimepicker form-control'}),
+        widget=forms.DateTimeInput(
+            attrs={'class': 'datetimepicker form-control'}),
         required=False)
     activity_time_to = forms.CharField(
         label='活动结束时间',
-        widget=forms
-        .DateTimeInput(attrs={'class': 'datetimepicker form-control'}),
+        widget=forms.DateTimeInput(
+            attrs={'class': 'datetimepicker form-control'}),
         required=False)
 
     class Meta:
