@@ -18,10 +18,17 @@
                     {{form.form|addcls:'form-control'}}
                 </div>
             </div>
+            <div class="err_group">
             <div class="col-sm-6">
-                {% if form.errors %}
-                    <p class="text-danger">{{ form.errors.as_text }}</p>
+                {% if form.title.errors %}  -->
+                    <p class="text-danger">{{ form.title.errors.as_text }}</p>
                 {% endif %}
+            </div>
+            <div class="col-sm-6">
+                {% if form.form.errors %}
+                    <p class="text-danger">{{ form.form.errors.as_text }}</p>
+                {% endif %}
+            </div>
             </div>
         </div>
         <!--line 2-->
@@ -40,10 +47,17 @@
                     {{form.contact_info|addcls:'form-control'}}
                 </div>
             </div>
+            <div class="err_group">
             <div class="col-sm-6">
-                {% if form.errors %}
-                    <p class="text-danger">{{ form.errors.as_text }}</p>
+                {% if form.charger.errors %}  -->
+                    <p class="text-danger">{{ form.charger.errors.as_text }}</p>
                 {% endif %}
+            </div>
+            <div class="col-sm-6">
+                {% if form.contact_info.errors %}
+                    <p class="text-danger">{{ form.contact_info.errors.as_text }}</p>
+                {% endif %}
+            </div>
             </div>
         </div> 
         <!--line 3-->
@@ -62,10 +76,17 @@
                     {{form.site|addcls:'form-control'}}
                 </div>
             </div>
+            <div class="err_group">
             <div class="col-sm-6">
-                {% if form.errors %}
-                    <p class="text-danger">{{ form.errors.as_text }}</p>
+                {% if form.workshop.errors %}  -->
+                    <p class="text-danger">{{ form.workshop.errors.as_text }}</p>
                 {% endif %}
+            </div>
+            <div class="col-sm-6">
+                {% if form.site.errors %}
+                    <p class="text-danger">{{ form.site.errors.as_text }}</p>
+                {% endif %}
+            </div>
             </div>
         </div>
         <!--line 4-->
@@ -84,10 +105,17 @@
                     {{form.activity_time_to}}
                 </div>
             </div>
+            <div class="err_group">
             <div class="col-sm-6">
-                {% if form.errors %}
-                    <p class="text-danger">{{ form.errors.as_text }}</p>
+                {% if form.activity_time_from.errors %}  -->
+                    <p class="text-danger">{{ form.activity_time_from.errors.as_text }}</p>
                 {% endif %}
+            </div>
+            <div class="col-sm-6">
+                {% if form.activity_time_to.errors %}
+                    <p class="text-danger">{{ form.activity_time_to.errors.as_text }}</p>
+                {% endif %}
+            </div>
             </div>
         </div> 
         <!--line 5-->
@@ -112,10 +140,22 @@
                     {{form.has_social|addcls:'form-control'}}
                 </div>
             </div>
-            <div class="col-sm-6">
-                {% if form.errors %}
-                    <p class="text-danger">{{ form.errors.as_text }}</p>
+            <div class="err_group">
+            <div class="col-sm-4">
+                {% if form.activity_range.errors %}  -->
+                    <p class="text-danger">{{ form.activity_range.errors.as_text }}</p>
                 {% endif %}
+            </div>
+            <div class="col-sm-4">
+                {% if form.amount.errors %}
+                    <p class="text-danger">{{ form.amount.errors.as_text }}</p>
+                {% endif %}
+            </div>
+            <div class="col-sm-4">
+                {% if form.has_social.errors %}
+                    <p class="text-danger">{{ form.has_social.errors.as_text }}</p>
+                {% endif %}
+            </div>
             </div>
         </div> 
         <!--line 6-->
@@ -128,10 +168,12 @@
                     {{form.budget|addcls:'form-control'}}
                 </div>
             </div>
-            <div class="col-sm-6">
-                {% if form.errors %}
-                    <p class="text-danger">{{ form.errors.as_text }}</p>
+            <div class="err_group">
+            <div class="col-sm-12">
+                {% if form.budget.errors %}  -->
+                    <p class="text-danger">{{ form.budget.errors.as_text }}</p>
                 {% endif %}
+            </div>
             </div>
         </div> 
         <!--line 7-->
@@ -144,10 +186,12 @@
                     {{form.comment|addcls:'form-control'}}
                 </div>
             </div>
-            <div class="col-sm-6">
-                {% if form.errors %}
-                    <p class="text-danger">{{ form.errors.as_text }}</p>
+            <div class="err_group">
+            <div class="col-sm-12">
+                {% if form.comment.errors %}  -->
+                    <p class="text-danger">{{ form.comment.errors.as_text }}</p>
                 {% endif %}
+            </div>
             </div>
         </div>    
         <div>
