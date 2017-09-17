@@ -11,17 +11,20 @@ from datetime import datetime, timedelta, timezone
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
 from django.views.generic import DetailView, TemplateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404, JsonResponse
-from django.urls import reverse
+from django.http import Http404, JsonResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.urls import reverse, NoReverseMatch
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404, redirect
-
+from django.urls import reverse_lazy
 
 from authentication import USER_IDENTITY_STUDENT, USER_IDENTITY_TEACHER
 from authentication import USER_IDENTITY_ADMIN
 from SiteReservation.models import Reservation
-from SiteReservation.forms import DateForm
+from SiteReservation.forms import DateForm, ReservationAddForm
 from const.models import Site
+from tools.utils import assign_perms
+from SiteReservation import RESERVATION_SUBMITTED
 
 
 #  TODO: LoginRequiredMixin --> PermissionRequiredMixin
@@ -49,6 +52,7 @@ class ReservationStatus(ReservationBase, FormView):
     def form_valid(self, form):
         uid = self.request.POST.get('site_uid', None)
         date = form.cleaned_data['date']
+        print(date)
         if date < datetime.now().date():
             return JsonResponse({'status': 2, 'reason': '请选择一个未来时间'})
         start_dt = datetime.combine(date, datetime.min.time())
@@ -72,6 +76,7 @@ class ReservationStatus(ReservationBase, FormView):
         return JsonResponse({'status': 0, 'html': status_table})
 
     def form_invalid(self, form):
+        print(form.errors)
         return JsonResponse({'status': 1, 'reason': '表单信息有误，请核对'})
 
 
@@ -80,7 +85,12 @@ class ReservationList(ReservationBase, ListView):
     A view for displaying user-related reservations list. GET only.
     """
 
-    pass
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        kwargs['origin'] = 'List'
+        return super(ListView, self).get_context_data(**kwargs)
 
 
 class ReservationDetail(ReservationBase, DetailView):
@@ -95,8 +105,45 @@ class ReservationAdd(ReservationBase, CreateView):
     """
     A view for creating a new reservation.
     """
+    template_name = 'SiteReservation/reservation_add.html'
+    form_class = ReservationAddForm
+    success_url = reverse_lazy('reservation:index')
+    form_post_url = reverse_lazy('reservation:ordinary:add')
 
-    pass
+    def form_valid(self, form):
+        site = form.cleaned_data['site']
+        workshop = form.cleaned_data['workshop']
+        title = form.cleaned_data['title']
+        activity_time_from = form.cleaned_data['activity_time_from']
+        activity_time_to = form.cleaned_data['activity_time_to']
+        comment = form.cleaned_data['comment']
+
+        reservation = Reservation.objects.create(
+            user=self.request.user,
+            site=site,
+            workshop=workshop,
+            status=RESERVATION_SUBMITTED,
+            title=title,
+            activity_time_from=activity_time_from,
+            activity_time_to=activity_time_to,
+            comment=comment)
+        reservation.save()
+        self.object = reservation
+        assign_perms('reservation', self.request.user, obj=reservation)
+        return JsonResponse({'status': 0, 'redirect': self.success_url})
+    
+    def form_invalid(self, form):
+        context=self.get_context_data()
+        context['form'] = form
+        html = render_to_string(
+            self.template_name, request=self.request,
+            context=context)
+        return JsonResponse({'status': 1, 'html': html})
+
+    def get_context_data(self, **kwargs):
+        kwargs['form_post_url'] = self.form_post_url
+        kwargs['back_url'] = self.success_url
+        return super(ReservationAdd, self).get_context_data(**kwargs)
 
 
 class ReservationUpdate(ReservationBase, UpdateView):
