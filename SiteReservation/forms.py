@@ -52,9 +52,8 @@ class ReservationAddForm(ModelForm):
 
         q = Reservation.objects.filter(status=RESERVATION_APPROVED)
         q = q.filter(Q(site=site_now))
-        a = q.filter(Q(activity_time_to__gt=t2) & Q(activity_time_from__lt=t1))
         b = q.filter(Q(activity_time_to__gt=t1) & Q(activity_time_from__lt=t2))
-        qnum = a.count() + b.count()
+        qnum = b.count()
         if qnum != 0:
             errors['activity_time_to'] = ['该时间段内已存在预约']
         if errors:

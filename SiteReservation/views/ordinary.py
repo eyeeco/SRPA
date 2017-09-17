@@ -52,7 +52,6 @@ class ReservationStatus(ReservationBase, FormView):
     def form_valid(self, form):
         uid = self.request.POST.get('site_uid', None)
         date = form.cleaned_data['date']
-        print(date)
         if date < datetime.now().date():
             return JsonResponse({'status': 2, 'reason': '请选择一个未来时间'})
         start_dt = datetime.combine(date, datetime.min.time())
@@ -76,7 +75,6 @@ class ReservationStatus(ReservationBase, FormView):
         return JsonResponse({'status': 0, 'html': status_table})
 
     def form_invalid(self, form):
-        print(form.errors)
         return JsonResponse({'status': 1, 'reason': '表单信息有误，请核对'})
 
 
@@ -89,7 +87,6 @@ class ReservationList(ReservationBase, ListView):
         return super().get_queryset().filter(user=self.request.user)
 
     def get_context_data(self, **kwargs):
-        kwargs['origin'] = 'List'
         return super(ListView, self).get_context_data(**kwargs)
 
 
