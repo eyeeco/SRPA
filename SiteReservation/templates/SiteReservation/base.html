@@ -10,8 +10,8 @@
     <ul class="nav nav-tabs" role="tablist">
         <li class="white"><a type="button" class="btn page-loader" load-target="{% url 'reservation:status' %}">场地预约情况</a></li>
         {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
-        <li class="white"><a type="button" class="btn page-loader" href="#">我的预约</a></li>
-        <li class="white"><a type="button" class="btn page-loader" href="#">新的预约申请</a></li>
+        <li class="white"><a type="button" class="btn page-loader" load-target="{% url 'reservation:ordinary:list' %}">我的预约</a></li>
+        <li class="white"><a type="button" class="btn page-loader" load-target="{% url 'reservation:ordinary:add' %}">新的预约申请</a></li>
         {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
         <li class="white"><a type="button" class="btn page-loader" href="#">尚未添加</a></li>
         {% endif %}
