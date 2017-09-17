@@ -131,9 +131,9 @@ class ReservationAdd(ReservationBase, CreateView):
         self.object = reservation
         assign_perms('reservation', self.request.user, obj=reservation)
         return JsonResponse({'status': 0, 'redirect': self.success_url})
-    
+
     def form_invalid(self, form):
-        context=self.get_context_data()
+        context = self.get_context_data()
         context['form'] = form
         html = render_to_string(
             self.template_name, request=self.request,
