@@ -10,6 +10,7 @@ from django import forms
 from django.forms import ModelForm
 from django.contrib.admin import widgets
 from django.forms.extras.widgets import SelectDateWidget
+from datetime import datetime, timedelta, timezone
 
 from const.models import CaptchaField
 from SiteReservation.models import Reservation
@@ -45,10 +46,22 @@ class ReservationAddForm(ModelForm):
             errors['activity_time_to'] = ['活动时间应在早8点至晚10点间']
 
         if t2 <= t1:
-            if 'activity_time_from' in errors:
-                errors['activity_time_from'].append('活动结束时间应晚于开始时间')
+            if 'activity_time_to' in errors:
+                errors['activity_time_to'].append('活动结束时间应晚于开始时间')
             else:
-                errors['activity_time_from'] = ['活动结束时间应晚于开始时间']
+                errors['activity_time_to'] = ['活动结束时间应晚于开始时间']
+
+        if t1 < datetime.now(timezone.utc) + timedelta(days=2):
+            if 'activity_time_from' in errors:
+                errors['activity_time_from'].append('只能预约两天后的时间段')
+            else:
+                errors['activity_time_from'] = ['只能预约两天后的时间段']
+        
+        if t1.date() != t2.date():
+            if 'activity_time_to' in errors:
+                errors['activity_time_to'].append('只能预约同一天内的时间段')
+            else:
+                errors['activity_time_to'] = ['只能预约同一天内的时间段']
 
         q = Reservation.objects.filter(status=RESERVATION_APPROVED)
         q = q.filter(Q(site=site_now))
