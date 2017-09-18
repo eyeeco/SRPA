@@ -86,9 +86,6 @@ class ReservationList(ReservationBase, ListView):
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
-    def get_context_data(self, **kwargs):
-        return super(ListView, self).get_context_data(**kwargs)
-
 
 class ReservationDetail(ReservationBase, DetailView):
     """
