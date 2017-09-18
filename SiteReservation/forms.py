@@ -56,7 +56,7 @@ class ReservationAddForm(ModelForm):
                 errors['activity_time_from'].append('只能预约两天后的时间段')
             else:
                 errors['activity_time_from'] = ['只能预约两天后的时间段']
-        
+
         if t1.date() != t2.date():
             if 'activity_time_to' in errors:
                 errors['activity_time_to'].append('只能预约同一天内的时间段')
