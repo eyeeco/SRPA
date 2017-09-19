@@ -174,7 +174,7 @@ class ReservationUpdate(ReservationBase, UpdateView):
     template_name = 'SiteReservation/reservation_update.html'
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
-    form_class = ReservationAddForm
+    form_class = ReservationForm
     success_url = reverse_lazy('reservation:index')
     form_post_url = 'reservation:ordinary:update'
 
