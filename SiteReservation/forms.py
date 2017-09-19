@@ -26,14 +26,14 @@ class DateForm(forms.Form):
             'class': 'form-control'}))
 
 
-class ReservationAddForm(ModelForm):
+class ReservationForm(ModelForm):
     class Meta:
         model = Reservation
         fields = ['site', 'workshop', 'title',
                   'activity_time_from', 'activity_time_to', 'comment']
 
     def clean(self):
-        cleaned_data = super(ReservationAddForm, self).clean()
+        cleaned_data = super(ReservationForm, self).clean()
         errors = {}
         t1 = cleaned_data.get('activity_time_from')
         t2 = cleaned_data.get('activity_time_to')

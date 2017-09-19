@@ -22,7 +22,7 @@ from authentication import USER_IDENTITY_STUDENT, USER_IDENTITY_TEACHER
 from authentication import USER_IDENTITY_ADMIN
 from SiteReservation import RESERVATION_APPROVED
 from SiteReservation.models import Reservation
-from SiteReservation.forms import DateForm, ReservationAddForm, ReservationForm
+from SiteReservation.forms import DateForm, ReservationForm
 from const.models import Site
 from tools.utils import assign_perms
 from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_STUDENT
@@ -85,6 +85,7 @@ class ReservationList(ReservationBase, ListView):
     """
     A view for displaying user-related reservations list. GET only.
     """
+    paginate_by = 12
 
     def get_context_data(self, **kwargs):
         kwargs['RESERVATION_STATUS_STUDENT'] = RESERVATION_STATUS_STUDENT
@@ -108,7 +109,7 @@ class ReservationAdd(ReservationBase, CreateView):
     A view for creating a new reservation.
     """
     template_name = 'SiteReservation/reservation_add.html'
-    form_class = ReservationAddForm
+    form_class = ReservationForm
     success_url = reverse_lazy('reservation:index')
     form_post_url = reverse_lazy('reservation:ordinary:add')
 
