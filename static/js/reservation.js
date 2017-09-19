@@ -3,7 +3,7 @@ $(function () {
 })
 function clean_js()
 {
-    $('.form_datetime').datetimepicker('remove');
+    $('.form_datetime_day').datetimepicker('remove');
     $('.form_datetime_hour').datetimepicker('remove');
 }
 function init_js()
