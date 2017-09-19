@@ -17,6 +17,7 @@ from django.urls import reverse, NoReverseMatch
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.db.models import Q
 
 from authentication import USER_IDENTITY_STUDENT, USER_IDENTITY_TEACHER
 from authentication import USER_IDENTITY_ADMIN
@@ -86,6 +87,7 @@ class ReservationList(ReservationBase, ListView):
     A view for displaying user-related reservations list. GET only.
     """
     paginate_by = 12
+    ordering = '-reservation_time'
 
     def get_context_data(self, **kwargs):
         kwargs['RESERVATION_STATUS_STUDENT'] = RESERVATION_STATUS_STUDENT
@@ -120,6 +122,20 @@ class ReservationAdd(ReservationBase, CreateView):
         activity_time_from = form.cleaned_data['activity_time_from']
         activity_time_to = form.cleaned_data['activity_time_to']
         comment = form.cleaned_data['comment']
+
+        q = Reservation.objects.filter(status=RESERVATION_APPROVED)
+        q = q.filter(Q(site=site))
+        q = q.filter(Q(activity_time_to__gt=activity_time_from) &
+                     Q(activity_time_from__lt=activity_time_to))
+        cnt = q.count()
+        if cnt != 0:
+            context = self.get_context_data()
+            context['form'] = form
+            html = render_to_string(
+                self.template_name, request=self.request,
+                context=context)
+            return JsonResponse({'status': 2, 'reason': '该时间段内已存在预约',
+                                 'html': html})
 
         reservation = Reservation.objects.create(
             user=self.request.user,

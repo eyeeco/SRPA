@@ -37,7 +37,6 @@ class ReservationForm(ModelForm):
         errors = {}
         t1 = cleaned_data.get('activity_time_from')
         t2 = cleaned_data.get('activity_time_to')
-        site_now = cleaned_data.get('site')
 
         if t1.hour < 8 or t1.hour > 22:
             errors['activity_time_from'] = ['活动应在早8点至晚10点间']
@@ -63,12 +62,6 @@ class ReservationForm(ModelForm):
             else:
                 errors['activity_time_to'] = ['只能预约同一天内的时间段']
 
-        q = Reservation.objects.filter(status=RESERVATION_APPROVED)
-        q = q.filter(Q(site=site_now))
-        q = q.filter(Q(activity_time_to__gt=t1) & Q(activity_time_from__lt=t2))
-        cnt = q.count()
-        if cnt != 0:
-            errors['activity_time_to'] = ['该时间段内已存在预约']
         if errors:
             raise forms.ValidationError(errors)
         return cleaned_data

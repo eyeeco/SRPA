@@ -13,7 +13,8 @@ from . import views
 
 ord_patterns = [
     url(r'^list/(?P<page>\d+)$', views.ReservationList.as_view(), name='list'),
-    url(r'^detail/(?P<uid>.+)$', views.ReservationDetail.as_view(), name='detail'),
+    url(r'^detail/(?P<uid>.+)$', views.ReservationDetail.as_view(),
+        name='detail'),
     url(r'^add/$', views.ReservationAdd.as_view(), name='add'),
     url(r'^update/(?P<uid>.+)$', views.ReservationUpdate.as_view(),
         name='update'),
@@ -21,7 +22,8 @@ ord_patterns = [
 
 admin_patterns = [
     url(r'^list/$', views.AdminReservationList.as_view(), name='list'),
-    url(r'^detail/(?P<uid>.+)$', views.AdminReservationDetail.as_view(), name='detail'),
+    url(r'^detail/(?P<uid>.+)$', views.AdminReservationDetail.as_view(),
+        name='detail'),
     url(r'^update/(?P<uid>.+)$', views.AdminReservationUpdate.as_view(),
         name='update'),
 ]
