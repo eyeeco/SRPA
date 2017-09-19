@@ -3,7 +3,7 @@
         {% csrf_token %}
         <div class="form-group col-sm-6" data-toggle="tooltip" data-placement="top" title="请选择欲查询日期">
             <label for="id_date">选择日期</label>
-            <div id="dt_div" class="input-append input-group form_datetime date">
+            <div class="input-append input-group form_datetime_day date">
                 {{form.date}}
                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-remove"></span></span>
                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>

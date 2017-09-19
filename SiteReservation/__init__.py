@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 19:24
-# Last modified: 2017-09-07 19:38
+# Last modified: 2017-09-18 15:00
 # Filename: __init__.py
 # Description:
 RESERVATION_SUBMITTED = 0
@@ -22,3 +22,6 @@ RESERVATION_STATUS = (
     (RESERVATION_CONFIRMED, '预约已确认'),
     (RESERVATION_FINISHED, '预约已完成'),
 )
+
+RESERVATION_STATUS_STUDENT = (
+    RESERVATION_SUBMITTED, RESERVATION_EDITTING, RESERVATION_APPROVED)

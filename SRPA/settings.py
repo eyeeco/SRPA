@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:05
-# Last modified: 2017-09-16 10:56
+# Last modified: 2017-09-18 14:50
 # Filename: settings.py
 # Description:
 """
@@ -91,6 +91,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'SRPA.context_processors.expose_settings',
                 'authentication.context_processors.expose_consts',
+                'SiteReservation.context_processors.expose_consts',
             ],
         },
     },

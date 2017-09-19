@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 08:48
-# Last modified: 2017-09-16 11:41
+# Last modified: 2017-09-18 14:15
 # Filename: urls.py
 # Description:
 from django.conf.urls import url, include
@@ -13,16 +13,16 @@ from . import views
 
 ord_patterns = [
     url(r'^list/$', views.ReservationList.as_view(), name='list'),
-    url(r'^detail/$', views.ReservationDetail.as_view(), name='detail'),
+    url(r'^detail/(?P<uid>.+)$', views.ReservationDetail.as_view(), name='detail'),
     url(r'^add/$', views.ReservationAdd.as_view(), name='add'),
-    url(r'^update/$', views.ReservationUpdate.as_view(),
+    url(r'^update/(?P<uid>.+)$', views.ReservationUpdate.as_view(),
         name='update'),
 ]
 
 admin_patterns = [
     url(r'^list/$', views.AdminReservationList.as_view(), name='list'),
-    url(r'^detail/$', views.AdminReservationDetail.as_view(), name='detail'),
-    url(r'^update/$', views.AdminReservationUpdate.as_view(),
+    url(r'^detail/(?P<uid>.+)$', views.AdminReservationDetail.as_view(), name='detail'),
+    url(r'^update/(?P<uid>.+)$', views.AdminReservationUpdate.as_view(),
         name='update'),
 ]
 

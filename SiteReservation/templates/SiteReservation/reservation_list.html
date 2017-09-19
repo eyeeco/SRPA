@@ -2,9 +2,9 @@
     <tr>
         <th>场地</th>
         <th>工坊</th>
-        <th>预约时间</th>
         <th>活动开始时间</th>
         <th>活动结束时间</th>
+        <th>预约时间</th>
         <th>状态</th>
         <th>操作</th>
     </tr>
@@ -12,13 +12,15 @@
     <tr>
         <td>{{sheet.site}}</td>
         <td>{{sheet.workshop}}</td>
-        <td>{{sheet.reservation_time}}</td>
         <td>{{sheet.activity_time_from}}</td>
         <td>{{sheet.activity_time_to}}</td>
+        <td>{{sheet.reservation_time}}</td>
         <td>{{sheet.get_status_display}}</td>
         <td>
-            <button class="btn btn-info btn-xs "><a href="#">详情</a></button>
-            <button class="btn btn-info btn-xs "><a href="#">修改</a></button>
+            <button class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:detail' sheet.uid %}">详情</button>
+            {% if sheet.status in RESERVATION_STATUS_STUDENT %}
+            <button class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:update' sheet.uid %}">修改</button>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}

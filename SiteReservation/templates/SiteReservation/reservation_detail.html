@@ -1,0 +1,53 @@
+<form class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">场地:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.site}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">工坊:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.workshop}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">活动内容:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.title}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">活动开始时间:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.activity_time_from}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">活动结束时间:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.activity_time_to}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">预约时间:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.reservation_time}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">状态:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.get_status_display}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">备注:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.comment}}</p>
+        </div>
+    </div>
+</form>
+<div class="col-sm-6 col-sm-offset-3">
+    <a type="button" class="btn btn-info btn-block srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:update' object.uid %}">修改</a>
+</div>

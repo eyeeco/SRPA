@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:03
-# Last modified: 2017-09-17 20:37
+# Last modified: 2017-09-18 15:11
 # Filename: ordinary.py
 # Description:
 from datetime import datetime, timedelta, timezone
@@ -22,10 +22,10 @@ from authentication import USER_IDENTITY_STUDENT, USER_IDENTITY_TEACHER
 from authentication import USER_IDENTITY_ADMIN
 from SiteReservation import RESERVATION_APPROVED
 from SiteReservation.models import Reservation
-from SiteReservation.forms import DateForm, ReservationAddForm
+from SiteReservation.forms import DateForm, ReservationAddForm, ReservationForm
 from const.models import Site
 from tools.utils import assign_perms
-from SiteReservation import RESERVATION_SUBMITTED
+from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_STUDENT
 
 
 #  TODO: LoginRequiredMixin --> PermissionRequiredMixin
@@ -86,6 +86,10 @@ class ReservationList(ReservationBase, ListView):
     A view for displaying user-related reservations list. GET only.
     """
 
+    def get_context_data(self, **kwargs):
+        kwargs['RESERVATION_STATUS_STUDENT'] = RESERVATION_STATUS_STUDENT
+        return super(ReservationList, self).get_context_data(**kwargs)
+
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
@@ -95,7 +99,8 @@ class ReservationDetail(ReservationBase, DetailView):
     A view for displaying specified reservation. GET only.
     """
 
-    pass
+    slug_field = 'uid'
+    slug_url_kwarg = 'uid'
 
 
 class ReservationAdd(ReservationBase, CreateView):
@@ -149,4 +154,25 @@ class ReservationUpdate(ReservationBase, UpdateView):
     change, reject change if not match specified status.
     """
 
-    pass
+    template_name = 'SiteReservation/reservation_update.html'
+    slug_field = 'uid'
+    slug_url_kwarg = 'uid'
+    form_class = ReservationForm
+    success_url = reverse_lazy('reservation:index')
+    form_post_url = 'reservation:ordinary:update'
+
+    def get_context_data(self, **kwargs):
+        kwargs['form_post_url'] = self.form_post_url
+        kwargs['back_url'] = self.success_url
+        return super(ReservationUpdate, self).get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        return JsonResponse({'status': 0, 'redirect': self.success_url})
+
+    def form_invalid(self, form):
+        context = self.get_context_data()
+        context['form'] = form
+        html = render_to_string(
+            self.template_name, request=self.request,
+            context=context)
+        return JsonResponse({'status': 1, 'html': html})
