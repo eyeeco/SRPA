@@ -137,18 +137,9 @@ class ReservationAdd(ReservationBase, CreateView):
             return JsonResponse({'status': 2, 'reason': '该时间段内已存在预约',
                                  'html': html})
 
-        reservation = Reservation.objects.create(
-            user=self.request.user,
-            site=site,
-            workshop=workshop,
-            status=RESERVATION_SUBMITTED,
-            title=title,
-            activity_time_from=activity_time_from,
-            activity_time_to=activity_time_to,
-            comment=comment)
-        reservation.save()
-        self.object = reservation
-        assign_perms('reservation', self.request.user, obj=reservation)
+        form.instance.user = self.request.user
+        self.object = form.save()
+        assign_perms('reservation', self.request.user, obj=self.object)
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
     def form_invalid(self, form):
