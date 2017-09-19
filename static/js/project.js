@@ -8,37 +8,12 @@ function clean_js()
 function init_js()
 {
     $('[data-toggle="tooltip"]').tooltip();
-    $('.form_datetime_day').datetimepicker({
-        format: 'yyyy-mm-dd',
-        weekStart: 1,
-        autoclose: true,
-        todayBtn: true,
-        minView: 2,
-    });
     $('.form_datetime_hour').datetimepicker({
         format: 'yyyy-mm-dd hh:00:00',
         weekStart: 1,
         autoclose: true,
         todayBtn: true,
         minView: 1,
-    });
-    $('#search-form').on('submit', function(e){
-        var form = $('#search-form');
-        e.preventDefault();
-        $.ajax({
-            type: 'POST',
-            url: form.attr('action'),
-            data: form.serialize(),
-            success: function(data){
-                if(data.status == 0)
-                    $('#status_table').html(data.html);
-                else
-                {
-                    alert(data.reason);
-                    $('#status_table').html('');
-                }
-            },
-        });
     });
     $('#info-form').on('submit', function(e){
         var form = $('#info-form');

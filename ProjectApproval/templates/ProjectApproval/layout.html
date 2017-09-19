@@ -1,6 +1,7 @@
 {% extends "base/layout.html" %}
 {% load static %}
 {% block navigation %}
+
 {% block header_css %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/project.css' %}">
@@ -10,22 +11,4 @@
 <li><a href='{% url 'reservation:index' %}'>活动场地预约</a></li>
 <li class="active"><a href='{% url 'project:index' %}'>活动预约审批</a></li>
 </ul>
-{% endblock %}
-{% block footer_js %}
-{{ block.super }}
-<script type="text/javascript" src="{% static 'js/auth.js' %}"></script>
-<script>
-function load_project_info(type,obj)
-{
-	$(obj).parent().addClass("active");
-	$(obj).parent().siblings().removeClass("active");
-	
-    $.ajax({
-        url: "{% url 'project:ordinary:load_project_info' %}",
-        type: 'GET', 
-        data: {'type': type},
-        success: project_callback,
-    });
-}
-</script>
 {% endblock %}

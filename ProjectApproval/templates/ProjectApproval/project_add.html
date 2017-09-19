@@ -1,6 +1,6 @@
 {% block project_content %}
 {% load filters %}
- <form class="form-horizontal" method="POST" action="{% url 'project:ordinary:add' %}">
+ <form id="info-form" class="form-horizontal" method="POST" action="{% url 'project:ordinary:add' %}">
         {% csrf_token %}
         <!--line 1-->
         <div class="form-group" >
@@ -20,7 +20,7 @@
             </div>
             <div class="err_group">
             <div class="col-sm-6">
-                {% if form.title.errors %}  -->
+                {% if form.title.errors %}  
                     <p class="text-danger">{{ form.title.errors.as_text }}</p>
                 {% endif %}
             </div>
@@ -49,7 +49,7 @@
             </div>
             <div class="err_group">
             <div class="col-sm-6">
-                {% if form.charger.errors %}  -->
+                {% if form.charger.errors %}  
                     <p class="text-danger">{{ form.charger.errors.as_text }}</p>
                 {% endif %}
             </div>
@@ -78,7 +78,7 @@
             </div>
             <div class="err_group">
             <div class="col-sm-6">
-                {% if form.workshop.errors %}  -->
+                {% if form.workshop.errors %}  
                     <p class="text-danger">{{ form.workshop.errors.as_text }}</p>
                 {% endif %}
             </div>
@@ -91,23 +91,23 @@
         </div>
         <!--line 4-->
         <div class="form-group" >
-            <div class="input_group">
+            <div class="input_group ">
                 <div class="col-sm-2">
                     <label class="control-label">{{form.activity_time_from.label}}:</label>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-4 ">
                     {{form.activity_time_from}}
                 </div>
                 <div class="col-sm-2">
                     <label class="control-label">{{form.activity_time_to.label}}:</label>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-4 ">
                     {{form.activity_time_to}}
                 </div>
             </div>
             <div class="err_group">
             <div class="col-sm-6">
-                {% if form.activity_time_from.errors %}  -->
+                {% if form.activity_time_from.errors %}  
                     <p class="text-danger">{{ form.activity_time_from.errors.as_text }}</p>
                 {% endif %}
             </div>
@@ -142,7 +142,7 @@
             </div>
             <div class="err_group">
             <div class="col-sm-4">
-                {% if form.activity_range.errors %}  -->
+                {% if form.activity_range.errors %}  
                     <p class="text-danger">{{ form.activity_range.errors.as_text }}</p>
                 {% endif %}
             </div>
@@ -170,7 +170,7 @@
             </div>
             <div class="err_group">
             <div class="col-sm-12">
-                {% if form.budget.errors %}  -->
+                {% if form.budget.errors %}  
                     <p class="text-danger">{{ form.budget.errors.as_text }}</p>
                 {% endif %}
             </div>
@@ -188,7 +188,7 @@
             </div>
             <div class="err_group">
             <div class="col-sm-12">
-                {% if form.comment.errors %}  -->
+                {% if form.comment.errors %}  
                     <p class="text-danger">{{ form.comment.errors.as_text }}</p>
                 {% endif %}
             </div>

@@ -22,7 +22,7 @@ from authentication import USER_IDENTITY_STUDENT, USER_IDENTITY_TEACHER
 from authentication import USER_IDENTITY_ADMIN
 from SiteReservation import RESERVATION_APPROVED
 from SiteReservation.models import Reservation
-from SiteReservation.forms import DateForm, ReservationAddForm, ReservationForm
+from SiteReservation.forms import DateForm, ReservationAddForm
 from const.models import Site
 from tools.utils import assign_perms
 from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_STUDENT
@@ -157,7 +157,7 @@ class ReservationUpdate(ReservationBase, UpdateView):
     template_name = 'SiteReservation/reservation_update.html'
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
-    form_class = ReservationForm
+    form_class = ReservationAddForm
     success_url = reverse_lazy('reservation:index')
     form_post_url = 'reservation:ordinary:update'
 

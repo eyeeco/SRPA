@@ -11,9 +11,9 @@ from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy, reverse, NoReverseMatch
-from django.http import HttpResponseRedirect
-from django.http import HttpResponse, HttpResponseBadRequest, Http404
-
+from django.http import Http404, JsonResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.template.loader import render_to_string
 from ProjectApproval import PROJECT_STATUS, PROJECT_SUBMITTED
 from ProjectApproval.forms import AddActivityForm
 from ProjectApproval.models import Project
@@ -31,22 +31,7 @@ class ProjectBase(LoginRequiredMixin):
 
 class ProjectIndex(ProjectBase, TemplateView):
 
-    template_name = "ProjectApproval/base.html"
-
-
-class ProjectRedirect(ProjectBase, RedirectView):
-    """
-    A view for redirect admin users and ordinary users.
-    """
-    def get(self, request, *args, **kwargs):
-        register_type = request.GET.get('type', None)
-        if register_type is None:
-            raise Http404()
-        try:
-            self.url = reverse(register_type)
-        except NoReverseMatch:
-            raise Http404()
-        return super(ProjectRedirect, self).get(request, *args, **kwargs)
+    template_name = "ProjectApproval/index.html"
 
 
 class ProjectList(ProjectBase, ListView):
@@ -74,6 +59,7 @@ class ProjectAdd(ProjectBase, CreateView):
     """
     A view for creating a new project.
     """
+    template_name = 'ProjectApproval/project_add.html'
     form_class = AddActivityForm
     success_url = reverse_lazy('project:index')
     form_post_url = reverse_lazy('project:ordinary:add')
@@ -86,7 +72,15 @@ class ProjectAdd(ProjectBase, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         self.object = form.save()
-        return HttpResponseRedirect(self.get_success_url())
+        return JsonResponse({'status': 0, 'redirect': self.success_url})
+
+    def form_invalid(self, form):
+        context = self.get_context_data()
+        context['form'] = form
+        html = render_to_string(
+            self.template_name, request=self.request,
+            context=context)
+        return JsonResponse({'status': 1, 'html': html})
 
 
 class ProjectUpdate(ProjectBase, UpdateView):
