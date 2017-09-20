@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-14 14:39
-# Last modified: 2017-09-15 19:36
+# Last modified: 2017-09-19 19:56
 # Filename: forms.py
 # Description:
 from django import forms
@@ -27,6 +27,20 @@ class DateForm(forms.Form):
 
 
 class ReservationForm(ModelForm):
+<<<<<<< HEAD
+=======
+    activity_time_from = forms.DateTimeField(
+        label='活动开始时间',
+        input_formats=['%Y-%m-%d %H:00:00'],
+        widget=forms.DateTimeInput(
+            format='%Y-%m-%d %H:00:00'))
+    activity_time_to = forms.DateTimeField(
+        label='活动结束时间',
+        input_formats=['%Y-%m-%d %H:00:00'],
+        widget=forms.DateTimeInput(
+            format='%Y-%m-%d %H:00:00'))
+
+>>>>>>> SRPA/master
     class Meta:
         model = Reservation
         fields = ['site', 'workshop', 'title',

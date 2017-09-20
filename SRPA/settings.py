@@ -92,6 +92,7 @@ TEMPLATES = [
                 'SRPA.context_processors.expose_settings',
                 'authentication.context_processors.expose_consts',
                 'SiteReservation.context_processors.expose_consts',
+                'ProjectApproval.context_processors.expose_consts',
             ],
         },
     },

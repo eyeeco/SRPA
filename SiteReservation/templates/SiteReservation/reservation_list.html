@@ -18,9 +18,6 @@
         <td>{{sheet.get_status_display}}</td>
         <td>
             <button class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:detail' sheet.uid %}">详情</button>
-            {% if sheet.status in RESERVATION_STATUS_STUDENT %}
-            <button class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:update' sheet.uid %}">修改</button>
-            {% endif %}
         </td>
     </tr>
     {% endfor %}
@@ -63,4 +60,8 @@
         {% endif %}
     </ul>
 </nav>
+<<<<<<< HEAD
 {% endif %}
+=======
+{% endif %}
+>>>>>>> SRPA/master

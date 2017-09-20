@@ -1,9 +1,8 @@
-th{
-
+.project-form label{
+    font-size: 1em;
 }
-
-a{
-    color: white;
+.project-detail label{
+	font-size: 1.4em;
 }
 p{
 	font-size: 1.2em ;

@@ -49,5 +49,10 @@
     </div>
 </form>
 <div class="col-sm-6 col-sm-offset-3">
-    <a type="button" class="btn btn-info btn-block srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:update' object.uid %}">修改</a>
+    {% if object.status in RESERVATION_STATUS_CAN_EDIT %}
+    <a type="button" class="btn btn-info srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:update' object.uid %}">修改</a>
+    {% endif %}
+    {% if object.status in RESERVATION_STATUS_CAN_CANCEL %}
+    <a type="button" class="btn btn-danger" href="#">取消</a>
+    {% endif %}
 </div>

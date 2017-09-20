@@ -8,7 +8,7 @@
         <title>{% block web_title %}{{TITLE}}{% endblock %}</title>
         {% block header_css %}
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/srpa.css' %}">
         {% endblock %}
         {% block header_js %}
         {% endblock %}
@@ -22,7 +22,11 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     {% block navigation %}
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href='{% url 'index' %}'>主页</a></li>
+                        {% if request.user.is_authenticated %}
+                        <li><a href="{% url 'index' %}">主页</a></li>
+                        <li><a href="{% url 'reservation:index' %}">活动场地预约</a></li>
+                        <li><a href="{% url 'project:index' %}">活动预约审批</a></li>
+                        {% endif %}
                     </ul>
                     {% endblock %}
                     <ul class="nav navbar-nav navbar-right">
@@ -31,11 +35,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">欢迎, {{user.first_name}}<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
                                     <a href="{% url 'auth:info:student' request.user.user_info.uid %}">个人信息</a>
-                                    {% elif request.user.user_info.identity == USER_IDENTITY_SOCIAL %}
-                                    <a href="{% url 'auth:info:social' request.user.user_info.uid %}">个人信息</a>
-                                    {% endif %}
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'auth:logout' %}">退出登录</a></li>
@@ -51,8 +51,8 @@
         {% block before-container %}
         <div class="main-bg"></div>
         {% endblock %}
-        <div id="main-container" class="container-fluid text-center">
-            <div class="row">
+        <div class="container-fluid text-center">
+            <div id="module" class="row">
                 {% block container %}
                 {% endblock %}
             </div>

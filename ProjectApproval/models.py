@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 19:33
-# Last modified: 2017-09-14 14:01
+# Last modified: 2017-09-20 20:11
 # Filename: models.py
 # Description:
 from uuid import uuid4
@@ -27,6 +27,8 @@ class Project(models.Model):
                                  choices=PROJECT_STATUS,
                                  default=PROJECT_SUBMITTED)
     title = models.CharField(verbose_name='活动内容', max_length=100)
+    apply_time = models.DateTimeField(verbose_name='申请时间',
+                                      auto_now_add=True)
     activity_time_from = models.DateTimeField(verbose_name='活动开始时间')
     activity_time_to = models.DateTimeField(verbose_name='活动结束时间')
     site = models.CharField(verbose_name='活动场地', max_length=100)
