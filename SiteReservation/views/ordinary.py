@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:03
-# Last modified: 2017-09-19 20:18
+# Last modified: 2017-09-20 17:31
 # Filename: ordinary.py
 # Description:
 from datetime import datetime, timedelta, timezone
@@ -27,7 +27,7 @@ from SiteReservation.models import Reservation
 from SiteReservation.forms import DateForm, ReservationForm
 from const.models import Site
 from tools.utils import assign_perms
-from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_STUDENT
+from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_CAN_EDIT
 
 
 #  TODO: LoginRequiredMixin --> PermissionRequiredMixin
@@ -92,7 +92,7 @@ class ReservationList(ReservationBase, ListView):
     ordering = '-reservation_time'
 
     def get_context_data(self, **kwargs):
-        kwargs['RESERVATION_STATUS_STUDENT'] = RESERVATION_STATUS_STUDENT
+        kwargs['RESERVATION_STATUS_CAN_EDIT'] = RESERVATION_STATUS_CAN_EDIT
         return super(ReservationList, self).get_context_data(**kwargs)
 
     def get_queryset(self):
@@ -185,11 +185,20 @@ class ReservationUpdate(ReservationBase, UpdateView):
         kwargs['back_url'] = self.success_url
         return super(ReservationUpdate, self).get_context_data(**kwargs)
 
-    # TODO: status check required
     def get(self, request, *args, **kwargs):
-        if request.is_ajax():
-            return super(ReservationUpdate, self).get(request, *args, **kwargs)
-        return HttpResponseForbidden()
+        self.object = self.get_object()
+        is_ajax = request.is_ajax()
+        allowed_status = self.object.status in RESERVATION_STATUS_CAN_EDIT
+        if not is_ajax or not allowed_status:
+            return HttpResponseForbidden()
+        return self.render_to_response(self.get_context_data())
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        allowed_status = self.object.status in RESERVATION_STATUS_CAN_EDIT
+        if not allowed_status:
+            return HttpResponseForbidden()
+        return super(ReservationUpdate, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
         activity_time_from = form.cleaned_data['activity_time_from']

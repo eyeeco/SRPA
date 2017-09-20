@@ -29,6 +29,9 @@ function init_js()
                 $('#page').html(data.html);
                 init_js();
             },
+            error: function(request, data){
+                alert('与服务器通信发生错误');
+            }
         });
     });
 }

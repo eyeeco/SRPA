@@ -16,7 +16,6 @@ $(function(){
     });
     $(document).on('click', '.srpa-loader', function(e){
         var loader_target = $(this).attr('loader-target');
-        var loader_type = $(this).attr('loader-type');  // module, page
         var target = this;
         if($(target).parents('li').hasClass('active'))
             return;
@@ -27,15 +26,12 @@ $(function(){
                 // Remove older js
                 clean_js();
                 // Refresh HTML data
-                var content = $("#"+loader_type);
+                var content = $("#page");
                 content.fadeOut(0);
                 content.html(data);
                 content.fadeIn(500);
                 // type-related actions
-                if(loader_type == 'page')
-                    $('li.li-page.active').removeClass('active');
-                else if(loader_type == 'module')
-                    $('li.li-module.active').removeClass('active');
+                $('li.li-page.active').removeClass('active');
                 $(target).parents('li').addClass('active');
                 // Init new js
                 init_js();

@@ -1,5 +1,13 @@
 {% extends "base/layout.html" %}
 {% load static %}
-{% load filters %}
 
+{% block header_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+
+{% block footer_js %}
+{{ block.super }}
 <script type="text/javascript" src="{% static 'js/auth.js' %}"></script>
+{% endblock %}

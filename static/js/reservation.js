@@ -39,6 +39,9 @@ function init_js()
                     $('#status_table').html('');
                 }
             },
+            error: function(request, data){
+                alert('与服务器通信发生错误');
+            }
         });
     });
     $('#info-form').on('submit', function(e){
@@ -57,6 +60,9 @@ function init_js()
                 $('#page').html(data.html);
                 init_js();
             },
+            error: function(request, data){
+                alert('与服务器通信发生错误');
+            }
         });
     });
 }

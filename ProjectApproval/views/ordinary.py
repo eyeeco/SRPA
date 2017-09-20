@@ -38,6 +38,9 @@ class ProjectList(ProjectBase, ListView):
     """
     A view for displaying user-related projects list. GET only.
     """
+    paginate_by = 12
+    ordering = '-activity_time_from'
+
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 

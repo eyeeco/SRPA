@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-08 20:06
-# Last modified: 2017-09-20 09:48
+# Last modified: 2017-09-20 11:52
 # Filename: info_update.py
 # Description:
 from django.views.generic import UpdateView
@@ -34,7 +34,6 @@ class InfoUpdateBase(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
         return super(InfoUpdateBase, self).get_context_data(**kwargs)
 
     def get(self, request, *args, **kwargs):
-        slug_val = getattr(request.user.user_info, self.slug_field)
         self.success_url = reverse_lazy(self.success_url)
         return super(InfoUpdateBase, self).get(request, *args, **kwargs)
 
