@@ -1,17 +1,5 @@
-{% extends "base/layout.html"%}
 {% load static %}
 {% load filters %}
-
-{% block web_title %}
-{{block.super}} - 个人信息修改
-{% endblock %}
-
-{% block header_css %}
-{{ block.super }}
-<link rel="stylesheet" href="{% static 'css/auth.css' %}">
-{% endblock %}
-
-{% block container%}
 
 <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12 srpa-background">
     <h2>个人信息修改</h2>
@@ -19,9 +7,3 @@
         {% include './info_form.html' %}
     </div>
 </div>
-{% endblock %}
-
-{% block footer_js %}
-{{ block.super }}
-<script type="text/javascript" src="{% static 'js/auth.js' %}"></script>
-{% endblock %}

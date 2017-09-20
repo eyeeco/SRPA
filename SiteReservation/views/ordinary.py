@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:03
-# Last modified: 2017-09-18 15:11
+# Last modified: 2017-09-19 20:18
 # Filename: ordinary.py
 # Description:
 from datetime import datetime, timedelta, timezone
@@ -12,7 +12,8 @@ from django.views.generic import ListView, CreateView, UpdateView, RedirectView
 from django.views.generic import DetailView, TemplateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, JsonResponse, HttpResponseRedirect
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse
+from django.http import HttpResponseForbidden
 from django.urls import reverse, NoReverseMatch
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404, redirect
@@ -65,7 +66,8 @@ class ReservationStatus(ReservationBase, FormView):
         reservations = Reservation.objects.filter(site=site)
         reservations = reservations.filter(status=RESERVATION_APPROVED)
         reservations = reservations.filter(
-            activity_time_from__range=(start_dt, end_dt))  # day range
+            Q(activity_time_from__gte=start_dt) &
+            Q(activity_time_from__lt=end_dt))
         available_status = [True for _ in range(14)]  # 0 -> 08:00 ~ 09:00
         for r in reservations:
             for hour in range(r.activity_time_from.hour,
@@ -183,7 +185,30 @@ class ReservationUpdate(ReservationBase, UpdateView):
         kwargs['back_url'] = self.success_url
         return super(ReservationUpdate, self).get_context_data(**kwargs)
 
+    # TODO: status check required
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super(ReservationUpdate, self).get(request, *args, **kwargs)
+        return HttpResponseForbidden()
+
     def form_valid(self, form):
+        activity_time_from = form.cleaned_data['activity_time_from']
+        activity_time_to = form.cleaned_data['activity_time_to']
+
+        q = Reservation.objects.filter(status=RESERVATION_APPROVED)
+        q = q.exclude(uid=form.instance.uid)
+        q = q.filter(Q(activity_time_to__gt=activity_time_from) &
+                     Q(activity_time_from__lt=activity_time_to))
+        cnt = q.count()
+        if cnt != 0:
+            context = self.get_context_data()
+            context['form'] = form
+            html = render_to_string(
+                self.template_name, request=self.request,
+                context=context)
+            return JsonResponse({'status': 2, 'reason': '该时间段内已存在预约',
+                                 'html': html})
+        form.save()
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
     def form_invalid(self, form):

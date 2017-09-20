@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-08 20:06
-# Last modified: 2017-09-14 09:51
+# Last modified: 2017-09-20 09:48
 # Filename: info_update.py
 # Description:
 from django.views.generic import UpdateView
@@ -25,12 +25,17 @@ class InfoUpdateBase(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     raise_exception = True
 
     def get_success_url(self):
+        return reverse_lazy(self.success_url)
+
+    def get_context_data(self, **kwargs):
         slug_val = getattr(self.object, self.slug_field)
-        return reverse_lazy(self.success_url, args=(slug_val,))
+        kwargs['form_post_url'] = reverse_lazy(self.form_post_url,
+                                               args=(slug_val,))
+        return super(InfoUpdateBase, self).get_context_data(**kwargs)
 
     def get(self, request, *args, **kwargs):
         slug_val = getattr(request.user.user_info, self.slug_field)
-        self.success_url = reverse_lazy(self.success_url, args=(slug_val,))
+        self.success_url = reverse_lazy(self.success_url)
         return super(InfoUpdateBase, self).get(request, *args, **kwargs)
 
 
@@ -41,5 +46,6 @@ class StudentInfoUpdate(InfoUpdateBase):
 
     model = StudentInfo
     fields = ['student_id', 'institute']
-    success_url = 'auth:info:student'
+    success_url = 'index'
     permission_required = 'update_studentinfo'
+    form_post_url = 'auth:info:update:student'

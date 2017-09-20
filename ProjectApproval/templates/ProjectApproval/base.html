@@ -1,10 +1,4 @@
-{% extends 'ProjectApproval/layout.html' %}
 {% load static %}
-{% block header_css %}
-{{ block.super }}
-<link rel="stylesheet" href="{% static 'css/project.css' %}">
-{% endblock %}
-{% block container%}
 <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12 srpa-background">
     <h3>活动预约审批</h3>
     <ul class="nav nav-tabs" role="tablist">
@@ -20,8 +14,5 @@
         {% endblock %}
     </div>
 </div>
-{% endblock %}
-{% block footer_js %}
-{{ block.super }}
 <script type="text/javascript" src="{% static 'js/project.js' %}"></script>
-{% endblock %}
+

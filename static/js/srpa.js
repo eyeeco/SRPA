@@ -1,3 +1,9 @@
+function clean_js()
+{
+}
+function init_js()
+{
+}
 $(function(){
     $(document).on('click', 'img.captcha', function(){
         var refresh_url = $(this).attr('refresh-url');
@@ -10,9 +16,9 @@ $(function(){
     });
     $(document).on('click', '.srpa-loader', function(e){
         var loader_target = $(this).attr('loader-target');
-        var loader_type = $(this).attr('loader-type');  // module, page, content
+        var loader_type = $(this).attr('loader-type');  // module, page
         var target = this;
-        if(loader_type == 'page' && $(target).parents('li').hasClass('active'))
+        if($(target).parents('li').hasClass('active'))
             return;
         $.ajax({
             type: 'GET',
@@ -27,13 +33,16 @@ $(function(){
                 content.fadeIn(500);
                 // type-related actions
                 if(loader_type == 'page')
-                {
                     $('li.li-page.active').removeClass('active');
-                    $(target).parents('li').addClass('active');
-                }
+                else if(loader_type == 'module')
+                    $('li.li-module.active').removeClass('active');
+                $(target).parents('li').addClass('active');
                 // Init new js
                 init_js();
-            }
+            },
+            error: function(request, error){
+                alert('与服务器通信发生错误');
+            },
         });
     });
 });

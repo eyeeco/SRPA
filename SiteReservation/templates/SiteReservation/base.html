@@ -1,10 +1,4 @@
-{% extends 'SiteReservation/layout.html' %}
 {% load static %}
-{% block header_css %}
-{{ block.super }}
-<link rel="stylesheet" href="{% static 'css/reservation.css' %}">
-{% endblock %}
-{% block container %}
 <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 srpa-background">
     <h3>活动场地预约</h3>
     <ul class="nav nav-tabs" role="tablist">
@@ -21,8 +15,4 @@
         {% endblock %}
     </div>
 </div>
-{% endblock %}
-{% block footer_js %}
-{{ block.super }}
 <script type="text/javascript" src="{% static 'js/reservation.js' %}"></script>
-{% endblock %}

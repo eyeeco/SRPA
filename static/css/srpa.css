@@ -28,3 +28,8 @@ body{
 .nav-tabs{
     margin-bottom: 2em;
 }
+
+.white a{
+    color: white;
+}
+
