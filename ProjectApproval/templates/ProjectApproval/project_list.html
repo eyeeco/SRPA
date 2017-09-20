@@ -1,23 +1,25 @@
 {% block project_content %}
+{% load static %}
 <table class="table"> 
     <tr class="fir_tr">
-        <th>申请人</th>
         <th>工坊</th>
         <th>活动内容</th>
+        <th>活动开始时间</th>
+        <th>活动结束时间</th>
         <th>活动负责人</th>
         <th>状态</th>
         <th>操作</th>
     </tr>
     {% for sheet in object_list %}
     <tr>
-        <td>{{sheet.user}}</td>
         <td>{{sheet.workshop}}</td>
         <td>{{sheet.title}}</td>
+        <td>{{sheet.activity_time_from}}</td>
+        <td>{{sheet.activity_time_to}}</td>
         <td>{{sheet.charger}}</td>
         <td>{{sheet.get_status_display}}</td>
         <td>
-        	<a class="btn btn-info btn-xs " href="{% url 'project:ordinary:detail'%}">详情</a>
-        	<a class="btn btn-info btn-xs " href="#">修改</a>
+        	<a type="button" class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:detail' sheet.uid %}">详情</a>
         </td>
     </tr>
     {% endfor %}
@@ -62,3 +64,4 @@
     </ul>
 </nav>
 {% endif %}
+

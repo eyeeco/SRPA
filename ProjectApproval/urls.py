@@ -13,9 +13,9 @@ from . import views
 
 ord_patterns = [
     url(r'^list/(?P<page>\d+)$', views.ProjectList.as_view(), name='list'),
-    url(r'^detail/$', views.ProjectDetail.as_view(), name='detail'),
+    url(r'^detail/(?P<uid>.+)$', views.ProjectDetail.as_view(), name='detail'),
     url(r'^add/$', views.ProjectAdd.as_view(), name='add'),
-    url(r'^update/$', views.ProjectUpdate.as_view(),
+    url(r'^update/(?P<uid>.+)$', views.ProjectUpdate.as_view(),
         name='update'),
 ]
 

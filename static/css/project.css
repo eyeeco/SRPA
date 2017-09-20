@@ -1,6 +1,9 @@
 .project-form label{
     font-size: 1em;
 }
+.project-detail label{
+	font-size: 1.4em;
+}
 p{
 	font-size: 1.2em ;
 }
