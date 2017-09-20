@@ -139,11 +139,6 @@ class ReservationAdd(ReservationBase, CreateView):
             return JsonResponse({'status': 2, 'reason': '该时间段内已存在预约',
                                  'html': html})
 
-<<<<<<< HEAD
-        form.instance.user = self.request.user
-        self.object = form.save()
-        assign_perms('reservation', self.request.user, obj=self.object)
-=======
         reservation = Reservation.objects.create(
             user=self.request.user,
             site=site,
@@ -156,7 +151,6 @@ class ReservationAdd(ReservationBase, CreateView):
         reservation.save()
         self.object = reservation
         assign_perms('reservation', self.request.user, obj=reservation)
->>>>>>> SRPA/master
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
     def form_invalid(self, form):

@@ -27,8 +27,6 @@ class DateForm(forms.Form):
 
 
 class ReservationForm(ModelForm):
-<<<<<<< HEAD
-=======
     activity_time_from = forms.DateTimeField(
         label='活动开始时间',
         input_formats=['%Y-%m-%d %H:00:00'],
@@ -40,7 +38,6 @@ class ReservationForm(ModelForm):
         widget=forms.DateTimeInput(
             format='%Y-%m-%d %H:00:00'))
 
->>>>>>> SRPA/master
     class Meta:
         model = Reservation
         fields = ['site', 'workshop', 'title',
