@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:03
-# Last modified: 2017-09-20 17:31
+# Last modified: 2017-09-21 18:24
 # Filename: ordinary.py
 # Description:
 from datetime import datetime, timedelta, timezone
@@ -25,6 +25,7 @@ from authentication import USER_IDENTITY_ADMIN
 from SiteReservation import RESERVATION_APPROVED
 from SiteReservation.models import Reservation
 from SiteReservation.forms import DateForm, ReservationForm
+from SiteReservation.utils import is_conflict
 from const.models import Site
 from tools.utils import assign_perms
 from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_CAN_EDIT
@@ -91,10 +92,6 @@ class ReservationList(ReservationBase, ListView):
     paginate_by = 12
     ordering = '-reservation_time'
 
-    def get_context_data(self, **kwargs):
-        kwargs['RESERVATION_STATUS_CAN_EDIT'] = RESERVATION_STATUS_CAN_EDIT
-        return super(ReservationList, self).get_context_data(**kwargs)
-
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
@@ -125,12 +122,8 @@ class ReservationAdd(ReservationBase, CreateView):
         activity_time_to = form.cleaned_data['activity_time_to']
         comment = form.cleaned_data['comment']
 
-        q = Reservation.objects.filter(status=RESERVATION_APPROVED)
-        q = q.filter(Q(site=site))
-        q = q.filter(Q(activity_time_to__gt=activity_time_from) &
-                     Q(activity_time_from__lt=activity_time_to))
-        cnt = q.count()
-        if cnt != 0:
+        conflict = is_conflict(activity_time_from, activity_time_to, site)
+        if conflict:
             context = self.get_context_data()
             context['form'] = form
             html = render_to_string(

@@ -33,3 +33,11 @@ body{
     color: white;
 }
 
+.modal label,.modal-title {
+    color: black;
+}
+
+textarea {
+    resize: none;
+    color: black;
+}

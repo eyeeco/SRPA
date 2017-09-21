@@ -17,7 +17,11 @@
         <td>{{sheet.reservation_time}}</td>
         <td>{{sheet.get_status_display}}</td>
         <td>
+            {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
             <button class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:detail' sheet.uid %}">详情</button>
+            {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+            <button class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:admin:detail' sheet.uid %}">详情</button>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
