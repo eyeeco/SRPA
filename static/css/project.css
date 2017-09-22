@@ -4,6 +4,9 @@
 .project-detail label{
 	font-size: 1em;
 }
+.hide{
+	display: none;
+}
 p{
 	font-size: 1.2em ;
 }

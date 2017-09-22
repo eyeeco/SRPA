@@ -1,5 +1,5 @@
 $(function () {
-    $('.srpa-loader[loader-type="page"]').first().click();
+    $('.srpa-loader[loader-type="page"]')[1].click();
 })
 function clean_js()
 {
