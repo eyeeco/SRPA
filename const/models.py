@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 18:34
-# Last modified: 2017-09-20 16:29
+# Last modified: 2017-09-22 09:52
 # Filename: models.py
 # Description:
 from uuid import uuid4
@@ -49,6 +49,7 @@ class FeedBack(models.Model):
     user = models.ForeignKey(User, verbose_name='审阅人',
                              on_delete=models.CASCADE)
     target_uid = models.UUIDField(verbose_name='被审阅对象')
+    created = models.DateTimeField(verbose_name='审阅时间', auto_now_add=True)
     desc = models.TextField(verbose_name='意见')
 
     class Meta:

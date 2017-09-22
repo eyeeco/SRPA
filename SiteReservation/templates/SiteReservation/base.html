@@ -14,7 +14,7 @@
         <li class="li-page white"><a type="button" class="btn srpa-loader" loader-type="page" loader-target="{% url 'reservation:ordinary:list' page=1 %}">我的预约</a></li>
         <li class="li-page white"><a type="button" class="btn srpa-loader" loader-type="page" loader-target="{% url 'reservation:ordinary:add' %}">新的预约申请</a></li>
         {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
-        <li class="li-page white"><a type="button" class="btn page-loader" href="#">尚未添加</a></li>
+        <li class="li-page white"><a type="button" class="btn srpa-loader" loader-type="page" loader-target="{% url 'reservation:admin:list' page=1 %}">工坊预约</a></li>
         {% endif %}
     </ul>
     <div id="page">

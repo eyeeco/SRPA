@@ -41,4 +41,26 @@ $(function(){
             },
         });
     });
+    $(document).on('submit', '#modal_form form', function(e){
+        var form = $("#modal_form form");
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: form.attr('action'),
+            data: form.serialize(),
+            success: function(data){
+                if(data.status != 0)
+                    alert(data.reason);
+                else
+                {
+                    alert('审核成功');
+                    $('#modal_form').modal('hide');
+                    $('.srpa-loader[loader-type="page"]')[1].click();
+                }
+            },
+            error: function(request, data){
+                alert('与服务器通信发生错误');
+            }
+        });
+    });
 });
