@@ -42,7 +42,6 @@ class AdminProjectDetail(AdminProjectBase, ProjectDetail):
     A view for displaying specified project for admin. GET only.
     """
     def get_context_data(self, **kwargs):
-
         form = FeedBackForm({'target_uid': self.object.uid})
         kwargs['form'] = form
         return super(AdminProjectDetail, self).get_context_data(**kwargs)
