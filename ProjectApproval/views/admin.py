@@ -82,10 +82,6 @@ class AdminProjectUpdate(AdminProjectBase, UpdateView):
         feedback.user = self.request.user
         status = form.cleaned_data['status']
         if status == 'APPROVE':
-            conflict = 0
-            if conflict:
-                return JsonResponse({'status': 3,
-                                     'reason': '当前时间段已存在预约'})
             obj.status = PROJECT_APPROVED
         elif status == 'EDITTING':
             obj.status = PROJECT_EDITTING
