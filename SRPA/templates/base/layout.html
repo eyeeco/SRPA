@@ -35,7 +35,9 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">欢迎, {{user.first_name}}<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>
+                                {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
                                     <a href="{% url 'auth:info:student' request.user.user_info.uid %}">个人信息</a>
+                                {% endif %}
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'auth:logout' %}">退出登录</a></li>

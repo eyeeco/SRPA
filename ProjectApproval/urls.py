@@ -20,9 +20,11 @@ ord_patterns = [
 ]
 
 admin_patterns = [
-    url(r'^list/$', views.AdminProjectList.as_view(), name='list'),
-    url(r'^detail/$', views.AdminProjectDetail.as_view(), name='detail'),
-    url(r'^update/$', views.AdminProjectUpdate.as_view(),
+    url(r'^list/(?P<page>\d+)$', views.AdminProjectList.as_view(),
+        name='list'),
+    url(r'^detail/(?P<uid>.+)$', views.AdminProjectDetail.as_view(),
+        name='detail'),
+    url(r'^update/(?P<uid>.+)$', views.AdminProjectUpdate.as_view(),
         name='update'),
 ]
 
