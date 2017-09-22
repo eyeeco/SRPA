@@ -3,12 +3,12 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:03
-# Last modified: 2017-09-21 18:35
+# Last modified: 2017-09-22 09:45
 # Filename: admin.py
 # Description:
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, UpdateView
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.urls import reverse_lazy
 
 from .ordinary import ReservationList, ReservationUpdate, ReservationDetail

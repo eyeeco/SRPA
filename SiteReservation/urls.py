@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 08:48
-# Last modified: 2017-09-21 15:59
+# Last modified: 2017-09-22 09:44
 # Filename: urls.py
 # Description:
 from django.conf.urls import url, include
@@ -21,7 +21,8 @@ ord_patterns = [
 ]
 
 admin_patterns = [
-    url(r'^list/(?P<page>\d+)$', views.AdminReservationList.as_view(), name='list'),
+    url(r'^list/(?P<page>\d+)$', views.AdminReservationList.as_view(),
+        name='list'),
     url(r'^detail/(?P<uid>.+)$', views.AdminReservationDetail.as_view(),
         name='detail'),
     url(r'^update/(?P<uid>.+)$', views.AdminReservationUpdate.as_view(),
