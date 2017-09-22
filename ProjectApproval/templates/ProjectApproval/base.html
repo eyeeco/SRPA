@@ -12,8 +12,7 @@
         <li class="li-page white"><a type="button" class="btn srpa-loader" loader-type="page" loader-target="{% url 'project:ordinary:list' page=1 %}">已预约活动</a></li>
         <li class="li-page white"><a type="button" class="btn srpa-loader" loader-type="page" loader-target="{% url 'project:ordinary:add' %}">增加活动项</a></li>
         {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
-        <li class="li-page white hide"><a type="button" class="btn srpa-loader" loader-type="page" loader-target="{% url 'project:admin:list' page=1 %}"></a></li>
-        <li class="li-page white"><a type="button" class="btn srpa-loader" loader-type="page" loader-target="{% url 'project:admin:list' page=1 %}">活动列表</a></li>
+        <li class="li-page white"><a type="button" class="btn srpa-loader srpa-list" loader-type="page" loader-target="{% url 'project:admin:list' page=1 %}">活动列表</a></li>
         {% endif %}
     </ul>
     <div id="page">
