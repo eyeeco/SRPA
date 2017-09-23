@@ -4,7 +4,7 @@ from ProjectApproval import PROJECT_TERMINATED, PROJECT_END_CONFIRMED
 from ProjectApproval import PROJECT_END_EDITTING, PROJECT_FINISHED
 from ProjectApproval import PROJECT_COMPLETED
 from ProjectApproval import PROJECT_STATUS_CAN_EDIT
-from ProjectApproval import PROJECT_STATUS_TEACHER
+from ProjectApproval import PROJECT_STATUS_CAN_CHECK
 from ProjectApproval import PROJECT_STATUS_CAN_CANCEL
 
 
@@ -21,6 +21,6 @@ def expose_consts(request):
         'PROJECT_COMPLETED': PROJECT_COMPLETED,
         'PROJECT_STATUS_CAN_EDIT': PROJECT_STATUS_CAN_EDIT,
         'PROJECT_STATUS_CAN_CANCEL': PROJECT_STATUS_CAN_CANCEL,
-        'PROJECT_STATUS_TEACHER': PROJECT_STATUS_TEACHER,
+        'PROJECT_STATUS_CAN_CHECK': PROJECT_STATUS_CAN_CHECK,
     }
     return consts

@@ -55,7 +55,7 @@ $(function(){
                 {
                     alert('审核成功');
                     $('#modal_form').modal('hide');
-                    $('.srpa-loader[loader-type="page"]')[1].click();
+                    $('.srpa-loader.srpa-list').click();
                 }
             },
             error: function(request, data){

@@ -103,7 +103,9 @@
     </div>
 </div>    
 </form>
+{% block opreate %}
 <div class="col-sm-6 col-sm-offset-3">
+    {% if request.user.user_info.identity == USER_IDENTITY_STUDENT%}
     {% if object.status in PROJECT_STATUS_CAN_EDIT %}
     <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:update' object.uid %}">修改</a>
     {% endif %}
@@ -111,4 +113,33 @@
     <a type="button" class="btn btn-danger" href="#">取消</a>
     {% endif %}
     <a href="{{ view.success_url }}" class="btn btn-default btn-md ">返回</a>
+    {% endif %}
+    {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
+    <a type="button" class="btn btn-info" href="#" data-toggle="modal" data-target="#modal_form">审核</a>
+    {% endif %}
 </div>
+{% endblock %}
+{% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+<div class="modal" id="modal_form" tabindex="-1" role="dialog" aria-labelledby="modal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <form class="form-horizontal" action="{% url 'project:admin:update' object.uid %}" method="POST">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal_title">审批意见</h4>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    {{ form.target_uid }}
+                    {{ form.desc }}
+                    {{ form.status }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">确认</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
