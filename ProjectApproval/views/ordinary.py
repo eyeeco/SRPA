@@ -68,7 +68,6 @@ class ProjectAdd(ProjectBase, CreateView):
     form_post_url = 'project:ordinary:add'
 
     def get_context_data(self, **kwargs):
-
         kwargs['form_post_url'] = self.form_post_url
         kwargs['back_url'] = self.success_url
         return super(CreateView, self).get_context_data(**kwargs)
@@ -166,7 +165,7 @@ class ProjectUpdate(ProjectBase, UpdateView):
             form.instance.status = PROJECT_HASSOCIAL
         elif has_social == 'False':
             form.instance.status = PROJECT_SUBMITTED
-            if social_invite:
+        if social_invite:
                 social_invite[0].delete()
         self.object = form.save()
         return JsonResponse({'status': 0, 'redirect': self.success_url})
