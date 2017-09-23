@@ -49,7 +49,7 @@
     </div>
     {% if feedbacks %}
     <h4>审批意见</h4>
-    <table width="800" style="word-wrap:break-word; word-break:break-all;">
+    <table width="750" style="word-wrap:break-word; word-break:break-all; text-align:right; margin:auto">
         <tr>
             <th>审批时间</th>
             <th>审批内容</th>
@@ -69,7 +69,7 @@
     <a type="button" class="btn btn-info srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:update' object.uid %}">修改</a>
     {% endif %}
     {% if object.status in RESERVATION_STATUS_CAN_CANCEL %}
-    <a type="button" class="btn btn-danger" href="#">取消</a>
+    <a type="button" class="btn btn-danger srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:terminate' object.uid %}">取消</a>
     {% endif %}
     {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
     <a type="button" class="btn btn-info" href="#" data-toggle="modal" data-target="#modal_form">审核</a>

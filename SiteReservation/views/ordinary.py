@@ -9,7 +9,7 @@
 from datetime import datetime, timedelta, timezone
 
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
-from django.views.generic import DetailView, TemplateView, FormView
+from django.views.generic import DetailView, TemplateView, FormView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, JsonResponse, HttpResponseRedirect
 from django.http import HttpResponse
@@ -22,7 +22,7 @@ from django.db.models import Q
 
 from authentication import USER_IDENTITY_STUDENT, USER_IDENTITY_TEACHER
 from authentication import USER_IDENTITY_ADMIN
-from SiteReservation import RESERVATION_APPROVED
+from SiteReservation import RESERVATION_APPROVED, RESERVATION_TERMINATED
 from SiteReservation.models import Reservation
 from SiteReservation.forms import DateForm, ReservationForm
 from SiteReservation.utils import is_conflict
@@ -90,11 +90,21 @@ class ReservationList(ReservationBase, ListView):
     A view for displaying user-related reservations list. GET only.
     """
     paginate_by = 12
-    ordering = '-reservation_time'
+    ordering = ['status', '-reservation_time']
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
+
+class ReservationTerminate(ReservationBase, View):
+    """
+    A view for displaying user-related reservations list after terminating.
+    """
+    
+    success_url = reverse_lazy('reservation:index')
+    def get(self, request, *args, **kwargs):
+        Reservation.objects.filter(uid=kwargs['uid']).update(status=RESERVATION_TERMINATED)
+        return JsonResponse({'status': 0, 'redirect': self.success_url})
 
 class ReservationDetail(ReservationBase, DetailView):
     """
@@ -138,7 +148,7 @@ class ReservationAdd(ReservationBase, CreateView):
 
         form.instance.user = self.request.user
         self.object = form.save()
-        assign_perms('reservation', self.request.user, obj=reservation)
+        assign_perms('reservation', self.request.user, obj=self.object)
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
     def form_invalid(self, form):
