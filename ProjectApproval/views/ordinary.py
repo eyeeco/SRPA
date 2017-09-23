@@ -107,8 +107,8 @@ class ProjectSocialAdd(ProjectBase, CreateView):
         return self.render_to_response(self.get_context_data(**kwargs))
 
     def get_context_data(self, **kwargs):
-        kwargs['form_post_url'] = reverse_lazy('project:ordinary:social_add',
-                                               args=(kwargs['uid'],))
+        kwargs['form_post_url'] = reverse('project:ordinary:social_add',
+                                          args=(kwargs['uid'],))
         kwargs['back_url'] = self.success_url
         return super(ProjectSocialAdd, self).get_context_data(**kwargs)
 
