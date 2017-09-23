@@ -75,9 +75,9 @@ class ProjectAdd(ProjectBase, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         has_social = form.cleaned_data['has_social']
-        if has_social == 'True':
+        if has_social:
             form.instance.status = PROJECT_HASSOCIAL
-        elif has_social == 'False':
+        else:
             form.instance.status = PROJECT_SUBMITTED
         self.object = form.save()
         return JsonResponse({'status': 0, 'redirect': self.success_url})
