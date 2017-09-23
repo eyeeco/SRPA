@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:05
-# Last modified: 2017-09-18 14:50
+# Last modified: 2017-09-23 10:13
 # Filename: settings.py
 # Description:
 """
@@ -151,6 +151,9 @@ STATICFILES_DIRS = [
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+TMP_FILES_ROOT = os.path.join(MEDIA_ROOT, 'tmp_files')
+TMP_FILES_URL = os.path.join(MEDIA_URL, 'tmp_files')
 
 
 # Captcha settings
