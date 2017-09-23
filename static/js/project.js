@@ -1,6 +1,5 @@
 $(function () {
     $('.srpa-loader[loader-type="page"]').first().click();
-    
 })
 function clean_js()
 {
