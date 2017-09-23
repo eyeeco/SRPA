@@ -7,7 +7,7 @@
 # Filename: admin.py
 # Description:
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, UpdateView
+from django.views.generic import ListView, UpdateView, DetailView
 from django.http import JsonResponse, HttpResponseForbidden
 from django.urls import reverse_lazy
 
@@ -43,11 +43,12 @@ class AdminReservationList(AdminReservationBase, ListView):
         return super().get_queryset().filter(workshop__in=workshops)
 
 
-class AdminReservationDetail(AdminReservationBase, ReservationDetail):
+class AdminReservationDetail(AdminReservationBase, DetailView):
     """
     A view for displaying specified reservation for admin. GET only.
     """
-
+    slug_field = 'uid'
+    slug_url_kwarg = 'uid'
     def get_context_data(self, **kwargs):
         form = FeedBackForm({'target_uid': self.object.uid})
         kwargs['form'] = form

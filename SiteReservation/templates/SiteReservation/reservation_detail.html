@@ -47,6 +47,21 @@
             <p class="form-control-static">{{object.comment}}</p>
         </div>
     </div>
+    {% if feedbacks %}
+    <h4>审批意见</h4>
+    <table width="800" style="word-wrap:break-word; word-break:break-all;">
+        <tr>
+            <th>审批时间</th>
+            <th>审批内容</th>
+        </tr>
+        {% for feedback in feedbacks %}
+        <tr>
+            <td height='30' width='80' style="table-layout:fixed">{{feedback.created}}</td>
+            <td height='30' width='80' style="table-layout:fixed">{{feedback.desc}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
 </form>
 <div class="col-sm-6 col-sm-offset-3">
     {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}

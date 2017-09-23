@@ -26,7 +26,7 @@ from SiteReservation import RESERVATION_APPROVED
 from SiteReservation.models import Reservation
 from SiteReservation.forms import DateForm, ReservationForm
 from SiteReservation.utils import is_conflict
-from const.models import Site
+from const.models import Site, FeedBack
 from tools.utils import assign_perms
 from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_CAN_EDIT
 
@@ -103,6 +103,10 @@ class ReservationDetail(ReservationBase, DetailView):
 
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
+    def get_context_data(self, **kwargs):
+        feedbacks = FeedBack.objects.filter(target_uid=self.object.uid).order_by('-created')
+        kwargs['feedbacks'] = feedbacks
+        return super(ReservationDetail, self).get_context_data(**kwargs)
 
 
 class ReservationAdd(ReservationBase, CreateView):
@@ -132,17 +136,8 @@ class ReservationAdd(ReservationBase, CreateView):
             return JsonResponse({'status': 2, 'reason': '该时间段内已存在预约',
                                  'html': html})
 
-        reservation = Reservation.objects.create(
-            user=self.request.user,
-            site=site,
-            workshop=workshop,
-            status=RESERVATION_SUBMITTED,
-            title=title,
-            activity_time_from=activity_time_from,
-            activity_time_to=activity_time_to,
-            comment=comment)
-        reservation.save()
-        self.object = reservation
+        form.instance.user = self.request.user
+        self.object = form.save()
         assign_perms('reservation', self.request.user, obj=reservation)
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
