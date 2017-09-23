@@ -31,7 +31,7 @@ class ActivityForm(ModelForm):
             attrs={'class': 'form_datetime_hour form-control'},
             format='%Y-%m-%d %H:00:00'),
         required=False)
-    has_social = forms.CharField(
+    has_social = forms.BooleanField(
         label='是否有校外人员参与',
         widget=forms.CheckboxInput(attrs={}), required=False)
 
@@ -60,6 +60,9 @@ class ActivityForm(ModelForm):
 
 class SocialInvitationForm(ModelForm):
 
+    target_uid = forms.CharField(
+        widget=forms.HiddenInput(attrs={
+            'class': 'form-control'}))
     socials_info = forms.CharField(
         label='校外人员名单',
         widget=forms.TextInput(attrs={
@@ -75,4 +78,4 @@ class SocialInvitationForm(ModelForm):
 
     class Meta:
         model = SocialInvitation
-        fields = ['socials_info', 'attend_info', 'ideology_info']
+        fields = ['target_uid', 'socials_info', 'attend_info', 'ideology_info']

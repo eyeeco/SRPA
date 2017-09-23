@@ -24,7 +24,8 @@ class Project(models.Model):
     workshop = models.ForeignKey(Workshop, verbose_name='工坊',
                                  on_delete=models.CASCADE)
     status = models.IntegerField(verbose_name='状态',
-                                 choices=PROJECT_STATUS)
+                                 choices=PROJECT_STATUS,
+                                 default=PROJECT_SUBMITTED)
     title = models.CharField(verbose_name='活动名称', max_length=100)
     apply_time = models.DateTimeField(verbose_name='申请时间',
                                       auto_now_add=True)

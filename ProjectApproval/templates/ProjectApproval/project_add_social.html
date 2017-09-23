@@ -1,11 +1,11 @@
 <form id="info-form" class="form-horizontal project-form" method="POST" action="{{form_post_url}}">
 {% csrf_token %}
+{{form.target_uid}}
 <div class="form-group" >
     <div class="col-sm-4">
         <label class="control-label">{{form.socials_info.label}}:</label>
     </div>
     <div class="col-sm-8">
-        {{form.uid}}
         {{form.socials_info}}
     </div>
 </div> 
