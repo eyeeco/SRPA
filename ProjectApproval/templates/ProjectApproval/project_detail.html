@@ -132,7 +132,7 @@
     <a type="button" class="btn btn-danger" href="#">取消</a>
     {% endif %}
     {% if object.status == PROJECT_HASSOCIAL %}
-    <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:social' object.uid %}">校外人员表单填写</a>
+    <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:social_add' object.uid %}">校外人员表单填写</a>
     {% endif %}
     <a href="{{ view.success_url }}" class="btn btn-default btn-md ">返回</a>
     {% endif %}

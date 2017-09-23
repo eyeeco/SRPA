@@ -89,7 +89,7 @@ class ProjectAdd(ProjectBase, CreateView):
         return JsonResponse({'status': 1, 'html': html})
 
 
-class ProjectSocial(ProjectBase, CreateView):
+class ProjectSocialAdd(ProjectBase, CreateView):
     """
     A view for creating a information set for social people.
     """
@@ -107,9 +107,10 @@ class ProjectSocial(ProjectBase, CreateView):
         return self.render_to_response(self.get_context_data(**kwargs))
 
     def get_context_data(self, **kwargs):
-        kwargs['form_post_url'] = '/project/ordinary/social/' + kwargs['uid']
+        kwargs['form_post_url'] = reverse_lazy('project:ordinary:social_add',
+                                               args=(kwargs['uid'],))
         kwargs['back_url'] = self.success_url
-        return super(ProjectSocial, self).get_context_data(**kwargs)
+        return super(ProjectSocialAdd, self).get_context_data(**kwargs)
 
     def form_valid(self, form):
         project = Project.objects.filter(
@@ -173,8 +174,8 @@ class ProjectUpdate(ProjectBase, UpdateView):
             form.instance.status = PROJECT_HASSOCIAL
         else:
             form.instance.status = PROJECT_SUBMITTED
-        if social_invitation:
-            social_invitation.delete()
+            if social_invitation:
+                social_invitation.delete()
         self.object = form.save()
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
