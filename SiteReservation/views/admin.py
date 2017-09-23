@@ -49,6 +49,7 @@ class AdminReservationDetail(AdminReservationBase, DetailView):
     """
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
+
     def get_context_data(self, **kwargs):
         form = FeedBackForm({'target_uid': self.object.uid})
         kwargs['form'] = form

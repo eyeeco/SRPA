@@ -15,6 +15,7 @@ from .admin import AdminReservationDetail
 
 __all__ = [
     'ReservationIndex', 'ReservationDetail', 'AdminReservationDetail',
-    'ReservationList', 'ReservationAdd', 'ReservationUpdate', 'ReservationTerminate',
+    'ReservationList', 'ReservationAdd', 'ReservationUpdate',
+    'ReservationTerminate',
     'AdminReservationList', 'AdminReservationUpdate', 'ReservationStatus',
 ]

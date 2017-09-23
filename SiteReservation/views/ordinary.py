@@ -100,11 +100,13 @@ class ReservationTerminate(ReservationBase, View):
     """
     A view for displaying user-related reservations list after terminating.
     """
-    
+
     success_url = reverse_lazy('reservation:index')
+
     def get(self, request, *args, **kwargs):
         Reservation.objects.filter(uid=kwargs['uid']).update(status=RESERVATION_TERMINATED)
         return JsonResponse({'status': 0, 'redirect': self.success_url})
+
 
 class ReservationDetail(ReservationBase, DetailView):
     """
@@ -113,6 +115,7 @@ class ReservationDetail(ReservationBase, DetailView):
 
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
+
     def get_context_data(self, **kwargs):
         feedbacks = FeedBack.objects.filter(target_uid=self.object.uid).order_by('-created')
         kwargs['feedbacks'] = feedbacks
@@ -130,11 +133,8 @@ class ReservationAdd(ReservationBase, CreateView):
 
     def form_valid(self, form):
         site = form.cleaned_data['site']
-        workshop = form.cleaned_data['workshop']
-        title = form.cleaned_data['title']
         activity_time_from = form.cleaned_data['activity_time_from']
         activity_time_to = form.cleaned_data['activity_time_to']
-        comment = form.cleaned_data['comment']
 
         conflict = is_conflict(activity_time_from, activity_time_to, site)
         if conflict:
