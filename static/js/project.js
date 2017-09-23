@@ -1,5 +1,6 @@
 $(function () {
     $('.srpa-loader[loader-type="page"]').first().click();
+    
 })
 function clean_js()
 {
@@ -25,6 +26,9 @@ function init_js()
             success: function(data){
                 if(data.status == 0)
                     window.location.href=data.redirect;
+                if(data.status == 2)
+                    alert(data.reason);
+                    $('#status_table').html('');
                 clean_js();
                 $('#page').html(data.html);
                 init_js();

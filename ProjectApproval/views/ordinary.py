@@ -16,8 +16,9 @@ from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.template.loader import render_to_string
 from ProjectApproval import PROJECT_STATUS, PROJECT_SUBMITTED
-from ProjectApproval.forms import ActivityForm
-from ProjectApproval.models import Project
+from ProjectApproval import PROJECT_HASSOCIAL
+from ProjectApproval.forms import ActivityForm, SocialInvitationForm
+from ProjectApproval.models import Project, SocialInvitation
 from const.models import Workshop
 from authentication.models import UserInfo
 from authentication import USER_IDENTITIES
@@ -42,7 +43,7 @@ class ProjectList(ProjectBase, ListView):
     A view for displaying user-related projects list. GET only.
     """
     paginate_by = 12
-    ordering = '-activity_time_from'
+    ordering = ['status', '-apply_time']
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
@@ -67,12 +68,18 @@ class ProjectAdd(ProjectBase, CreateView):
     form_post_url = 'project:ordinary:add'
 
     def get_context_data(self, **kwargs):
+
         kwargs['form_post_url'] = self.form_post_url
         kwargs['back_url'] = self.success_url
         return super(CreateView, self).get_context_data(**kwargs)
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        has_social = form.cleaned_data['has_social']
+        if has_social == 'True':
+            form.instance.status = PROJECT_HASSOCIAL
+        elif has_social == 'False':
+            form.instance.status = PROJECT_SUBMITTED
         self.object = form.save()
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
@@ -83,6 +90,38 @@ class ProjectAdd(ProjectBase, CreateView):
             self.template_name, request=self.request,
             context=context)
         return JsonResponse({'status': 1, 'html': html})
+
+
+class ProjectSocial(ProjectBase, CreateView):
+    """
+    A view for creating a information set for social people.
+    """
+    template_name = 'ProjectApproval/project_add_social.html'
+    form_class = SocialInvitationForm
+    success_url = reverse_lazy('project:index')
+
+    def get_context_data(self, **kwargs):
+        uid = self.request.get_full_path().split('/')[4]
+        kwargs['form_post_url'] = '/project/ordinary/social/' + uid
+        kwargs['back_url'] = self.success_url
+        return super(ProjectSocial, self).get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        uid = self.request.get_full_path().split('/')[4]
+        project = Project.objects.filter(uid=uid)[0]
+        project_social = SocialInvitation.objects.create(
+            project=project,
+            socials_info=form.cleaned_data['socials_info'],
+            attend_info=form.cleaned_data['attend_info'],
+            ideology_info=form.cleaned_data['ideology_info'])
+        project_social.save()
+        if project.status == PROJECT_HASSOCIAL:
+            project.status = PROJECT_SUBMITTED
+        project.save()
+        return JsonResponse({'status': 0, 'redirect': self.success_url})
+
+    def form_invalid(self, form):
+        return JsonResponse({'status': 1, 'reason': '无效输入'})
 
 
 class ProjectUpdate(ProjectBase, UpdateView):
@@ -119,5 +158,18 @@ class ProjectUpdate(ProjectBase, UpdateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        has_social = form.cleaned_data['has_social']
+        uid = self.request.get_full_path().split('/')[4]
+        project = Project.objects.filter(uid=uid)[0]
+        social_invite = project.socialinvitation_set.all()
+        if has_social == 'True':
+            form.instance.status = PROJECT_HASSOCIAL
+        elif has_social == 'False':
+            form.instance.status = PROJECT_SUBMITTED
+            if social_invite:
+                social_invite[0].delete()
         self.object = form.save()
         return JsonResponse({'status': 0, 'redirect': self.success_url})
+
+    def form_invalid(self, form):
+        return JsonResponse({'status': 1, 'reason': '无效输入'})

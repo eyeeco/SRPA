@@ -1,0 +1,37 @@
+<form id="info-form" class="form-horizontal project-form" method="POST" action="{{form_post_url}}">
+{% csrf_token %}
+<div class="form-group" >
+    <div class="col-sm-4">
+        <label class="control-label">{{form.socials_info.label}}:</label>
+    </div>
+    <div class="col-sm-8">
+        {{form.uid}}
+        {{form.socials_info}}
+    </div>
+</div> 
+ <div class="form-group" >
+    <div class="col-sm-4">
+        <label class="control-label">{{form.attend_info.label}}:</label>
+    </div>
+    <div class="col-sm-8">
+        {{form.attend_info}}
+    </div>
+</div>
+<div class="form-group" >
+    <div class="col-sm-4">
+        <label class="control-label">{{form.ideology_info.label}}:</label>
+    </div>
+    <div class="col-sm-8">
+        {{form.ideology_info}}
+    </div>
+</div> 
+{% if form.errors %}
+{% for error in form.non_field_errors %}
+<p class="text-danger">{{ error }}</p>
+{% endfor %}
+{% endif %} 
+<div>
+    <button type="submit" class="btn btn-primary btn-md">提交</button>
+    <a href="{{ back_url }}" class="btn btn-primary btn-md">返回</a>
+</div> 
+</form>
