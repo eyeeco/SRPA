@@ -48,19 +48,23 @@
         </div>
     </div>
     {% if feedbacks %}
-    <h4>审批意见</h4>
-    <table width="750" style="word-wrap:break-word; word-break:break-all; text-align:right; margin:auto">
-        <tr>
-            <th>审批时间</th>
-            <th>审批内容</th>
-        </tr>
-        {% for feedback in feedbacks %}
-        <tr>
-            <td height='30' width='80' style="table-layout:fixed">{{feedback.created}}</td>
-            <td height='30' width='80' style="table-layout:fixed">{{feedback.desc}}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="form-group" >
+        <div class="col-sm-2">
+            <label class="control-label">审批意见:</label>
+        </div>
+        <div class="col-sm-10">
+            {% for feedback in feedbacks %}
+            <div class="row">
+                <div class="col-sm-4">
+                    <p class="form-control-static">{{feedback.created}}</p>
+                </div>
+                <div class="col-sm-8">
+                    <p class="form-control-static">{{feedback.desc}}</p>
+                </div>
+            </div>
+            {% endfor%}
+        </div>
+    </div>
     {% endif %}
 </form>
 <div class="col-sm-6 col-sm-offset-3">

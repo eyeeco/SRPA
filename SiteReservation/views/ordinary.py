@@ -101,7 +101,7 @@ class ReservationTerminate(ReservationBase, View):
     A view for displaying user-related reservations list after terminating.
     """
 
-    success_url = reverse_lazy('reservation:status')
+    success_url = reverse_lazy('reservation:index')
 
     def get(self, request, *args, **kwargs):
         Reservation.objects.filter(uid=kwargs['uid']).update(status=RESERVATION_TERMINATED)
