@@ -14,6 +14,7 @@ from django.urls import reverse_lazy
 from .ordinary import ReservationList, ReservationUpdate, ReservationDetail
 
 from const.forms import FeedBackForm
+from const.models import FeedBack
 from SiteReservation import RESERVATION_STATUS_CAN_CHECK, RESERVATION_EDITTING
 from SiteReservation import RESERVATION_APPROVED, RESERVATION_TERMINATED
 from SiteReservation.models import Reservation
@@ -53,6 +54,8 @@ class AdminReservationDetail(AdminReservationBase, DetailView):
     def get_context_data(self, **kwargs):
         form = FeedBackForm({'target_uid': self.object.uid})
         kwargs['form'] = form
+        feedbacks = FeedBack.objects.filter(target_uid=self.object.uid).order_by('-created')
+        kwargs['feedbacks'] = feedbacks
         return super(AdminReservationDetail, self).get_context_data(**kwargs)
 
 

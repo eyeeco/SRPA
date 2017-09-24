@@ -105,7 +105,8 @@ class ReservationTerminate(ReservationBase, View):
 
     def get(self, request, *args, **kwargs):
         Reservation.objects.filter(uid=kwargs['uid']).update(status=RESERVATION_TERMINATED)
-        return JsonResponse({'status': 0, 'redirect': self.success_url})
+        return redirect(self.success_url)
+        # return JsonResponse({'status': 0, 'redirect': self.success_url})
 
 
 class ReservationDetail(ReservationBase, DetailView):
