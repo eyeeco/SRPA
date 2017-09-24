@@ -88,10 +88,10 @@
 <!--line 6-->
 <div class="form-group" >
     <div class="col-sm-2">
-        <label class="control-label">{{form.budget.label}}:</label>
+        <label class="control-label">{{form.content.label}}:</label>
     </div>
     <div class="col-sm-10">
-        {{form.budget|addcls:'form-control'}}
+        {{form.content|addcls:'form-control'}}
     </div>
 </div> 
 <!--line 7-->
@@ -103,7 +103,15 @@
         {{form.comment|addcls:'form-control'}}
     </div>
 </div>    
-
+<!--line 8-->
+<div class="form-group" >
+    <div class="col-sm-2">
+        <label class="control-label">{{form.budget.label}}:</label>
+    </div>
+    <div class="col-sm-10">
+        {{form.budget|addcls:'form-control'}}
+    </div>
+</div>   
 {% if form.errors %}
 {% for error in form.non_field_errors %}
 <p class="text-danger">{{ error }}</p>

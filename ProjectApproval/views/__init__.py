@@ -7,7 +7,7 @@
 # Filename: __init__.py
 # Description:
 from .ordinary import ProjectList, ProjectAdd, ProjectUpdate, ProjectIndex
-from .ordinary import ProjectDetail
+from .ordinary import ProjectDetail, ProjectSocialAdd
 from .admin import AdminProjectList, AdminProjectUpdate, AdminProjectDetail
 
 
@@ -15,4 +15,5 @@ __all__ = [
     'ProjectDetail', 'AdminProjectDetail',
     'ProjectList', 'ProjectAdd', 'ProjectUpdate',
     'AdminProjectList', 'AdminProjectUpdate',
+    'ProjectSocialAdd'
 ]

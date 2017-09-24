@@ -101,7 +101,26 @@
     <div class="col-sm-10">
         <p class="form-control-static">{{object.comment}}</p>
     </div>
-</div>    
+</div>
+{% if form %}
+<div class="form-group" >
+    <div class="col-sm-2">
+        <label class="control-label">审批意见:</label>
+    </div>
+    <div class="col-sm-10">
+        {% for list in feed %}
+        <div class="row">
+            <div class="col-sm-4">
+                <p class="form-control-static">{{list.created}}</p>
+            </div>
+            <div class="col-sm-8">
+                <p class="form-control-static">{{list.desc}}</p>
+            </div>
+        </div>
+        {% endfor%}
+    </div>
+</div>
+{% endif %}
 </form>
 {% block opreate %}
 <div class="col-sm-6 col-sm-offset-3">
@@ -112,10 +131,15 @@
     {% if object.status in PROJECT_STATUS_CAN_CANCEL %}
     <a type="button" class="btn btn-danger" href="#">取消</a>
     {% endif %}
+    {% if object.status == PROJECT_HASSOCIAL %}
+    <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:social_add' object.uid %}">校外人员表单填写</a>
+    {% endif %}
     <a href="{{ view.success_url }}" class="btn btn-default btn-md ">返回</a>
     {% endif %}
     {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
+    {% if object.status in PROJECT_STATUS_CAN_CHECK %}
     <a type="button" class="btn btn-info" href="#" data-toggle="modal" data-target="#modal_form">审核</a>
+    {% endif %}   
     {% endif %}
 </div>
 {% endblock %}

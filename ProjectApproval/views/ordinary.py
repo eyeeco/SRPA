@@ -16,7 +16,8 @@ from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.template.loader import render_to_string
 from ProjectApproval import PROJECT_STATUS, PROJECT_SUBMITTED
-from ProjectApproval.forms import ActivityForm
+from ProjectApproval import PROJECT_HASSOCIAL
+from ProjectApproval.forms import ActivityForm, SocialInvitationForm
 from ProjectApproval.models import Project
 from const.models import Workshop
 from authentication.models import UserInfo
@@ -42,7 +43,7 @@ class ProjectList(ProjectBase, ListView):
     A view for displaying user-related projects list. GET only.
     """
     paginate_by = 12
-    ordering = '-activity_time_from'
+    ordering = ['status', '-apply_time']
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
@@ -73,6 +74,9 @@ class ProjectAdd(ProjectBase, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        has_social = form.cleaned_data['has_social']
+        if has_social:
+            form.instance.status = PROJECT_HASSOCIAL
         self.object = form.save()
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
@@ -83,6 +87,50 @@ class ProjectAdd(ProjectBase, CreateView):
             self.template_name, request=self.request,
             context=context)
         return JsonResponse({'status': 1, 'html': html})
+
+
+class ProjectSocialAdd(ProjectBase, CreateView):
+    """
+    A view for creating a information set for social people.
+    """
+    slug_field = 'uid'
+    slug_url_kwarg = 'uid'
+    template_name = 'ProjectApproval/project_add_social.html'
+    form_class = SocialInvitationForm
+    success_url = reverse_lazy('project:index')
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = SocialInvitationForm({'target_uid': kwargs['uid']})
+        kwargs['form'] = form
+        kwargs['uid'] = kwargs['uid']
+        return self.render_to_response(self.get_context_data(**kwargs))
+
+    def get_context_data(self, **kwargs):
+        kwargs['form_post_url'] = reverse_lazy('project:ordinary:social_add',
+                                               args=(kwargs['uid'],))
+        kwargs['back_url'] = self.success_url
+        return super(ProjectSocialAdd, self).get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        project = Project.objects.filter(
+            uid=form.cleaned_data['target_uid'])[0]
+        if project.status == PROJECT_HASSOCIAL:
+            project.status = PROJECT_SUBMITTED
+        else:
+            return HttpResponseForbidden()
+        form.instance.project = project
+        self.object = form.save()
+        project.save()
+        return JsonResponse({'status': 0, 'redirect': self.success_url})
+
+    def form_invalid(self, form):
+        context = self.get_context_data()
+        context['form'] = form
+        html = render_to_string(
+            self.template_name, request=self.request,
+            context=context)
+        return JsonResponse({'status': 1, 'reason': '无效输入', 'html': html})
 
 
 class ProjectUpdate(ProjectBase, UpdateView):
@@ -119,5 +167,22 @@ class ProjectUpdate(ProjectBase, UpdateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        has_social = form.cleaned_data['has_social']
+        project = Project.objects.filter(uid=form.instance.uid)[0]
+        social_invitation = project.socialinvitation_set.all()
+        if has_social:
+            form.instance.status = PROJECT_HASSOCIAL
+        else:
+            form.instance.status = PROJECT_SUBMITTED
+            if social_invitation:
+                social_invitation.delete()
         self.object = form.save()
         return JsonResponse({'status': 0, 'redirect': self.success_url})
+
+    def form_invalid(self, form):
+        context = self.get_context_data()
+        context['form'] = form
+        html = render_to_string(
+            self.template_name, request=self.request,
+            context=context)
+        return JsonResponse({'status': 1, 'reason': '无效输入', 'html': html})

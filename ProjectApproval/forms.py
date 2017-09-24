@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from django.contrib.admin import widgets
 from django.forms.extras.widgets import SelectDateWidget
 from ProjectApproval.models import Project
+from ProjectApproval.models import SocialInvitation
 
 
 class ActivityForm(ModelForm):
@@ -12,6 +13,9 @@ class ActivityForm(ModelForm):
         widget=forms.Textarea(attrs={"rows": 3}))
     comment = forms.CharField(
         label='备注',
+        widget=forms.Textarea(attrs={"rows": 3}))
+    content = forms.CharField(
+        label='活动内容简介',
         widget=forms.Textarea(attrs={"rows": 3}))
     activity_time_from = forms.DateTimeField(
         label='活动开始时间',
@@ -27,6 +31,9 @@ class ActivityForm(ModelForm):
             attrs={'class': 'form_datetime_hour form-control'},
             format='%Y-%m-%d %H:00:00'),
         required=False)
+    has_social = forms.BooleanField(
+        label='是否有校外人员参与',
+        widget=forms.CheckboxInput(attrs={}), required=False)
 
     class Meta:
         model = Project
@@ -34,7 +41,7 @@ class ActivityForm(ModelForm):
                   'activity_time_to', 'site', 'form', 'charger',
                   'contact_info', 'activity_range', 'amount', 'has_social',
                   'budget', 'comment', 'instructor_comment',
-                  'attachment']
+                  'attachment', 'content']
 
     def clean(self):
         cleaned_data = super(ActivityForm, self).clean()
@@ -49,3 +56,26 @@ class ActivityForm(ModelForm):
         if errors:
             raise forms.ValidationError(errors)
         return cleaned_data
+
+
+class SocialInvitationForm(ModelForm):
+
+    target_uid = forms.CharField(
+        widget=forms.HiddenInput(attrs={
+            'class': 'form-control'}))
+    socials_info = forms.CharField(
+        label='校外人员名单',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control'}))
+    attend_info = forms.CharField(
+        label='校外人员参与活动情况说明',
+        widget=forms.Textarea(attrs={
+            'class': 'form-control social_info', 'rows': 3}))
+    ideology_info = forms.CharField(
+        label='校外人员思想意识形态情况说明',
+        widget=forms.Textarea(attrs={
+            'class': 'form-control social_info', 'rows': 3}))
+
+    class Meta:
+        model = SocialInvitation
+        fields = ['target_uid', 'socials_info', 'attend_info', 'ideology_info']
