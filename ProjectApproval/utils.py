@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:49
-# Last modified: 2017-09-23 10:13
+# Last modified: 2017-09-24 10:01
 # Filename: utils.py
 # Description:
 import os.path as osp
@@ -83,7 +83,7 @@ def export_project(project, max_budget_row=5):
     sheet.write_merge(0, 0, 0, 11, '大连理工大学创意工社活动申请表',
                       style=title_style)
     sheet.write_merge(1, 1, 0, 1, '工社名称', style=header_style)
-    sheet.write_merge(1, 1, 2, 5, project.workshop, style=header_style)
+    sheet.write_merge(1, 1, 2, 5, str(project.workshop), style=header_style)
     sheet.write_merge(1, 1, 6, 7, '活动名称', style=header_style)
     sheet.write_merge(1, 1, 8, 11, project.title, style=header_style)
     sheet.write_merge(2, 2, 0, 1, '活动地点', style=header_style)
@@ -93,7 +93,7 @@ def export_project(project, max_budget_row=5):
         project.activity_time_from, project.activity_time_to)
     sheet.write_merge(2, 2, 8, 11, activity_time, style=header_style)
     sheet.write_merge(3, 3, 0, 1, '活动负责人', style=header_style)
-    sheet.write_merge(3, 3, 2, 5, project.user, style=header_style)
+    sheet.write_merge(3, 3, 2, 5, project.user.first_name, style=header_style)
     sheet.write_merge(3, 3, 6, 7, '联系方式', style=header_style)
     sheet.write_merge(3, 3, 8, 11, project.contact_info, style=header_style)
     sheet.write_merge(4, 5, 0, 1, '参与对象及人数', style=header_style)

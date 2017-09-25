@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:08
-# Last modified: 2017-09-09 20:22
+# Last modified: 2017-09-24 16:00
 # Filename: urls.py
 # Description:
 """SRPA URL Configuration
@@ -21,8 +21,11 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.conf.urls import url, include
+from django.conf.urls.static import static
 from django.contrib import admin
+from django.views.static import serve
 
 from authentication import views
 
@@ -37,4 +40,4 @@ urlpatterns = [
         namespace='reservation')),
     url(r'^project/', include('ProjectApproval.urls',
         namespace='project')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

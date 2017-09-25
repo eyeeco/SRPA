@@ -11,12 +11,18 @@
     <div class="col-sm-4">
         {{form.title|addcls:'form-control'}}
     </div>
+    {% if form.title.errors %}
+        <p class="text-danger">{{form.title.errors.as_text}}</p>
+    {% endif %}
     <div class="col-sm-2">
         <label class="control-label">{{form.form.label}}:</label>
     </div>
     <div class="col-sm-4">
         {{form.form|addcls:'form-control'}}
     </div>
+    {% if form.form.errors %}
+        <p class="text-danger">{{form.form.errors.as_text}}</p>
+    {% endif %}
 </div>
 <!--line 2-->
 <div class="form-group" >
@@ -26,12 +32,18 @@
     <div class="col-sm-4">
         {{form.charger|addcls:'form-control'}}
     </div>
+    {% if form.charger.errors %}
+        <p class="text-danger">{{form.charger.errors.as_text}}</p>
+    {% endif %}
     <div class="col-sm-2">
         <label class="control-label">{{form.contact_info.label}}:</label>
     </div>
     <div class="col-sm-4">
         {{form.contact_info|addcls:'form-control'}}
     </div>
+    {% if form.contact_info.errors %}
+        <p class="text-danger">{{form.contact_info.errors.as_text}}</p>
+    {% endif %}
 
 </div> 
 <!--line 3-->
@@ -42,12 +54,18 @@
     <div class="col-sm-4">
         {{form.workshop|addcls:'form-control'}}
     </div>
+    {% if form.workshop.errors %}
+        <p class="text-danger">{{form.workshop.errors.as_text}}</p>
+    {% endif %}
      <div class="col-sm-2">
         <label class="control-label">{{form.site.label}}:</label>
     </div>
     <div class="col-sm-4">
         {{form.site|addcls:'form-control'}}
     </div>
+    {% if form.site.errors %}
+        <p class="text-danger">{{form.site.errors.as_text}}</p>
+    {% endif %}
 </div>
 <!--line 4-->
 <div class="form-group" >
@@ -57,12 +75,18 @@
     <div class="col-sm-4">
         {{form.activity_time_from}}
     </div>
+    {% if form.activity_time_from.errors %}
+        <p class="text-danger">{{form.activity_time_from.errors.as_text}}</p>
+    {% endif %}
     <div class="col-sm-2">
         <label class="control-label">{{form.activity_time_to.label}}:</label>
     </div>
     <div class="col-sm-4">
         {{form.activity_time_to}}
     </div>
+    {% if form.activity_time_to.errors %}
+        <p class="text-danger">{{form.activity_time_to.errors.as_text}}</p>
+    {% endif %}
 </div> 
 <!--line 5-->
 <div class="form-group" >
@@ -72,18 +96,27 @@
     <div class="col-sm-2">
         {{form.activity_range|addcls:'form-control'}}
     </div>
+    {% if form.activity_range.errors %}
+        <p class="text-danger">{{form.activity_range.errors.as_text}}</p>
+    {% endif %}
     <div class="col-sm-2">
         <label class="control-label">{{form.amount.label}}:</label>
     </div>
     <div class="col-sm-2">
         {{form.amount|addcls:'form-control'}}
     </div>
+    {% if form.amount.errors %}
+        <p class="text-danger">{{form.amount.errors.as_text}}</p>
+    {% endif %}
     <div class="col-sm-3">
         <label class="control-label">{{form.has_social.label}}:</label>
     </div>
     <div class="col-sm-1">
         {{form.has_social|addcls:'form-control'}}
     </div>
+    {% if form.has_social.errors %}
+        <p class="text-danger">{{form.has_social.errors.as_text}}</p>
+    {% endif %}
 </div> 
 <!--line 6-->
 <div class="form-group" >
@@ -93,6 +126,9 @@
     <div class="col-sm-10">
         {{form.content|addcls:'form-control'}}
     </div>
+    {% if form.content.errors %}
+        <p class="text-danger">{{form.content.errors.as_text}}</p>
+    {% endif %}
 </div> 
 <!--line 7-->
 <div class="form-group" >
@@ -102,6 +138,9 @@
     <div class="col-sm-10">
         {{form.comment|addcls:'form-control'}}
     </div>
+    {% if form.comment.errors %}
+        <p class="text-danger">{{form.comment.errors.as_text}}</p>
+    {% endif %}
 </div>    
 <!--line 8-->
 <div class="form-group" >
@@ -111,6 +150,9 @@
     <div class="col-sm-10">
         {{form.budget|addcls:'form-control'}}
     </div>
+    {% if form.budget.errors %}
+        <p class="text-danger">{{form.budget.errors.as_text}}</p>
+    {% endif %}
 </div> 
 {% if form.errors %}
 {% for error in form.non_field_errors %}

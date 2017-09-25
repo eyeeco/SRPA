@@ -19,6 +19,8 @@ ord_patterns = [
         name='update'),
     url(r'^social_add/(?P<uid>.+)$', views.ProjectSocialAdd.as_view(),
         name='social_add'),
+    url(r'^export/(?P<uid>.+)$', views.ProjectExport.as_view(),
+        name='export'),
 ]
 
 admin_patterns = [

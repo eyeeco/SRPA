@@ -65,7 +65,7 @@
         <label class="control-label">活动范围:</label>
     </div>
     <div class="col-sm-2">
-        <p class="form-control-static">{{object.activity_range}}</p>
+        <p class="form-control-static">{{object.get_activity_range_display}}</p>
     </div>
     <div class="col-sm-2">
         <label class="control-label">参与人数:</label>
@@ -90,7 +90,20 @@
         <label class="control-label">预算及说明:</label>
     </div>
     <div class="col-sm-10">
-        <p class="form-control-static">{{object.budget}}</p>
+        <table class="table"> 
+            <tr class="fir_tr">
+                <th>项目名称</th>
+                <th>预算金额(元)</th>
+                <th>描述</th>
+            </tr>
+        {% for item, budget, desc in budgets %}    
+            <tr>
+                <th>{{item}}</th>
+                <th>{{budget}}</th>
+                <th>{{desc}}</th>
+            </tr>
+        {% endfor%}
+        </table>
     </div>
 </div> 
 <!--line 7-->
@@ -102,7 +115,7 @@
         <p class="form-control-static">{{object.comment}}</p>
     </div>
 </div>
-{% if form %}
+{% if feed %}
 <div class="form-group" >
     <div class="col-sm-2">
         <label class="control-label">审批意见:</label>

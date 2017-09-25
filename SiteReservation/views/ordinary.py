@@ -9,7 +9,7 @@
 from datetime import datetime, timedelta, timezone
 
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
-from django.views.generic import DetailView, TemplateView, FormView
+from django.views.generic import DetailView, TemplateView, FormView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, JsonResponse, HttpResponseRedirect
 from django.http import HttpResponse
@@ -22,11 +22,11 @@ from django.db.models import Q
 
 from authentication import USER_IDENTITY_STUDENT, USER_IDENTITY_TEACHER
 from authentication import USER_IDENTITY_ADMIN
-from SiteReservation import RESERVATION_APPROVED
+from SiteReservation import RESERVATION_APPROVED, RESERVATION_TERMINATED
 from SiteReservation.models import Reservation
 from SiteReservation.forms import DateForm, ReservationForm
 from SiteReservation.utils import is_conflict
-from const.models import Site
+from const.models import Site, FeedBack
 from tools.utils import assign_perms
 from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_CAN_EDIT
 
@@ -89,11 +89,37 @@ class ReservationList(ReservationBase, ListView):
     """
     A view for displaying user-related reservations list. GET only.
     """
-    paginate_by = 12
-    ordering = '-reservation_time'
+    paginate_by = 10
+    ordering = ['status', '-reservation_time']
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
+
+
+class ReservationTerminate(ReservationBase, View):
+    """
+    A view for displaying user-related reservations list after terminating.
+    """
+
+    success_url = reverse_lazy('reservation:index')
+
+    def get(self, request, *args, **kwargs):
+        reservation = Reservation.objects.filter(uid=kwargs['uid'])
+        reservation.update(status=RESERVATION_TERMINATED)
+        return redirect(self.success_url)
+        # return JsonResponse({'status': 0, 'redirect': self.success_url})
+
+
+class ReservationExport(ReservationBase, View):
+    """
+    A view for exporting the user reservation list
+    """
+
+    success_url = reverse_lazy('reservation:index')
+
+    def get(self, request, *args, **kwargs):
+        # reservation = Reservation.objects.filter(uid=kwargs['uid'])
+        return redirect(self.success_url)
 
 
 class ReservationDetail(ReservationBase, DetailView):
@@ -103,6 +129,12 @@ class ReservationDetail(ReservationBase, DetailView):
 
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
+
+    def get_context_data(self, **kwargs):
+        feedbacks = FeedBack.objects.filter(target_uid=self.object.uid)
+        feedbacks.order_by('-created')
+        kwargs['feedbacks'] = feedbacks
+        return super(ReservationDetail, self).get_context_data(**kwargs)
 
 
 class ReservationAdd(ReservationBase, CreateView):
@@ -116,11 +148,8 @@ class ReservationAdd(ReservationBase, CreateView):
 
     def form_valid(self, form):
         site = form.cleaned_data['site']
-        workshop = form.cleaned_data['workshop']
-        title = form.cleaned_data['title']
         activity_time_from = form.cleaned_data['activity_time_from']
         activity_time_to = form.cleaned_data['activity_time_to']
-        comment = form.cleaned_data['comment']
 
         conflict = is_conflict(activity_time_from, activity_time_to, site)
         if conflict:
@@ -132,18 +161,9 @@ class ReservationAdd(ReservationBase, CreateView):
             return JsonResponse({'status': 2, 'reason': '该时间段内已存在预约',
                                  'html': html})
 
-        reservation = Reservation.objects.create(
-            user=self.request.user,
-            site=site,
-            workshop=workshop,
-            status=RESERVATION_SUBMITTED,
-            title=title,
-            activity_time_from=activity_time_from,
-            activity_time_to=activity_time_to,
-            comment=comment)
-        reservation.save()
-        self.object = reservation
-        assign_perms('reservation', self.request.user, obj=reservation)
+        form.instance.user = self.request.user
+        self.object = form.save()
+        assign_perms('reservation', self.request.user, obj=self.object)
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
     def form_invalid(self, form):

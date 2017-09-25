@@ -7,13 +7,14 @@
 # Filename: admin.py
 # Description:
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, UpdateView
+from django.views.generic import ListView, UpdateView, DetailView
 from django.http import JsonResponse, HttpResponseForbidden
 from django.urls import reverse_lazy
 
 from .ordinary import ReservationList, ReservationUpdate, ReservationDetail
 
 from const.forms import FeedBackForm
+from const.models import FeedBack
 from SiteReservation import RESERVATION_STATUS_CAN_CHECK, RESERVATION_EDITTING
 from SiteReservation import RESERVATION_APPROVED, RESERVATION_TERMINATED
 from SiteReservation.models import Reservation
@@ -43,14 +44,19 @@ class AdminReservationList(AdminReservationBase, ListView):
         return super().get_queryset().filter(workshop__in=workshops)
 
 
-class AdminReservationDetail(AdminReservationBase, ReservationDetail):
+class AdminReservationDetail(AdminReservationBase, DetailView):
     """
     A view for displaying specified reservation for admin. GET only.
     """
+    slug_field = 'uid'
+    slug_url_kwarg = 'uid'
 
     def get_context_data(self, **kwargs):
         form = FeedBackForm({'target_uid': self.object.uid})
         kwargs['form'] = form
+        feedbacks = FeedBack.objects.filter(target_uid=self.object.uid)
+        feedbacks.order_by('-created')
+        kwargs['feedbacks'] = feedbacks
         return super(AdminReservationDetail, self).get_context_data(**kwargs)
 
 
