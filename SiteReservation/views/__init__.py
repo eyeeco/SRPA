@@ -6,7 +6,7 @@
 # Last modified: 2017-09-16 11:03
 # Filename: __init__.py
 # Description:
-from .ordinary import ReservationIndex, ReservationTerminate
+from .ordinary import ReservationIndex, ReservationTerminate, ReservationExport
 from .ordinary import ReservationList, ReservationAdd, ReservationUpdate
 from .ordinary import ReservationDetail, ReservationStatus
 from .admin import AdminReservationList, AdminReservationUpdate
@@ -16,6 +16,6 @@ from .admin import AdminReservationDetail
 __all__ = [
     'ReservationIndex', 'ReservationDetail', 'AdminReservationDetail',
     'ReservationList', 'ReservationAdd', 'ReservationUpdate',
-    'ReservationTerminate',
+    'ReservationTerminate', 'ReservationExport'
     'AdminReservationList', 'AdminReservationUpdate', 'ReservationStatus',
 ]

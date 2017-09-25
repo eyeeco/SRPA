@@ -20,6 +20,8 @@ ord_patterns = [
         name='update'),
     url(r'^terminate/(?P<uid>.+)$', views.ReservationTerminate.as_view(),
         name='terminate'),
+    url(r'^export/(?P<uid>.+)$', views.ReservationExport.as_view(),
+        name='export'),
 ]
 
 admin_patterns = [

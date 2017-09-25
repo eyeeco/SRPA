@@ -104,9 +104,22 @@ class ReservationTerminate(ReservationBase, View):
     success_url = reverse_lazy('reservation:index')
 
     def get(self, request, *args, **kwargs):
-        Reservation.objects.filter(uid=kwargs['uid']).update(status=RESERVATION_TERMINATED)
+        reservation = Reservation.objects.filter(uid=kwargs['uid'])
+        reservation.update(status=RESERVATION_TERMINATED)
         return redirect(self.success_url)
         # return JsonResponse({'status': 0, 'redirect': self.success_url})
+
+
+class ReservationExport(ReservationBase, View):
+    """
+    A view for exporting the user reservation list
+    """
+
+    success_url = reverse_lazy('reservation:index')
+
+    def get(self, request, *args, **kwargs):
+        # reservation = Reservation.objects.filter(uid=kwargs['uid'])
+        return redirect(self.success_url)
 
 
 class ReservationDetail(ReservationBase, DetailView):
@@ -118,7 +131,8 @@ class ReservationDetail(ReservationBase, DetailView):
     slug_url_kwarg = 'uid'
 
     def get_context_data(self, **kwargs):
-        feedbacks = FeedBack.objects.filter(target_uid=self.object.uid).order_by('-created')
+        feedbacks = FeedBack.objects.filter(target_uid=self.object.uid)
+        feedbacks.order_by('-created')
         kwargs['feedbacks'] = feedbacks
         return super(ReservationDetail, self).get_context_data(**kwargs)
 

@@ -73,6 +73,9 @@
     {% if object.status in RESERVATION_STATUS_CAN_CANCEL %}
     <a type="button" class="btn btn-danger" href="{% url 'reservation:ordinary:terminate' object.uid %}" onclick="if(confirm('确定取消该预约?')==false)return false;">取消</a>
     {% endif %}
+    {% if object.status == RESERVATION_APPROVED %}
+    <a type="button" class="btn btn-info" href="{% url 'reservation:ordinary:export' object.uid %}">导出</a>
+    {% endif %}
     {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
     {% if object.status in RESERVATION_STATUS_CAN_CHECK %}
     <a type="button" class="btn btn-info" href="#" data-toggle="modal" data-target="#modal_form">审核</a>

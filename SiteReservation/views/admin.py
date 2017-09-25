@@ -54,7 +54,8 @@ class AdminReservationDetail(AdminReservationBase, DetailView):
     def get_context_data(self, **kwargs):
         form = FeedBackForm({'target_uid': self.object.uid})
         kwargs['form'] = form
-        feedbacks = FeedBack.objects.filter(target_uid=self.object.uid).order_by('-created')
+        feedbacks = FeedBack.objects.filter(target_uid=self.object.uid)
+        feedbacks.order_by('-created')
         kwargs['feedbacks'] = feedbacks
         return super(AdminReservationDetail, self).get_context_data(**kwargs)
 
