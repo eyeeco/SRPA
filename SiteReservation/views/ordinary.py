@@ -230,6 +230,7 @@ class ReservationUpdate(ReservationBase, UpdateView):
                 context=context)
             return JsonResponse({'status': 2, 'reason': '该时间段内已存在预约',
                                  'html': html})
+        self.object.status = RESERVATION_SUBMITTED
         form.save()
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
