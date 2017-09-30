@@ -16,7 +16,7 @@
         <td>{{sheet.charger}}</td>
         <td>{{sheet.get_status_display}}</td>
         <td>
-        	<a class="btn btn-info btn-xs " href="{% url 'project:ordinary:detail'%}">详情</a>
+        	<a class="btn btn-info btn-xs " onclick="load_project_info('project:ordinary:detail'{{sheet.uid}},this)">详情</a>
         	<a class="btn btn-info btn-xs " href="#">修改</a>
         </td>
     </tr>
