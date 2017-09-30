@@ -28,3 +28,16 @@ body{
 .nav-tabs{
     margin-bottom: 2em;
 }
+
+.white a{
+    color: white;
+}
+
+.modal label,.modal-title {
+    color: black;
+}
+
+textarea {
+    resize: none;
+    color: black;
+}

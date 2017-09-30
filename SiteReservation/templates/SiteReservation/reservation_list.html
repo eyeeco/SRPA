@@ -1,1 +1,112 @@
+<table class="table"> 
+    <tr>
+        <th>场地</th>
+        <th>工坊</th>
+        <th>活动开始时间</th>
+        <th>活动结束时间</th>
+        <th>预约时间</th>
+        <th>状态</th>
+        <th>操作</th>
+    </tr>
+    {% for sheet in object_list %}
+    <tr>
+        <td>{{sheet.site}}</td>
+        <td>{{sheet.workshop}}</td>
+        <td>{{sheet.activity_time_from}}</td>
+        <td>{{sheet.activity_time_to}}</td>
+        <td>{{sheet.reservation_time}}</td>
+        <td>{{sheet.get_status_display}}</td>
+        <td>
+            {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+            <button class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:detail' sheet.uid %}">详情</button>
+            {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+            <button class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:admin:detail' sheet.uid %}">详情</button>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 
+{% if is_paginated %}
+
+{% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+<nav>
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li>
+            <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:list' page=page_obj.previous_page_number %}">
+                <span aria-hidden="true">&laquo;</span>
+        </a>
+        </li>
+        {% else %}
+        <li class="disabled">
+            <a href="#">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% endif %}
+
+        {% for pageid in paginator.page_range %}
+            <li {% if pageid == page_obj.number %}class="active"{% endif %}>
+                <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:list' page=pageid %}">{{ pageid }}</a>
+            </li>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li>
+            <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:list' page=page_obj.next_page_number %}">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% else %}
+        <li {% if not page_obj.has_next %}class="disabled"{% endif %}>
+            <a href="#">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+<nav>
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li>
+            <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:admin:list' page=page_obj.previous_page_number %}">
+                <span aria-hidden="true">&laquo;</span>
+        </a>
+        </li>
+        {% else %}
+        <li class="disabled">
+            <a href="#">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% endif %}
+
+        {% for pageid in paginator.page_range %}
+            <li {% if pageid == page_obj.number %}class="active"{% endif %}>
+                <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:admin:list' page=pageid %}">{{ pageid }}</a>
+            </li>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li>
+            <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:admin:list' page=page_obj.next_page_number %}">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% else %}
+        <li {% if not page_obj.has_next %}class="disabled"{% endif %}>
+            <a href="#">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% endif %}

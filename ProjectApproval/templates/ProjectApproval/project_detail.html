@@ -1,0 +1,182 @@
+<form class="form-horizontal project-detail">
+<div class="form-group" >
+    <div class="col-sm-2">
+        <label class="control-label">活动内容:</label>
+    </div>
+    <div class="col-sm-4">
+        <p class="form-control-static">{{object.title}}</p>
+    </div>
+    <div class="col-sm-2">
+        <label class="control-label">活动形式:</label>
+    </div>
+    <div class="col-sm-4">
+        <p class="form-control-static">{{object.form}}</p>
+    </div>
+</div>
+<!--line 2-->
+<div class="form-group" >
+    <div class="col-sm-2">
+        <label class="control-label">活动负责人:</label>
+    </div>
+    <div class="col-sm-4">
+        <p class="form-control-static">{{object.charger}}</p>
+    </div>
+    <div class="col-sm-2">
+        <label class="control-label">联系方式:</label>
+    </div>
+    <div class="col-sm-4">
+        <p class="form-control-static">{{object.contact_info}}</p>
+    </div>
+
+</div> 
+<!--line 3-->
+<div class="form-group" >
+    <div class="col-sm-2">
+        <label class="control-label">工坊:</label>
+    </div>
+    <div class="col-sm-4">
+        <p class="form-control-static">{{object.workshop}}</p>
+    </div>
+     <div class="col-sm-2">
+        <label class="control-label">活动场地:</label>
+    </div>
+    <div class="col-sm-4">
+        <p class="form-control-static">{{object.site}}</p>
+    </div>
+</div>
+<!--line 4-->
+<div class="form-group" >
+    <div class="col-sm-2">
+        <label class="control-label">活动开始时间:</label>
+    </div>
+    <div class="col-sm-4">
+        <p class="form-control-static">{{object.activity_time_from}}</p>
+    </div>
+    <div class="col-sm-2">
+        <label class="control-label">活动结束时间:</label>
+    </div>
+    <div class="col-sm-4">
+       <p class="form-control-static">{{object.activity_time_to}}</p>
+    </div>
+</div> 
+<!--line 5-->
+<div class="form-group" >
+    <div class="col-sm-2">
+        <label class="control-label">活动范围:</label>
+    </div>
+    <div class="col-sm-2">
+        <p class="form-control-static">{{object.get_activity_range_display}}</p>
+    </div>
+    <div class="col-sm-2">
+        <label class="control-label">参与人数:</label>
+    </div>
+    <div class="col-sm-2">
+        <p class="form-control-static">{{object.amount}}</p>
+    </div>
+    <div class="col-sm-3">
+        <label class="control-label">是否有校外人员参与:</label>
+    </div>
+    <div class="col-sm-1">
+        {% if object.has_social == False %}
+        <p class="form-control-static">否</p>
+        {% else %}
+        <p class="form-control-static">是</p>
+        {% endif %}
+    </div>
+</div> 
+<!--line 6-->
+<div class="form-group" >
+    <div class="col-sm-2">
+        <label class="control-label">预算及说明:</label>
+    </div>
+    <div class="col-sm-10">
+        <table class="table"> 
+            <tr class="fir_tr">
+                <th>项目名称</th>
+                <th>预算金额(元)</th>
+                <th>描述</th>
+            </tr>
+        {% for item, budget, desc in budgets %}    
+            <tr>
+                <th>{{item}}</th>
+                <th>{{budget}}</th>
+                <th>{{desc}}</th>
+            </tr>
+        {% endfor%}
+        </table>
+    </div>
+</div> 
+<!--line 7-->
+<div class="form-group" >
+    <div class="col-sm-2">
+        <label class="control-label">备注:</label>
+    </div>
+    <div class="col-sm-10">
+        <p class="form-control-static">{{object.comment}}</p>
+    </div>
+</div>
+{% if feed %}
+<div class="form-group" >
+    <div class="col-sm-2">
+        <label class="control-label">审批意见:</label>
+    </div>
+    <div class="col-sm-10">
+        {% for list in feed %}
+        <div class="row">
+            <div class="col-sm-4">
+                <p class="form-control-static">{{list.created}}</p>
+            </div>
+            <div class="col-sm-8">
+                <p class="form-control-static">{{list.desc}}</p>
+            </div>
+        </div>
+        {% endfor%}
+    </div>
+</div>
+{% endif %}
+</form>
+{% block opreate %}
+<div class="col-sm-6 col-sm-offset-3">
+    {% if request.user.user_info.identity == USER_IDENTITY_STUDENT%}
+    {% if object.status in PROJECT_STATUS_CAN_EDIT %}
+    <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:update' object.uid %}">修改</a>
+    {% endif %}
+    {% if object.status in PROJECT_STATUS_CAN_CANCEL %}
+    <a type="button" class="btn btn-danger" href="#">取消</a>
+    {% endif %}
+    {% if object.status == PROJECT_HASSOCIAL %}
+    <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:social_add' object.uid %}">校外人员表单填写</a>
+    {% endif %}
+    <a href="{{ view.success_url }}" class="btn btn-default btn-md ">返回</a>
+    {% endif %}
+    {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
+    {% if object.status in PROJECT_STATUS_CAN_CHECK %}
+    <a type="button" class="btn btn-info" href="#" data-toggle="modal" data-target="#modal_form">审核</a>
+    {% endif %}   
+    {% endif %}
+</div>
+{% endblock %}
+{% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+<div class="modal" id="modal_form" tabindex="-1" role="dialog" aria-labelledby="modal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <form class="form-horizontal" action="{% url 'project:admin:update' object.uid %}" method="POST">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal_title">审批意见</h4>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    {{ form.target_uid }}
+                    {{ form.desc }}
+                    {{ form.status }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">确认</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}

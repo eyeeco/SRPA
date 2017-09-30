@@ -12,19 +12,23 @@ from . import views
 
 
 ord_patterns = [
-    url(r'^list/$', views.ProjectList.as_view(), name='list'),
-    url(r'^detail/$', views.ProjectDetail.as_view(), name='detail'),
+    url(r'^list/(?P<page>\d+)$', views.ProjectList.as_view(), name='list'),
+    url(r'^detail/(?P<uid>.+)$', views.ProjectDetail.as_view(), name='detail'),
     url(r'^add/$', views.ProjectAdd.as_view(), name='add'),
-    url(r'^update/$', views.ProjectUpdate.as_view(),
+    url(r'^update/(?P<uid>.+)$', views.ProjectUpdate.as_view(),
         name='update'),
-    url('^load_project_info/$', views.ProjectRedirect.as_view(),
-        name='load_project_info'),
+    url(r'^social_add/(?P<uid>.+)$', views.ProjectSocialAdd.as_view(),
+        name='social_add'),
+    url(r'^export/(?P<uid>.+)$', views.ProjectExport.as_view(),
+        name='export'),
 ]
 
 admin_patterns = [
-    url(r'^list/$', views.AdminProjectList.as_view(), name='list'),
-    url(r'^detail/$', views.AdminProjectDetail.as_view(), name='detail'),
-    url(r'^update/$', views.AdminProjectUpdate.as_view(),
+    url(r'^list/(?P<page>\d+)$', views.AdminProjectList.as_view(),
+        name='list'),
+    url(r'^detail/(?P<uid>.+)$', views.AdminProjectDetail.as_view(),
+        name='detail'),
+    url(r'^update/(?P<uid>.+)$', views.AdminProjectUpdate.as_view(),
         name='update'),
 ]
 

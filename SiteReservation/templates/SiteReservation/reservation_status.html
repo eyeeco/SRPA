@@ -1,35 +1,24 @@
-{% extends 'SiteReservation/base.html' %}
-{% block container %}
-<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 srpa-background">
-    <h3>活动场地预约</h3>
-    <ul class="nav nav-tabs" role="tablist">
-        <li class="white active"><a type="button" class="btn" href="#">场地预约情况</a></li>
-        <li class="white"><a type="button" class="btn" href="#">我的预约</a></li>
-        <li class="white"><a type="button" class="btn" href="#">新的预约申请</a></li>
-    </ul>
-    <div class="col-xs-12" style="margin-bottom:2em">
-        <form class="form-inline" method="POST" id="search-form">
-            {% csrf_token %}
-            <div class="form-group col-sm-6" data-toggle="tooltip" data-placement="top" title="请选择欲查询日期">
-                <label for="id_date" class="control-label">选择日期</label>
-                <div class="input-append input-group form_datetime date">
-                    {{form.date}}
-                    <span class="input-group-addon add-on"><span class="glyphicon glyphicon-remove"></span></span>
-                    <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
-                </div>
+<div class="col-xs-12" style="margin-bottom:2em">
+    <form class="form-inline" method="POST" id="search-form" action="{% url 'reservation:status' %}">
+        {% csrf_token %}
+        <div class="form-group col-sm-6" data-toggle="tooltip" data-placement="top" title="请选择欲查询日期">
+            <label for="id_date">选择日期</label>
+            <div class="input-append input-group form_datetime_day date">
+                {{form.date}}
+                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-remove"></span></span>
+                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
             </div>
-            <div class="form-group col-sm-2">
-                <label for="id_site" class="control-label">选择场地</label>
-                <select class="form-control" id="id_site" placeholder="" name="site_uid">
-                    {% for site in sites %}
-                    <option value="{{site.uid}}">{{site.desc}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <button type="submit" class="btn btn-default">检索</button>
-        </form>
-    </div>
-    <div id="status_table" class="col-xs-12">
-    </div>
+        </div>
+        <div class="form-group col-sm-3">
+            <label for="id_site">选择场地</label>
+            <select class="form-control" id="id_site" placeholder="" name="site_uid">
+                {% for site in sites %}
+                <option value="{{site.uid}}">{{site.desc}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-default">检索</button>
+    </form>
 </div>
-{% endblock %}
+<div id="status_table" class="col-xs-12">
+</div>

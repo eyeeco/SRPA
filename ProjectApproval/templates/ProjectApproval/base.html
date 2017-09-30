@@ -1,21 +1,27 @@
-{% extends 'ProjectApproval/layout.html' %}
-{% block container%}
-<div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12 srpa-background">
-    <h3>活动预约与审批</h3>
+{% extends 'base/layout.html' %}
+{% load static %}
+{% block header_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/project.css' %}">
+{% endblock %}
+{% block container %}
+<div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 srpa-background">
+    <h3>活动预约审批</h3>
     <ul class="nav nav-tabs" role="tablist">
-        <li class="white active"><a type="button" class="btn" onclick="load_project_info('project:ordinary:list',this)">已预约活动</a></li>
-        <li class="white "><a type="button" class="btn" onclick="load_project_info('project:ordinary:add',this)">增加活动项</a></li>
+        {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+        <li class="li-page white"><a type="button" class="btn srpa-loader" loader-type="page" loader-target="{% url 'project:ordinary:list' page=1 %}">已预约活动</a></li>
+        <li class="li-page white"><a type="button" class="btn srpa-loader" loader-type="page" loader-target="{% url 'project:ordinary:add' %}">增加活动项</a></li>
+        {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+        <li class="li-page white"><a type="button" class="btn srpa-loader srpa-list" loader-type="page" loader-target="{% url 'project:admin:list' page=1 %}">活动列表</a></li>
+        {% endif %}
     </ul>
-    {% block project_content %}
-    {% endblock %}
-    <div id="project_item">
-    
+    <div id="page">
+        {% block content %}
+        {% endblock %}
     </div>
 </div>
 {% endblock %}
 {% block footer_js %}
 {{ block.super }}
-<script>
-load_project_info('project:ordinary:list');
-</script>
+<script type="text/javascript" src="{% static 'js/project.js' %}"></script>
 {% endblock %}

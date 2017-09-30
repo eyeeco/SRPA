@@ -1,5 +1,9 @@
 .status-table td.not-available{
     background-color: yellow;
-    opacity: 0.8;
     color: red;
+}
+
+.status-table td.available{
+    background-color: green;
+    color: white;
 }

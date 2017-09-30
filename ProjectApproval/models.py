@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 19:33
-# Last modified: 2017-09-14 14:01
+# Last modified: 2017-09-20 20:11
 # Filename: models.py
 # Description:
 from uuid import uuid4
@@ -26,7 +26,9 @@ class Project(models.Model):
     status = models.IntegerField(verbose_name='状态',
                                  choices=PROJECT_STATUS,
                                  default=PROJECT_SUBMITTED)
-    title = models.CharField(verbose_name='活动内容', max_length=100)
+    title = models.CharField(verbose_name='活动名称', max_length=100)
+    apply_time = models.DateTimeField(verbose_name='申请时间',
+                                      auto_now_add=True)
     activity_time_from = models.DateTimeField(verbose_name='活动开始时间')
     activity_time_to = models.DateTimeField(verbose_name='活动结束时间')
     site = models.CharField(verbose_name='活动场地', max_length=100)
@@ -40,6 +42,7 @@ class Project(models.Model):
     has_social = models.BooleanField(verbose_name='是否有校外人员参与')
     budget = models.TextField(verbose_name='活动预算及说明')
     comment = models.TextField(verbose_name='备注')
+    content = models.TextField(verbose_name='活动内容', default='')
     instructor_comment = models.TextField(verbose_name='指导教师意见',
                                           blank=True)
     attachment = models.FileField(

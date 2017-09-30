@@ -1,9 +1,8 @@
-th{
-
+.project-form label{
+    font-size: 1em;
 }
-
-a{
-    color: white;
+.project-detail label{
+	font-size: 1em;
 }
 p{
 	font-size: 1.2em ;
@@ -12,4 +11,7 @@ p.text-danger{
 
     text-align: right;
     color: rgb(235, 66, 56);
+}
+.hide{
+	display: none;
 }

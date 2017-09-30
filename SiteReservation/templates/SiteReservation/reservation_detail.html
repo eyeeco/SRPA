@@ -1,0 +1,108 @@
+<form class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">场地:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.site}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">工坊:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.workshop}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">活动内容:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.title}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">活动开始时间:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.activity_time_from}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">活动结束时间:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.activity_time_to}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">预约时间:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.reservation_time}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">状态:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.get_status_display}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">备注:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{object.comment}}</p>
+        </div>
+    </div>
+    {% if feedbacks %}
+    <div class="form-group" >
+        <label class="col-sm-4 col-xs-6 control-label">审批意见:</label>
+        <div class="col-sm-8 col-xs-6">
+            {% for feedback in feedbacks %}
+            <div class="row">
+                <div class="col-xs-4">
+                    <p class="form-control-static">{{feedback.created}}</p>
+                </div>
+                <div class="col-xs-8">
+                    <p class="form-control-static">{{feedback.desc}}</p>
+                </div>
+            </div>
+            {% endfor%}
+        </div>
+    </div>
+    {% endif %}
+</form>
+<div class="col-sm-6 col-sm-offset-3">
+    {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+    {% if object.status in RESERVATION_STATUS_CAN_EDIT %}
+    <a type="button" class="btn btn-info srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:update' object.uid %}">修改</a>
+    {% endif %}
+    {% if object.status in RESERVATION_STATUS_CAN_CANCEL %}
+    <a type="button" class="btn btn-danger" href="{% url 'reservation:ordinary:terminate' object.uid %}" onclick="if(confirm('确定取消该预约?')==false)return false;">取消</a>
+    {% endif %}
+    {% if object.status == RESERVATION_APPROVED %}
+    <a type="button" class="btn btn-info" href="{% url 'reservation:ordinary:export' object.uid %}">导出</a>
+    {% endif %}
+    {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+    {% if object.status in RESERVATION_STATUS_CAN_CHECK %}
+    <a type="button" class="btn btn-info" href="#" data-toggle="modal" data-target="#modal_form">审核</a>
+    {% endif %}
+    {% endif %}
+</div>
+{% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+<div class="modal" id="modal_form" tabindex="-1" role="dialog" aria-labelledby="modal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <form class="form-horizontal" action="{% url 'reservation:admin:update' object.uid %}" method="POST">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal_title">审批意见</h4>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    {{ form.target_uid }}
+                    {{ form.desc }}
+                    {{ form.status }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">确认</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
