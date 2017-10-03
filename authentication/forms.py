@@ -3,11 +3,12 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:09
-# Last modified: 2017-09-25 17:26
+# Last modified: 2017-10-02 15:22
 # Filename: forms.py
 # Description:
 from django import forms
 from django.forms import ModelForm
+from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 
@@ -42,11 +43,13 @@ class RegisterForm(ModelForm):
         widget=forms.TextInput(),
         min_length=11,
         max_length=11)
+    email = forms.EmailField(
+        label='邮箱')
     captcha = CaptchaField()
 
     class Meta:
         model = UserInfo
-        fields = ['username', 'password', 'confirm_password',
+        fields = ['email', 'username', 'password', 'confirm_password',
                   'name', 'phone', 'captcha']
 
     def clean(self):
@@ -71,11 +74,11 @@ class RegisterForm(ModelForm):
 class StudentRegisterForm(RegisterForm):
     class Meta:
         model = StudentInfo
-        fields = ['username', 'password', 'confirm_password',
+        fields = ['email', 'username', 'password', 'confirm_password',
                   'name', 'phone', 'student_id', 'institute', 'captcha']
 
     def clean_student_id(self, *args, **kwargs):
         student_id = self.cleaned_data['student_id']
-        if student_id not in ALLOW_IDS:
+        if not settings.DEBUG and student_id not in ALLOW_IDS:
             raise forms.ValidationError('学号不在受邀注册名单内')
         return student_id

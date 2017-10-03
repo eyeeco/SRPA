@@ -39,6 +39,7 @@
                                 <li>
                                 {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
                                     <a href="{% url 'auth:info:student' request.user.user_info.uid %}">个人信息</a>
+                                    <a href="{% url 'auth:password_change' %}">修改密码</a>
                                 {% endif %}
                                 </li>
                                 <li role="separator" class="divider"></li>

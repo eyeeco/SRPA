@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-10-01 15:15
-# Last modified: 2017-10-01 15:20
+# Last modified: 2017-10-02 22:16
 # Filename: development_settings.py
 # Description:
 # Database
@@ -16,9 +16,12 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '192.168.3.95',
-        'PORT': '3306',
+        'PORT': '3307',
         'OPTIONS': {
             'sql_mode': 'STRICT_TRANS_TABLES',
         }
     }
 }
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True

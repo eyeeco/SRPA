@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:17
-# Last modified: 2017-09-09 10:08
+# Last modified: 2017-10-02 13:41
 # Filename: ordinary.py
 # Description:
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
@@ -201,7 +201,9 @@ class ProjectUpdate(ProjectBase, UpdateView):
 
 
 class ProjectExport(ProjectBase, DetailView):
-
+    """
+    A view for exporting project application
+    """
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
 

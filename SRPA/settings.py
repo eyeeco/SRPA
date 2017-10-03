@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:05
-# Last modified: 2017-10-01 15:37
+# Last modified: 2017-10-02 22:16
 # Filename: settings.py
 # Description:
 """
@@ -32,8 +32,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'v_&4b1seyjht1+vl6c08)&7is*srv_0lqg4t^%0f71o19r5%yu'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = [
     '192.168.3.93',
@@ -127,17 +125,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'global_static'),
 ]
 
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+if not os.path.exists(MEDIA_ROOT):
+    os.makedirs(MEDIA_ROOT)
+
 TMP_FILES_ROOT = os.path.join(MEDIA_ROOT, 'tmp_files')
 TMP_FILES_URL = os.path.join(MEDIA_URL, 'tmp_files')
 
+if not os.path.exists(TMP_FILES_ROOT):
+    os.makedirs(TMP_FILES_ROOT)
 
 # Captcha settings
 CAPTCHA_CHALLENGE_FUNCT = 'authentication.captchas.random_num_challenge'

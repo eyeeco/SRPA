@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:03
-# Last modified: 2017-09-21 18:24
+# Last modified: 2017-10-02 13:41
 # Filename: ordinary.py
 # Description:
 from datetime import datetime, timedelta, timezone
@@ -23,12 +23,12 @@ from django.db.models import Q
 from authentication import USER_IDENTITY_STUDENT, USER_IDENTITY_TEACHER
 from authentication import USER_IDENTITY_ADMIN
 from SiteReservation import RESERVATION_APPROVED, RESERVATION_TERMINATED
+from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_CAN_EDIT
 from SiteReservation.models import Reservation
 from SiteReservation.forms import DateForm, ReservationForm
-from SiteReservation.utils import is_conflict
+from SiteReservation.utils import is_conflict, export_reservation
 from const.models import Site, FeedBack
 from tools.utils import assign_perms
-from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_CAN_EDIT
 
 
 #  TODO: LoginRequiredMixin --> PermissionRequiredMixin
@@ -110,16 +110,16 @@ class ReservationTerminate(ReservationBase, View):
         # return JsonResponse({'status': 0, 'redirect': self.success_url})
 
 
-class ReservationExport(ReservationBase, View):
+class ReservationExport(ReservationBase, DetailView):
     """
-    A view for exporting the user reservation list
+    A view for exporting reservation application
     """
-
-    success_url = reverse_lazy('reservation:index')
+    slug_field = 'uid'
+    slug_url_kwarg = 'uid'
 
     def get(self, request, *args, **kwargs):
-        # reservation = Reservation.objects.filter(uid=kwargs['uid'])
-        return redirect(self.success_url)
+        self.object = self.get_object()
+        return redirect(export_reservation(self.object))
 
 
 class ReservationDetail(ReservationBase, DetailView):
