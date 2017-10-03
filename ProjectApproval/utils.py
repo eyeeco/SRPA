@@ -111,7 +111,7 @@ def export_project(project, max_budget_row=5):
     sheet.write_merge(12, 12, 4, 7, '预算金额(元)', style=budget_style)
     sheet.write_merge(12, 12, 8, 11, '描述', style=budget_style)
     row_offset = 1
-    budgets = [x.split(' ') for x in project.budget.split('\n')]
+    budgets = [x.strip().split(' ') for x in project.budget.split('\n')]
     total_budget = sum(int(budget) for item, budget, desc in budgets)
     if len(budgets) > max_budget_row:
         rest_budget = sum(int(budget) for item, budget, desc

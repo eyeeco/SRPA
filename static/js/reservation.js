@@ -10,17 +10,17 @@ function init_js()
 {
     $('[data-toggle="tooltip"]').tooltip();
     $('.form_datetime_day').datetimepicker({
+        language: 'zh',
         format: 'yyyy-mm-dd',
         weekStart: 1,
         autoclose: true,
-        todayBtn: true,
         minView: 2,
     });
     $('.form_datetime_hour').datetimepicker({
+        language: 'zh',
         format: 'yyyy-mm-dd hh:00:00',
         weekStart: 1,
         autoclose: true,
-        todayBtn: true,
         minView: 1,
     });
     $('#search-form').on('submit', function(e){
