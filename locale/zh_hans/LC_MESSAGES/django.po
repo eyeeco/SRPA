@@ -215,7 +215,6 @@ msgstr "邀请校外人员申请表"
 
 #: ProjectApproval/templates/ProjectApproval/base.html:10
 #: SRPA/templates/base/layout.html:31
-
 msgid "Project Approval"
 msgstr "活动审批"
 
