@@ -17,8 +17,9 @@ from ProjectApproval import PROJECT_APPROVED, PROJECT_EDITTING
 from ProjectApproval import PROJECT_TERMINATED
 from const.models import FeedBack
 
-
 #  TODO: LoginRequiredMixin --> PermissionRequiredMixin
+
+
 class AdminProjectBase(LoginRequiredMixin):
     """
     A base view for all project actions. SHOULD NOT DIRECTLY USE THIS.
@@ -44,9 +45,7 @@ class AdminProjectDetail(AdminProjectBase, ProjectDetail):
     """
     def get_context_data(self, **kwargs):
         form = FeedBackForm({'target_uid': self.object.uid})
-        feed = FeedBack.objects.filter(target_uid=self.object.uid)
         kwargs['form'] = form
-        kwargs['feed'] = feed
         return super(AdminProjectDetail, self).get_context_data(**kwargs)
 
 

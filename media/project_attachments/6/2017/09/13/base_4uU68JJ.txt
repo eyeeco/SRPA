@@ -1,8 +1,0 @@
-#创建虚拟环境
-$virtualenv -p /usr/bin/python3 py3
-
-#激活虚拟环境
-$source py3/bin/activate
-
-#退出虚拟环境
-$deactivate

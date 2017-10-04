@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:05
-# Last modified: 2017-09-23 10:13
+# Last modified: 2017-10-04 10:47
 # Filename: settings.py
 # Description:
 """
@@ -24,6 +24,7 @@ from django.urls import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PHASE = os.getenv('SRPA_SETTINGS', 'development')
 
 
 # Quick-start development settings - unsuitable for production
@@ -32,11 +33,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'v_&4b1seyjht1+vl6c08)&7is*srv_0lqg4t^%0f71o19r5%yu'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = [
-    '192.168.2.169',
+    '192.168.3.93',
+    '192.168.3.95',
     '127.0.0.1',
 ]
 
@@ -101,24 +101,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'SRPA.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'SRPA',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': '192.168.2.167',
-        'PORT': '3306',
-        'OPTIONS': {
-            'sql_mode': 'STRICT_TRANS_TABLES',
-        }
-    }
-}
-
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -139,22 +121,33 @@ USE_L10N = True
 
 USE_TZ = True
 
+if PHASE == 'production':
+    from SRPA.production_settings import DATABASES
+else:
+    from SRPA.development_settings import DATABASES
+    DEBUG = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'global_static'),
 ]
 
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+if not os.path.exists(MEDIA_ROOT):
+    os.makedirs(MEDIA_ROOT)
+
 TMP_FILES_ROOT = os.path.join(MEDIA_ROOT, 'tmp_files')
 TMP_FILES_URL = os.path.join(MEDIA_URL, 'tmp_files')
 
+if not os.path.exists(TMP_FILES_ROOT):
+    os.makedirs(TMP_FILES_ROOT)
 
 # Captcha settings
 CAPTCHA_CHALLENGE_FUNCT = 'authentication.captchas.random_num_challenge'

@@ -24,7 +24,7 @@
             <p class="text-danger">{{form.captcha.errors.as_text}}</p>
             {% endif %}
             {% if form.errors and not form.captcha.errors %}
-            <p class="text-danger">用户名或密码不正确</p>
+            <p class="text-danger">* 用户名或密码不正确</p>
             {% endif %}
         </div>
         <div class="form-group">

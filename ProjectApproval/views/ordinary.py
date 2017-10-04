@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:17
-# Last modified: 2017-09-09 10:08
+# Last modified: 2017-10-02 13:41
 # Filename: ordinary.py
 # Description:
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
@@ -15,6 +15,8 @@ from django.http import Http404, JsonResponse, HttpResponseRedirect
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.template.loader import render_to_string
+from django.shortcuts import redirect
+
 from ProjectApproval import PROJECT_STATUS, PROJECT_SUBMITTED
 from ProjectApproval import PROJECT_HASSOCIAL
 from ProjectApproval.forms import ActivityForm, SocialInvitationForm
@@ -23,6 +25,8 @@ from const.models import Workshop
 from authentication.models import UserInfo
 from authentication import USER_IDENTITIES
 from ProjectApproval import PROJECT_STATUS_CAN_EDIT
+from ProjectApproval.utils import export_project
+from const.models import FeedBack
 
 
 #  TODO: LoginRequiredMixin --> PermissionRequiredMixin
@@ -57,6 +61,14 @@ class ProjectDetail(ProjectBase, DetailView):
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
 
+    def get_context_data(self, **kwargs):
+        feed = FeedBack.objects.filter(
+            target_uid=self.object.uid)
+        kwargs['budgets'] = [x.strip().split(' ') for x in
+                             self.object.budget.split('\n')]
+        kwargs['feed'] = feed
+        return super(ProjectDetail, self).get_context_data(**kwargs)
+
 
 class ProjectAdd(ProjectBase, CreateView):
     """
@@ -86,7 +98,7 @@ class ProjectAdd(ProjectBase, CreateView):
         html = render_to_string(
             self.template_name, request=self.request,
             context=context)
-        return JsonResponse({'status': 1, 'html': html})
+        return JsonResponse({'status': 1, 'reason': '表单填写有错误', 'html': html})
 
 
 class ProjectSocialAdd(ProjectBase, CreateView):
@@ -107,8 +119,8 @@ class ProjectSocialAdd(ProjectBase, CreateView):
         return self.render_to_response(self.get_context_data(**kwargs))
 
     def get_context_data(self, **kwargs):
-        kwargs['form_post_url'] = reverse_lazy('project:ordinary:social_add',
-                                               args=(kwargs['uid'],))
+        kwargs['form_post_url'] = reverse('project:ordinary:social_add',
+                                          args=(kwargs['uid'],))
         kwargs['back_url'] = self.success_url
         return super(ProjectSocialAdd, self).get_context_data(**kwargs)
 
@@ -130,7 +142,7 @@ class ProjectSocialAdd(ProjectBase, CreateView):
         html = render_to_string(
             self.template_name, request=self.request,
             context=context)
-        return JsonResponse({'status': 1, 'reason': '无效输入', 'html': html})
+        return JsonResponse({'status': 1, 'reason': '表单填写有错误', 'html': html})
 
 
 class ProjectUpdate(ProjectBase, UpdateView):
@@ -185,4 +197,16 @@ class ProjectUpdate(ProjectBase, UpdateView):
         html = render_to_string(
             self.template_name, request=self.request,
             context=context)
-        return JsonResponse({'status': 1, 'reason': '无效输入', 'html': html})
+        return JsonResponse({'status': 1, 'reason': '表单填写有错误', 'html': html})
+
+
+class ProjectExport(ProjectBase, DetailView):
+    """
+    A view for exporting project application
+    """
+    slug_field = 'uid'
+    slug_url_kwarg = 'uid'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return redirect(export_project(self.object))

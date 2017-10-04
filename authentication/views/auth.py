@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-08 20:07
-# Last modified: 2017-09-20 09:28
+# Last modified: 2017-10-03 15:59
 # Filename: auth.py
 # Description:
 import json
@@ -65,7 +65,9 @@ class StudentRegisterView(CreateView):
         username = form.cleaned_data['username']
         first_name = form.cleaned_data['name']
         password = form.cleaned_data['password']
+        email = form.cleaned_data['email']
         user = User.objects.create_user(
+            email=email,
             username=username,
             password=password,
             first_name=first_name)
