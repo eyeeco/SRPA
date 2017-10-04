@@ -23,7 +23,7 @@ from django import forms
 
 from authentication import USER_IDENTITY_STUDENT, USER_IDENTITY_TEACHER
 from authentication import USER_IDENTITY_ADMIN
-from SiteReservation import RESERVATION_APPROVED, RESERVATION_TERMINATED
+from SiteReservation import RESERVATION_APPROVED, RESERVATION_CANCELLED
 from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_CAN_EDIT
 from SiteReservation.models import Reservation
 from SiteReservation.forms import DateForm, ReservationForm
@@ -91,12 +91,13 @@ class ReservationList(ReservationBase, ListView):
     A view for displaying user-related reservations list. GET only.
     """
     paginate_by = 10
+    ordering = ['status', '-reservation_time']
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
 
-class ReservationTerminate(ReservationBase, View):
+class ReservationCancelled(ReservationBase, View):
     """
     A view for displaying user-related reservations list after terminating.
     """
@@ -105,7 +106,7 @@ class ReservationTerminate(ReservationBase, View):
 
     def get(self, request, *args, **kwargs):
         reservation = Reservation.objects.filter(uid=kwargs['uid'])
-        reservation.update(status=RESERVATION_TERMINATED)
+        reservation.update(status=RESERVATION_CANCELLED)
         return redirect(self.success_url)
         # return JsonResponse({'status': 0, 'redirect': self.success_url})
 
@@ -166,19 +167,20 @@ class ReservationAdd(ReservationBase, CreateView):
         site = form.cleaned_data['site']
         activity_time_from = form.cleaned_data['activity_time_from']
         activity_time_to = form.cleaned_data['activity_time_to']
-        comment = form.cleaned_data['comment']
-        reservation = Reservation.objects.create(
-            user=self.request.user,
-            site=site,
-            workshop=workshop,
-            status=RESERVATION_SUBMITTED,
-            title=title,
-            activity_time_from=activity_time_from,
-            activity_time_to=activity_time_to,
-            comment=comment)
-        reservation.save()
-        self.object = reservation
-        assign_perms('reservation', self.request.user, obj=reservation)
+
+        conflict = is_conflict(activity_time_from, activity_time_to, site)
+        if conflict:
+            context = self.get_context_data()
+            context['form'] = form
+            html = render_to_string(
+                self.template_name, request=self.request,
+                context=context)
+            return JsonResponse({'status': 2, 'reason': '该时间段内已存在预约',
+                                 'html': html})
+
+        form.instance.user = self.request.user
+        self.object = form.save()
+        assign_perms('reservation', self.request.user, obj=self.object)
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
     def form_invalid(self, form):
