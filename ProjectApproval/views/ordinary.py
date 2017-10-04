@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:17
-# Last modified: 2017-10-02 13:41
+# Last modified: 2017-10-04 16:09
 # Filename: ordinary.py
 # Description:
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
@@ -16,9 +16,10 @@ from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.template.loader import render_to_string
 from django.shortcuts import redirect
+from django.utils.translation import ugettext_lazy as _
 
 from ProjectApproval import PROJECT_STATUS, PROJECT_SUBMITTED
-from ProjectApproval import PROJECT_HASSOCIAL
+from ProjectApproval import PROJECT_SOCIALFORM_REQUIRED
 from ProjectApproval.forms import ActivityForm, SocialInvitationForm
 from ProjectApproval.models import Project
 from const.models import Workshop
@@ -88,7 +89,7 @@ class ProjectAdd(ProjectBase, CreateView):
         form.instance.user = self.request.user
         has_social = form.cleaned_data['has_social']
         if has_social:
-            form.instance.status = PROJECT_HASSOCIAL
+            form.instance.status = PROJECT_SOCIALFORM_REQUIRED
         self.object = form.save()
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
@@ -98,7 +99,7 @@ class ProjectAdd(ProjectBase, CreateView):
         html = render_to_string(
             self.template_name, request=self.request,
             context=context)
-        return JsonResponse({'status': 1, 'reason': '表单填写有错误', 'html': html})
+        return JsonResponse({'status': 1, 'html': html})
 
 
 class ProjectSocialAdd(ProjectBase, CreateView):
@@ -127,7 +128,7 @@ class ProjectSocialAdd(ProjectBase, CreateView):
     def form_valid(self, form):
         project = Project.objects.filter(
             uid=form.cleaned_data['target_uid'])[0]
-        if project.status == PROJECT_HASSOCIAL:
+        if project.status == PROJECT_SOCIALFORM_REQUIRED:
             project.status = PROJECT_SUBMITTED
         else:
             return HttpResponseForbidden()
@@ -142,7 +143,7 @@ class ProjectSocialAdd(ProjectBase, CreateView):
         html = render_to_string(
             self.template_name, request=self.request,
             context=context)
-        return JsonResponse({'status': 1, 'reason': '表单填写有错误', 'html': html})
+        return JsonResponse({'status': 1, 'html': html})
 
 
 class ProjectUpdate(ProjectBase, UpdateView):
@@ -183,7 +184,7 @@ class ProjectUpdate(ProjectBase, UpdateView):
         project = Project.objects.filter(uid=form.instance.uid)[0]
         social_invitation = project.socialinvitation_set.all()
         if has_social:
-            form.instance.status = PROJECT_HASSOCIAL
+            form.instance.status = PROJECT_SOCIALFORM_REQUIRED
         else:
             form.instance.status = PROJECT_SUBMITTED
             if social_invitation:
@@ -197,7 +198,7 @@ class ProjectUpdate(ProjectBase, UpdateView):
         html = render_to_string(
             self.template_name, request=self.request,
             context=context)
-        return JsonResponse({'status': 1, 'reason': '表单填写有错误', 'html': html})
+        return JsonResponse({'status': 1, 'html': html})
 
 
 class ProjectExport(ProjectBase, DetailView):

@@ -1,30 +1,31 @@
 {% extends 'authentication/layout.html' %}
 {% load static %}
 {% load filters %}
+{% load i18n %}
 
 {% block container %}
 <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12 srpa-background">
     <div class="title-div col-sm-12">
-        <h2>个人信息</h2>
+        <h2>{% trans 'Profile' %}</h2>
     </div>
     <div class="col-sm-12">
         <form class="form-horizontal">
             {% include './user_info_detail.html' %}
             <div class="form-group">
-                <label class="col-sm-4 col-xs-6 control-label">学号:</label>
+                <label class="col-sm-4 col-xs-6 control-label">{% trans 'Student ID' %}:</label>
                 <div class="col-sm-8 col-xs-6">
                     <p class="form-control-static">{{object.student_id}}</p>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 col-xs-6 control-label">学院:</label>
+                <label class="col-sm-4 col-xs-6 control-label">{% trans 'Institute' %}:</label>
                 <div class="col-sm-8 col-xs-6">
                     <p class="form-control-static">{{object.get_institute_display}}</p>
                 </div>
             </div>
         </form>
         <div class="col-sm-6 col-sm-offset-3">
-            <a type="button" class="btn btn-info btn-block" href="{% url 'auth:info:update:student' object.uid %}">信息修改</a>
+            <a type="button" class="btn btn-info btn-block" href="{% url 'auth:info:update:student' object.uid %}">{% trans 'Update Profile' %}</a>
         </div>
     </div>
 </div>

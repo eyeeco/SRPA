@@ -1,4 +1,5 @@
 {% load filters %}
+{% load i18n %}
 <div id="form">
     <div class="center-block">
         <div class="col-sm-8 col-sm-offset-2 col-xs-12">
@@ -70,8 +71,8 @@
                 </div>
 
                 <div class="text-center">
-                    <button type="submit" class="btn btn-info btn-md btn-block">提交</button>
-                    <a href="{{ view.success_url }}" class="btn btn-default btn-md btn-block">返回</a>
+                    <button type="submit" class="btn btn-info btn-md btn-block">{% trans 'Submit' %}</button>
+                    <a href="{{ view.success_url }}" class="btn btn-default btn-md btn-block">{% trans 'Back' %}</a>
                 </div>
             </form>
         </div>

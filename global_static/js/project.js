@@ -27,7 +27,8 @@ function init_js()
                     window.location.href=data.redirect;
                 else
                 {
-                    alert(data.reason);
+                    if(data.status != 1)
+                        alert(data.reason);
                     $('#status_table').html('');
                 }
                 clean_js();

@@ -1,13 +1,14 @@
+{% load i18n %}
 <form class="form-horizontal project-detail">
 <div class="form-group" >
     <div class="col-sm-2">
-        <label class="control-label">活动内容:</label>
+        <label class="control-label">{% trans 'Project Title' %}:</label>
     </div>
     <div class="col-sm-4">
         <p class="form-control-static">{{object.title}}</p>
     </div>
     <div class="col-sm-2">
-        <label class="control-label">活动形式:</label>
+        <label class="control-label">{% trans 'Project Form' %}:</label>
     </div>
     <div class="col-sm-4">
         <p class="form-control-static">{{object.form}}</p>
@@ -16,13 +17,13 @@
 <!--line 2-->
 <div class="form-group" >
     <div class="col-sm-2">
-        <label class="control-label">活动负责人:</label>
+        <label class="control-label">{% trans 'Person in Charge' %}:</label>
     </div>
     <div class="col-sm-4">
         <p class="form-control-static">{{object.charger}}</p>
     </div>
     <div class="col-sm-2">
-        <label class="control-label">联系方式:</label>
+        <label class="control-label">{% trans 'Contact Info' %}:</label>
     </div>
     <div class="col-sm-4">
         <p class="form-control-static">{{object.contact_info}}</p>
@@ -32,13 +33,13 @@
 <!--line 3-->
 <div class="form-group" >
     <div class="col-sm-2">
-        <label class="control-label">工坊:</label>
+        <label class="control-label">{% trans 'Workshop' %}:</label>
     </div>
     <div class="col-sm-4">
         <p class="form-control-static">{{object.workshop}}</p>
     </div>
      <div class="col-sm-2">
-        <label class="control-label">活动场地:</label>
+         <label class="control-label">{% trans 'Site' %}:</label>
     </div>
     <div class="col-sm-4">
         <p class="form-control-static">{{object.site}}</p>
@@ -47,13 +48,13 @@
 <!--line 4-->
 <div class="form-group" >
     <div class="col-sm-2">
-        <label class="control-label">活动开始时间:</label>
+        <label class="control-label">{% trans 'Activity Time From' %}:</label>
     </div>
     <div class="col-sm-4">
         <p class="form-control-static">{{object.activity_time_from}}</p>
     </div>
     <div class="col-sm-2">
-        <label class="control-label">活动结束时间:</label>
+        <label class="control-label">{% trans 'Activity Time To' %}:</label>
     </div>
     <div class="col-sm-4">
        <p class="form-control-static">{{object.activity_time_to}}</p>
@@ -62,39 +63,39 @@
 <!--line 5-->
 <div class="form-group" >
     <div class="col-sm-2">
-        <label class="control-label">活动范围:</label>
+        <label class="control-label">{% trans 'Project Participant' %}:</label>
     </div>
     <div class="col-sm-2">
         <p class="form-control-static">{{object.get_activity_range_display}}</p>
     </div>
     <div class="col-sm-2">
-        <label class="control-label">参与人数:</label>
+        <label class="control-label">{% trans 'Participant Number' %}:</label>
     </div>
     <div class="col-sm-2">
         <p class="form-control-static">{{object.amount}}</p>
     </div>
     <div class="col-sm-3">
-        <label class="control-label">是否有校外人员参与:</label>
+        <label class="control-label">{% trans 'Has Social' %}:</label>
     </div>
     <div class="col-sm-1">
         {% if object.has_social == False %}
-        <p class="form-control-static">否</p>
+        <p class="form-control-static">{% trans 'No' %}</p>
         {% else %}
-        <p class="form-control-static">是</p>
+        <p class="form-control-static">{% trans 'Yes' %}</p>
         {% endif %}
     </div>
 </div> 
 <!--line 6-->
 <div class="form-group" >
     <div class="col-sm-2">
-        <label class="control-label">预算及说明:</label>
+        <label class="control-label">{% trans 'Budget Detail' %}:</label>
     </div>
     <div class="col-sm-10">
         <table class="table"> 
             <tr class="fir_tr">
-                <th>项目名称</th>
-                <th>预算金额(元)</th>
-                <th>描述</th>
+                <th>{% trans 'Budget Item' %}</th>
+                <th>{% trans 'Budget Amount' %}</th>
+                <th>{% trans 'Budget Description' %}</th>
             </tr>
         {% for item, budget, desc in budgets %}    
             <tr>
@@ -109,7 +110,7 @@
 <!--line 7-->
 <div class="form-group" >
     <div class="col-sm-2">
-        <label class="control-label">备注:</label>
+        <label class="control-label">{% trans 'Budget Comment' %}:</label>
     </div>
     <div class="col-sm-10">
         <p class="form-control-static">{{object.comment}}</p>
@@ -118,7 +119,7 @@
 {% if feed %}
 <div class="form-group" >
     <div class="col-sm-2">
-        <label class="control-label">审批意见:</label>
+        <label class="control-label">{% trans 'Audit Opinion' %}:</label>
     </div>
     <div class="col-sm-10">
         {% for list in feed %}
@@ -139,19 +140,19 @@
 <div class="col-sm-6 col-sm-offset-3">
     {% if request.user.user_info.identity == USER_IDENTITY_STUDENT%}
     {% if object.status in PROJECT_STATUS_CAN_EDIT %}
-    <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:update' object.uid %}">修改</a>
+    <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:update' object.uid %}">{% trans 'Update' %}</a>
     {% endif %}
     {% if object.status in PROJECT_STATUS_CAN_CANCEL %}
-    <a type="button" class="btn btn-danger" href="#">取消</a>
+    <a type="button" class="btn btn-danger" href="#">{% trans 'Cancel' %}</a>
     {% endif %}
     {% if object.status == PROJECT_HASSOCIAL %}
-    <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:social_add' object.uid %}">校外人员表单填写</a>
+    <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:social_add' object.uid %}">{% trans 'Fill Additional Form' %}</a>
     {% endif %}
-    <a href="{{ view.success_url }}" class="btn btn-default btn-md ">返回</a>
+    <a href="{{ view.success_url }}" class="btn btn-default btn-md ">{% trans 'Back' %}</a>
     {% endif %}
     {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
     {% if object.status in PROJECT_STATUS_CAN_CHECK %}
-    <a type="button" class="btn btn-info" href="#" data-toggle="modal" data-target="#modal_form">审核</a>
+    <a type="button" class="btn btn-info" href="#" data-toggle="modal" data-target="#modal_form">{% trans 'Audit' %}</a>
     {% endif %}   
     {% endif %}
 </div>
@@ -163,7 +164,7 @@
             <form class="form-horizontal" action="{% url 'project:admin:update' object.uid %}" method="POST">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal_title">审批意见</h4>
+                    <h4 class="modal-title" id="modal_title">{% trans 'Audit Opinion' %}</h4>
                 </div>
                 <div class="modal-body">
                     {% csrf_token %}
@@ -172,8 +173,8 @@
                     {{ form.status }}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-primary">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+                    <button type="submit" class="btn btn-primary">{% trans 'Confirm' %}</button>
                 </div>
             </form>
         </div>

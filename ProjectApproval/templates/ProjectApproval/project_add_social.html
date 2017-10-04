@@ -1,3 +1,4 @@
+{% load i18n %}
 <form id="info-form" class="form-horizontal project-form" method="POST" action="{{form_post_url}}">
 {% csrf_token %}
 {{form.target_uid}}
@@ -31,7 +32,7 @@
 {% endfor %}
 {% endif %} 
 <div>
-    <button type="submit" class="btn btn-primary btn-md">提交</button>
-    <a href="{{ back_url }}" class="btn btn-primary btn-md">返回</a>
+    <button type="submit" class="btn btn-primary btn-md">{% trans 'Submit' %}</button>
+    <a href="{{ back_url }}" class="btn btn-primary btn-md">{% trans 'Back' %}</a>
 </div> 
 </form>

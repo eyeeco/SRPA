@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 {% load static %}
+{% load i18n %}
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block web_title %}{{TITLE}}{% endblock %}</title>
+        <title>{% block web_title %}{% trans 'SRPA' %}{% endblock %}</title>
         {% block header_css %}
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
@@ -19,35 +20,35 @@
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="{% url 'index' %}">{{TITLE}}</a>
+                    <a class="navbar-brand" href="{% url 'index' %}">{% trans 'SRPA' %}</a>
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     {% block navigation %}
                     <ul class="nav navbar-nav">
                         {% if request.user.is_authenticated %}
-                        <li><a href="{% url 'index' %}">主页</a></li>
-                        <li><a href="{% url 'reservation:index' %}">活动场地预约</a></li>
-                        <li><a href="{% url 'project:index' %}">活动预约审批</a></li>
+                        <li><a href="{% url 'index' %}">{% trans 'index' %}</a></li>
+                        <li><a href="{% url 'reservation:index' %}">{% trans 'Site Reservation' %}</a></li>
+                        <li><a href="{% url 'project:index' %}">{% trans 'Project Approval' %}</a></li>
                         {% endif %}
                     </ul>
                     {% endblock %}
                     <ul class="nav navbar-nav navbar-right">
                         {% if user.is_authenticated %}
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">欢迎, {{user.first_name}}<span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% trans 'Welcome' %},{{user.first_name}}<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>
                                 {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
-                                    <a href="{% url 'auth:info:student' request.user.user_info.uid %}">个人信息</a>
-                                    <a href="{% url 'auth:password_change' %}">修改密码</a>
+                                    <a href="{% url 'auth:info:student' request.user.user_info.uid %}">{% trans 'Profile' %}</a>
+                                    <a href="{% url 'auth:password_change' %}">{% trans 'Update password' %}</a>
                                 {% endif %}
                                 </li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="{% url 'auth:logout' %}">退出登录</a></li>
+                                <li><a href="{% url 'auth:logout' %}">{% trans 'Logout' %}</a></li>
                             </ul>
                         </li>
                         {% else %}
-                        <li><a href="{% url 'auth:register:index' %}">注册</a></li>
+                        <li><a href="{% url 'auth:register:index' %}">{% trans 'Register' %}</a></li>
                         {% endif %}
                     </ul>
                 </div><!-- /.navbar-collapse -->

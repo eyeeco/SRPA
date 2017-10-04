@@ -1,22 +1,23 @@
 {% load static %}
 {% load filters %}
+{% load i18n %}
 <div class="col-sm-8 col-sm-offset-2 col-xs-12">
     <form class="form-horizontal" method="POST" action="{% url 'auth:login' %}">
         {% csrf_token %}
         <div class="form-group">
-            <div class="input-group" data-toggle="tooltip" data-placement="top" title="请输入用户名">
+            <div class="input-group" data-toggle="tooltip" data-placement="top" title="{% trans 'Please enter username' %}">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
                 {{form.username|addcls:'form-control'}}
             </div>
         </div>
         <div class="form-group">
-            <div class="input-group" data-toggle="tooltip" data-placement="top" title="请输入密码">
+            <div class="input-group" data-toggle="tooltip" data-placement="top" title="{% trans 'Please enter password' %}">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
                 {{form.password|addcls:'form-control'}}
             </div>
         </div>
         <div class="form-group">
-            <div class="input-group" data-toggle="tooltip" data-placement="top" title="请输入验证码">
+            <div class="input-group" data-toggle="tooltip" data-placement="top" title="{% trans 'Please enter captcha' %}">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></div>
                 {{form.captcha|addcls:'form-control'}}
             </div>
@@ -24,12 +25,12 @@
             <p class="text-danger">{{form.captcha.errors.as_text}}</p>
             {% endif %}
             {% if form.errors and not form.captcha.errors %}
-            <p class="text-danger">* 用户名或密码不正确</p>
+            <p class="text-danger">* {% trans 'Wrong username or password' %}</p>
             {% endif %}
         </div>
         <div class="form-group">
             <div class="col-sm-6 col-sm-offset-3">
-                <button type="submit" class="btn btn-info btn-lg btn-block">登录</button>
+                <button type="submit" class="btn btn-info btn-lg btn-block">{% trans 'Login' %}</button>
             </div>
         </div>
     </form>

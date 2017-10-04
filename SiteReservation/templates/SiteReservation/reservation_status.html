@@ -1,8 +1,9 @@
+{% load i18n %}
 <div class="col-xs-12" style="margin-bottom:2em">
     <form class="form-inline" method="POST" id="search-form" action="{% url 'reservation:status' %}">
         {% csrf_token %}
-        <div class="form-group col-sm-6" data-toggle="tooltip" data-placement="top" title="请选择欲查询日期">
-            <label for="id_date">选择日期</label>
+        <div class="form-group col-sm-6" data-toggle="tooltip" data-placement="top" title="{% trans 'Please select the date you want to check' %}">
+            <label for="id_date">{% trans 'Select Date' %}</label>
             <div class="input-append input-group form_datetime_day date">
                 {{form.date}}
                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-remove"></span></span>
@@ -10,14 +11,14 @@
             </div>
         </div>
         <div class="form-group col-sm-3">
-            <label for="id_site">选择场地</label>
+            <label for="id_site">{% trans 'Select Site' %}</label>
             <select class="form-control" id="id_site" placeholder="" name="site_uid">
                 {% for site in sites %}
                 <option value="{{site.uid}}">{{site.desc}}</option>
                 {% endfor %}
             </select>
         </div>
-        <button type="submit" class="btn btn-default">检索</button>
+        <button type="submit" class="btn btn-default">{% trans 'Retrieve' %}</button>
     </form>
 </div>
 <div id="status_table" class="col-xs-12">

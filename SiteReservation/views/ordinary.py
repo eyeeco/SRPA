@@ -3,9 +3,10 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:03
-# Last modified: 2017-10-02 13:41
+# Last modified: 2017-10-04 15:20
 # Filename: ordinary.py
 # Description:
+from uuid import UUID
 from datetime import datetime, timedelta, timezone
 
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
@@ -19,6 +20,7 @@ from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.db.models import Q
+from django.utils.translation import ugettext_lazy as _
 
 from authentication import USER_IDENTITY_STUDENT, USER_IDENTITY_TEACHER
 from authentication import USER_IDENTITY_ADMIN
@@ -57,12 +59,18 @@ class ReservationStatus(ReservationBase, FormView):
         uid = self.request.POST.get('site_uid', None)
         date = form.cleaned_data['date']
         if date < datetime.now().date():
-            return JsonResponse({'status': 2, 'reason': '请选择一个未来时间'})
+            return JsonResponse({'status': 2,
+                                 'reason': _('Please choose a future time')})
         start_dt = datetime.combine(date, datetime.min.time())
         start_dt = start_dt.replace(tzinfo=timezone.utc)
         end_dt = start_dt + timedelta(days=1)
         if not uid:
             raise Http404()
+        try:
+            uid = UUID(uid)
+        except ValueError:
+            return JsonResponse({'status': 3,
+                                 'reason': _('Illegal Input')})
         site = get_object_or_404(Site, uid=uid)
         reservations = Reservation.objects.filter(site=site)
         reservations = reservations.filter(status=RESERVATION_APPROVED)
@@ -82,7 +90,8 @@ class ReservationStatus(ReservationBase, FormView):
         return JsonResponse({'status': 0, 'html': status_table})
 
     def form_invalid(self, form):
-        return JsonResponse({'status': 1, 'reason': '表单信息有误，请核对'})
+        return JsonResponse({'status': 1, 'reason': _('Wrong form data, '
+                                                      'Please check again')})
 
 
 class ReservationList(ReservationBase, ListView):
@@ -107,7 +116,6 @@ class ReservationTerminate(ReservationBase, View):
         reservation = Reservation.objects.filter(uid=kwargs['uid'])
         reservation.update(status=RESERVATION_TERMINATED)
         return redirect(self.success_url)
-        # return JsonResponse({'status': 0, 'redirect': self.success_url})
 
 
 class ReservationExport(ReservationBase, DetailView):
@@ -158,7 +166,9 @@ class ReservationAdd(ReservationBase, CreateView):
             html = render_to_string(
                 self.template_name, request=self.request,
                 context=context)
-            return JsonResponse({'status': 2, 'reason': '该时间段内已存在预约',
+            return JsonResponse({'status': 2,
+                                 'reason': _('Conflict with existing '
+                                             'reservation'),
                                  'html': html})
 
         form.instance.user = self.request.user
@@ -228,7 +238,9 @@ class ReservationUpdate(ReservationBase, UpdateView):
             html = render_to_string(
                 self.template_name, request=self.request,
                 context=context)
-            return JsonResponse({'status': 2, 'reason': '该时间段内已存在预约',
+            return JsonResponse({'status': 2,
+                                 'reason': _('Conflict with existing '
+                                             'reservation'),
                                  'html': html})
         form.save()
         return JsonResponse({'status': 0, 'redirect': self.success_url})

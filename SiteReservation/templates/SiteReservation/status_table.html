@@ -1,4 +1,5 @@
-<h3>{{site}}预约情况</h3>
+{% load i18n %}
+<h3>{{site}}{% trans 'Reservation Status' %}</h3>
 <div class="table-responsive">
     <table class="table status-table">
         <tr>
@@ -22,9 +23,9 @@
             <td>{{date}}</td>
             {% for status in available_status %}
             {% if status %}
-            <td class='available'>可预约</td>
+            <td class='available'>{% trans 'Available' %}</td>
             {% else %}
-            <td class='not-available'>已预约</td>
+            <td class='not-available'>{% trans 'Not Available' %}</td>
             {% endif %}
             {% endfor %}
         </tr>

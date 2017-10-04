@@ -1,12 +1,13 @@
 {% extends "authentication/layout.html" %}
 {% load static %}
 {% load filters %}
+{% load i18n %}
 
 {% block container %}
 <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12 srpa-background">
-    <h1>注册</h1>
+    <h1>{% trans 'Register' %}</h1>
     <ul class="nav nav-tabs" role="tablist">
-        <li class="white{% if identity == USER_IDENTITY_STUDENT %} active{% endif %}"><a type="button" class="btn" data-toggle="tab">学生</a></li>
+        <li class="white{% if identity == USER_IDENTITY_STUDENT %} active{% endif %}"><a type="button" class="btn" data-toggle="tab">{% trans 'Student' %}</a></li>
     </ul>
     <div id="form">
         {% include './info_form.html' %}

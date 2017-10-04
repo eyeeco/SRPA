@@ -3,23 +3,25 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:17
-# Last modified: 2017-09-09 10:08
+# Last modified: 2017-10-04 15:46
 # Filename: admin.py
 # Description:
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, UpdateView
-from ProjectApproval.models import Project
-from .ordinary import ProjectList, ProjectUpdate, ProjectDetail
-from const.forms import FeedBackForm
 from django.http import JsonResponse, HttpResponseForbidden
+from django.utils.translation import ugettext_lazy as _
+
+from ProjectApproval.models import Project
+from const.forms import FeedBackForm
 from ProjectApproval import PROJECT_STATUS_CAN_CHECK, PROJECT_SUBMITTED
 from ProjectApproval import PROJECT_APPROVED, PROJECT_EDITTING
 from ProjectApproval import PROJECT_TERMINATED
 from const.models import FeedBack
 
+from .ordinary import ProjectList, ProjectUpdate, ProjectDetail
+
+
 #  TODO: LoginRequiredMixin --> PermissionRequiredMixin
-
-
 class AdminProjectBase(LoginRequiredMixin):
     """
     A base view for all project actions. SHOULD NOT DIRECTLY USE THIS.
@@ -76,10 +78,10 @@ class AdminProjectUpdate(AdminProjectBase, UpdateView):
         feedback = form.save(commit=False)
         if obj.uid != feedback.target_uid:
             # Mismatch target_uid
-            return JsonResponse({'status': 2, 'reason': '非法输入'})
+            return JsonResponse({'status': 2, 'reason': _('Illegal Input')})
         if obj.workshop.instructor.user_info.user != self.request.user:
             # Mismatch current teacher
-            return JsonResponse({'status': 2, 'reason': '非法输入'})
+            return JsonResponse({'status': 2, 'reason': _('Illegal Input')})
         feedback.user = self.request.user
         status = form.cleaned_data['status']
         if status == 'APPROVE':
@@ -93,4 +95,4 @@ class AdminProjectUpdate(AdminProjectBase, UpdateView):
         return JsonResponse({'status': 0})
 
     def form_invalid(self, form):
-        return JsonResponse({'status': 1, 'reason': '无效输入'})
+        return JsonResponse({'status': 1, 'reason': _('Illegal Input')})

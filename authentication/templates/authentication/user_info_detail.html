@@ -1,17 +1,18 @@
+{% load i18n %}
 <div class="form-group">
-    <label class="col-sm-4 col-xs-6 control-label">姓名:</label>
+    <label class="col-sm-4 col-xs-6 control-label">{% trans 'First Name' %}:</label>
     <div class="col-sm-8 col-xs-6">
         <p class="form-control-static">{{object.user.first_name}}</p>
     </div>
 </div>
 <div class="form-group">
-    <label class="col-sm-4 col-xs-6 control-label">联系方式:</label>
+    <label class="col-sm-4 col-xs-6 control-label">{% trans 'Contact Info' %}:</label>
     <div class="col-sm-8 col-xs-6">
         <p class="form-control-static">{{object.phone}}</p>
     </div>
 </div>
 <div class="form-group">
-    <label class="col-sm-4 col-xs-6 control-label">认证身份:</label>
+    <label class="col-sm-4 col-xs-6 control-label">{% trans 'Identity' %}:</label>
     <div class="col-sm-8 col-xs-6">
         <p class="form-control-static">{{object.get_identity_display}}</p>
     </div>

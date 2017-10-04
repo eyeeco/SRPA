@@ -1,6 +1,7 @@
-{% block project_content %}
 {% load filters %}
 {% load static %}
+{% load i18n %}
+{% block project_content %}
 <!--line 1-->
 <form id="info-form" class="form-horizontal project-form" method="POST" action="{% url form_post_url object.uid %}">
 {% csrf_token %}
@@ -143,7 +144,7 @@
     {% endif %}
 </div>    
 <!--line 8-->
-<div class="form-group" data-toggle="tooltip" data-placement="top" title="预算及说明请按照‘项目名（空格）预算金额（空格）说明’填写">
+<div class="form-group" data-toggle="tooltip" data-placement="top" title="{% trans 'Please fill the form in format' %}">
     <div class="col-sm-2">
         <label class="control-label">{{form.budget.label}}:</label>
     </div>
@@ -160,8 +161,8 @@
 {% endfor %}
 {% endif %}
 <div>
-     <button type="submit" class="btn btn-primary btn-md">提交</button>
-    <a href="{{ back_url }}" class="btn btn-primary btn-md">返回</a>
+    <button type="submit" class="btn btn-primary btn-md">{% trans 'Submit' %}</button>
+    <a href="{{ back_url }}" class="btn btn-primary btn-md">{% trans 'Back' %}</a>
 </div>
 </form>
 {% endblock %}

@@ -41,3 +41,8 @@ textarea {
     resize: none;
     color: black;
 }
+
+p.text-danger{
+    text-align: right;
+    color: rgb(235, 66, 56);
+}
