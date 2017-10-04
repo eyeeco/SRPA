@@ -16,5 +16,5 @@ __all__ = [
     'ProjectDetail', 'AdminProjectDetail',
     'ProjectList', 'ProjectAdd', 'ProjectUpdate',
     'AdminProjectList', 'AdminProjectUpdate',
-    'ProjectSocialAdd', 'ProjectExport','ProjectCancel'
+    'ProjectSocialAdd', 'ProjectExport', 'ProjectCancel'
 ]

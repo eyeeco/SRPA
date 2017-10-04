@@ -213,10 +213,11 @@ class ProjectExport(ProjectBase, DetailView):
         self.object = self.get_object()
         return redirect(export_project(self.object))
 
-class ProjectCancel(ProjectBase,View):
+
+class ProjectCancel(ProjectBase, View):
     """
     A view for student to cancel the project application himself
-    """  
+    """
     success_url = reverse_lazy('project:index')
 
     def get(self, request, *args, **kwargs):
