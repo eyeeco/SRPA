@@ -315,7 +315,7 @@ msgstr "操作"
 msgid "Detail"
 msgstr "详情"
 
-#: ProjectApproval/templates/ProjectApproval/project_list.html:26
+#: ProjectApproval/templates/ProjectApproval/project_detail.html:26
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:78
 msgid "Export"
 msgstr "导出"

@@ -7,7 +7,7 @@
 # Filename: ordinary.py
 # Description:
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
-from django.views.generic import DetailView
+from django.views.generic import DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy, reverse, NoReverseMatch
@@ -20,6 +20,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ProjectApproval import PROJECT_STATUS, PROJECT_SUBMITTED
 from ProjectApproval import PROJECT_SOCIALFORM_REQUIRED
+from ProjectApproval import PROJECT_CANCELLED
 from ProjectApproval.forms import ActivityForm, SocialInvitationForm
 from ProjectApproval.models import Project
 from const.models import Workshop
@@ -211,3 +212,14 @@ class ProjectExport(ProjectBase, DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         return redirect(export_project(self.object))
+
+class ProjectCancel(ProjectBase,View):
+    """
+    A view for student to cancel the project application himself
+    """  
+    success_url = reverse_lazy('project:index')
+
+    def get(self, request, *args, **kwargs):
+        reservation = Project.objects.filter(uid=kwargs['uid'])
+        reservation.update(status=PROJECT_CANCELLED)
+        return redirect(self.success_url)
