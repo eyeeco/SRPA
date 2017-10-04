@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:05
-# Last modified: 2017-10-02 22:16
+# Last modified: 2017-10-04 10:47
 # Filename: settings.py
 # Description:
 """
@@ -24,6 +24,7 @@ from django.urls import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PHASE = os.getenv('SRPA_SETTINGS', 'development')
 
 
 # Quick-start development settings - unsuitable for production
@@ -120,6 +121,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+if PHASE == 'production':
+    from SRPA.production_settings import DATABASES
+else:
+    from SRPA.development_settings import DATABASES
+    DEBUG = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
@@ -153,9 +159,3 @@ CAPTCHA_TIMEOUT = 1
 TITLE = '场地预约与活动审批系统'
 LOGIN_URL = reverse_lazy('auth:login')
 LOGIN_REDIRECT_URL = reverse_lazy('index')
-
-phase = os.getenv('SRPA_SETTINGS', 'development')
-if phase == 'production':
-    from SRPA.production_settings import DATABASES
-else:
-    from SRPA.development_settings import DATABASES

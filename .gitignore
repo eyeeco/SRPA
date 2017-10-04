@@ -102,3 +102,4 @@ ENV/
 media/
 *.swp
 tmp/
+static/
