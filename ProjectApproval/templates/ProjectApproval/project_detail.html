@@ -143,7 +143,7 @@
     <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:update' object.uid %}">{% trans 'Update' %}</a>
     {% endif %}
     {% if object.status in PROJECT_STATUS_CAN_CANCEL %}
-    <a type="button" class="btn btn-danger" href="{% url 'project:ordinary:cancel' object.uid %}">{% trans 'Cancel' %}</a>
+    <a type="button" class="btn btn-danger" href="{% url 'project:ordinary:cancel' object.uid %}" onclick="if(confirm('{% trans 'Are you sure you want to cancel the application apply' %}?')==false)return false;">{% trans 'Cancel' %}</a>
     {% endif %}
     {% if object.status == PROJECT_SOCIALFORM_REQUIRED %}
     <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:social_add' object.uid %}">{% trans 'Fill Additional Form' %}</a>
