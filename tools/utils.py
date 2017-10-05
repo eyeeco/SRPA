@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:13
-# Last modified: 2017-09-08 22:11
+# Last modified: 2017-10-05 11:35
 # Filename: utils.py
 # Description:
 from typing import Iterable
@@ -15,22 +15,28 @@ from django.utils.timezone import make_aware
 from guardian.shortcuts import assign_perm, remove_perm
 
 
-def assign_perms(name, user_or_group, obj=None, perms=None):
+def assign_perms(name, user_or_group, obj=None, perms=None, app_name=None):
     if perms is None:
         perms = ['add', 'update', 'delete', 'view']
-    if not isinstance(perms, Iterable):
+    if not isinstance(perms, list) and not isinstance(perms, tuple):
         perms = [perms]
+    perm_fmt = '{}_{}'
+    if app_name:
+        perm_fmt = app_name + '.' + perm_fmt
     for perm in perms:
-        assign_perm(perm + '_' + name, user_or_group, obj)
+        assign_perm(perm_fmt.format(perm, name), user_or_group, obj)
 
 
-def remove_perms(name, user_or_group, obj=None, perms=None):
+def remove_perms(name, user_or_group, obj=None, perms=None, app_name=None):
     if perms is None:
         perms = ['add', 'update', 'delete', 'view']
-    if not isinstance(perms, Iterable):
+    if not isinstance(perms, list) and not isinstance(perms, tuple):
         perms = [perms]
+    perm_fmt = '{}_{}'
+    if app_name:
+        perm_fmt = app_name + '.' + perm_fmt
     for perm in perms:
-        remove_perm(perm + '_' + name, user_or_group, obj)
+        remove_perm(perm_fmt.format(perm, name), user_or_group, obj)
 
 
 def check_perm(perm, user, obj, raise_403=True):

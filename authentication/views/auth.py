@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-08 20:07
-# Last modified: 2017-10-04 21:03
+# Last modified: 2017-10-05 11:35
 # Filename: auth.py
 # Description:
 import json
@@ -76,7 +76,13 @@ class StudentRegisterView(CreateView):
         login(self.request, user,
               backend='django.contrib.auth.backends.ModelBackend')
         self.object = form.save()
-        assign_perms(self.info_name, user, self.object)
+        assign_perms(self.info_name, user, self.object,
+                     perms=['update', 'view'])
+        # Assign perm to add Project and Reservation
+        assign_perms('reservation', user, perms='add',
+                     app_name='SiteReservation')
+        assign_perms('project', user, perms='add',
+                     app_name='ProjectApproval')
         return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
