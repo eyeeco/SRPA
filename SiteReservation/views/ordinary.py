@@ -22,10 +22,11 @@ from django.urls import reverse_lazy
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from guardian.mixins import PermissionRequiredMixin, PermissionListMixin
+from django import forms
 
 from authentication import USER_IDENTITY_STUDENT, USER_IDENTITY_TEACHER
 from authentication import USER_IDENTITY_ADMIN
-from SiteReservation import RESERVATION_APPROVED, RESERVATION_TERMINATED
+from SiteReservation import RESERVATION_APPROVED, RESERVATION_CANCELLED
 from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_CAN_EDIT
 from SiteReservation.models import Reservation
 from SiteReservation.forms import DateForm, ReservationForm
@@ -105,7 +106,7 @@ class ReservationList(ReservationBase, ListView):
         return super().get_queryset().filter(user=self.request.user)
 
 
-class ReservationTerminate(ReservationBase, View):
+class ReservationCancelled(ReservationBase, View):
     """
     A view for displaying user-related reservations list after terminating.
     """
@@ -114,7 +115,7 @@ class ReservationTerminate(ReservationBase, View):
 
     def get(self, request, *args, **kwargs):
         reservation = Reservation.objects.filter(uid=kwargs['uid'])
-        reservation.update(status=RESERVATION_TERMINATED)
+        reservation.update(status=RESERVATION_CANCELLED)
         return redirect(self.success_url)
 
 
@@ -155,6 +156,22 @@ class ReservationAdd(ReservationBase, CreateView):
     form_post_url = reverse_lazy('reservation:ordinary:add')
 
     def form_valid(self, form):
+        t1 = form.cleaned_data['activity_time_from']
+        t2 = form.cleaned_data['activity_time_to']
+        site_now = form.cleaned_data['site']
+        q = Reservation.objects.filter(status=RESERVATION_APPROVED)
+        q = q.filter(Q(site=site_now))
+        q = q.filter(Q(activity_time_to__gt=t1) & Q(activity_time_from__lt=t2))
+        cnt = q.count()
+        if cnt != 0:
+            print('here')
+            context = self.get_context_data()
+            context['form'] = form
+            html = render_to_string(
+                self.template_name, request=self.request,
+                context=context)
+            return JsonResponse({'status': 2, 'reason': '该时间段内已存在其他预约', 'html': html})
+
         site = form.cleaned_data['site']
         activity_time_from = form.cleaned_data['activity_time_from']
         activity_time_to = form.cleaned_data['activity_time_to']
@@ -242,6 +259,7 @@ class ReservationUpdate(ReservationBase, UpdateView):
                                  'reason': _('Conflict with existing '
                                              'reservation'),
                                  'html': html})
+        self.object.status = RESERVATION_SUBMITTED
         form.save()
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 

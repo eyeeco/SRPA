@@ -27,44 +27,17 @@
     </tr>
     {% endfor %}
 </table>
-
 {% if is_paginated %}
-
-{% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
-<nav>
-    <ul class="pagination">
+<div class="pagination">
+    <span class="page-links">
         {% if page_obj.has_previous %}
-        <li>
-            <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:list' page=page_obj.previous_page_number %}">
-                <span aria-hidden="true">&laquo;</span>
-        </a>
-        </li>
-        {% else %}
-        <li class="disabled">
-            <a href="#">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
+            <class="btn page-loader" type="button" a href="/reservation/ordinary/list/?page={{ page_obj.previous_page_number }}">previous</a>
         {% endif %}
-
-        {% for pageid in paginator.page_range %}
-            <li {% if pageid == page_obj.number %}class="active"{% endif %}>
-                <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:list' page=pageid %}">{{ pageid }}</a>
-            </li>
-        {% endfor %}
-
+        <span class="page-current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
         {% if page_obj.has_next %}
-        <li>
-            <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:list' page=page_obj.next_page_number %}">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-        {% else %}
-        <li {% if not page_obj.has_next %}class="disabled"{% endif %}>
-            <a href="#">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
+            <class="btn page-loader" type="button" a href="/reservation/ordinary/list/?page={{ page_obj.next_page_number }}">next</a>
         {% endif %}
     </ul>
 </nav>
@@ -108,6 +81,4 @@
         {% endif %}
     </ul>
 </nav>
-{% endif %}
-
 {% endif %}

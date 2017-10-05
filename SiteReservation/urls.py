@@ -18,8 +18,8 @@ ord_patterns = [
     url(r'^add/$', views.ReservationAdd.as_view(), name='add'),
     url(r'^update/(?P<uid>.+)$', views.ReservationUpdate.as_view(),
         name='update'),
-    url(r'^terminate/(?P<uid>.+)$', views.ReservationTerminate.as_view(),
-        name='terminate'),
+    url(r'^cancell/(?P<uid>.+)$', views.ReservationCancelled.as_view(),
+        name='cancell'),
     url(r'^export/(?P<uid>.+)$', views.ReservationExport.as_view(),
         name='export'),
 ]
