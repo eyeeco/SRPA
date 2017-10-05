@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:09
-# Last modified: 2017-10-04 14:45
+# Last modified: 2017-10-04 21:41
 # Filename: forms.py
 # Description:
 from django import forms
@@ -19,7 +19,7 @@ from .allow_ids import ALLOW_IDS
 
 
 class LoginForm(AuthenticationForm):
-    captcha = CaptchaField()
+    captcha = CaptchaField(label=_('Captcha'))
 
 
 class RegisterForm(ModelForm):
@@ -46,7 +46,7 @@ class RegisterForm(ModelForm):
         max_length=11)
     email = forms.EmailField(
         label=_('Email'))
-    captcha = CaptchaField()
+    captcha = CaptchaField(label=_('Captcha'))
 
     class Meta:
         model = UserInfo

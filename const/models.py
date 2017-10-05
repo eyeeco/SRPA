@@ -3,13 +3,14 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 18:34
-# Last modified: 2017-09-22 09:52
+# Last modified: 2017-10-04 21:48
 # Filename: models.py
 # Description:
 from uuid import uuid4
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
 from captcha.fields import CaptchaField as _CaptchaField
 
@@ -18,11 +19,11 @@ from authentication.models import TeacherInfo
 
 class Site(models.Model):
     uid = models.UUIDField(default=uuid4, editable=False, unique=True)
-    desc = models.CharField(verbose_name='场地', max_length=50)
+    desc = models.CharField(verbose_name=_('Site Description'), max_length=50)
 
     class Meta:
-        verbose_name = '场地信息'
-        verbose_name_plural = '场地信息'
+        verbose_name = _('Site')
+        verbose_name_plural = _('Site')
         default_permissions = ('add', 'delete', 'update', 'view')
 
     def __str__(self):
@@ -31,13 +32,14 @@ class Site(models.Model):
 
 class Workshop(models.Model):
     uid = models.UUIDField(default=uuid4, editable=False, unique=True)
-    desc = models.CharField(verbose_name='工坊', max_length=50)
-    instructor = models.ForeignKey(TeacherInfo, verbose_name='指导教师',
+    desc = models.CharField(verbose_name=_('Workshop Description'),
+                            max_length=50)
+    instructor = models.ForeignKey(TeacherInfo, verbose_name=_('Instructor'),
                                    on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = '工坊信息'
-        verbose_name_plural = '工坊信息'
+        verbose_name = _('Workshop')
+        verbose_name_plural = _('Workshop')
         default_permissions = ('add', 'delete', 'update', 'view')
 
     def __str__(self):
@@ -46,21 +48,22 @@ class Workshop(models.Model):
 
 class FeedBack(models.Model):
     uid = models.UUIDField(default=uuid4, editable=False, unique=True)
-    user = models.ForeignKey(User, verbose_name='审阅人',
+    user = models.ForeignKey(User, verbose_name=_('Auditor'),
                              on_delete=models.CASCADE)
-    target_uid = models.UUIDField(verbose_name='被审阅对象')
-    created = models.DateTimeField(verbose_name='审阅时间', auto_now_add=True)
-    desc = models.TextField(verbose_name='意见')
+    target_uid = models.UUIDField(verbose_name=_('Audited Target'))
+    created = models.DateTimeField(verbose_name=_('Audit Time'), auto_now_add=True)
+    desc = models.TextField(verbose_name=_('Audit Opinion'))
 
     class Meta:
-        verbose_name = '审阅意见'
-        verbose_name_plural = '审阅意见'
+        verbose_name = _('Audit Feedback')
+        verbose_name_plural = _('Audit Feedback')
 
     def __str__(self):
-        return '{}对{}的审阅意见'.format(self.user, self.target_uid)
+        return _('Audit Feedback on {target} by {user}').format(
+            self.user, self.target_uid)
 
 
 class CaptchaField(_CaptchaField):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, label=_('Captcha'), *args, **kwargs):
         super(CaptchaField, self).__init__(*args, **kwargs)
-        self.label = '验证码'
+        self.label = label

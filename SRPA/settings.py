@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:05
-# Last modified: 2017-10-04 11:33
+# Last modified: 2017-10-04 21:42
 # Filename: settings.py
 # Description:
 """
@@ -111,10 +111,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'zh-hans'
+LANGUAGE_CODE = 'zh-Hans'
 LANGUAGES = (
     ('en', _('English')),
-    ('zh-hans', _('Simplified Chinese')),
+    ('zh-Hans', _('Simplified Chinese')),
 )
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),

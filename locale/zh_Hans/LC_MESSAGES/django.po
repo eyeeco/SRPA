@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-04 16:32+0800\n"
+"POT-Creation-Date: 2017-10-04 21:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -151,6 +151,7 @@ msgstr "用户"
 #: SiteReservation/models.py:24
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:10
 #: SiteReservation/templates/SiteReservation/reservation_list.html:5
+#: const/models.py:41 const/models.py:42
 msgid "Workshop"
 msgstr "工坊"
 
@@ -170,6 +171,7 @@ msgstr "申请时间"
 #: SiteReservation/models.py:22
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:4
 #: SiteReservation/templates/SiteReservation/reservation_list.html:4
+#: const/models.py:25 const/models.py:26
 msgid "Site"
 msgstr "场地"
 
@@ -230,12 +232,12 @@ msgstr "新的活动"
 msgid "Workshop Projects"
 msgstr "工坊活动"
 
-#: ProjectApproval/templates/ProjectApproval/project_add.html:148
+#: ProjectApproval/templates/ProjectApproval/project_add.html:161
 #: ProjectApproval/templates/ProjectApproval/project_update.html:147
 msgid "Please fill the form in format"
 msgstr "请按照格式填写"
 
-#: ProjectApproval/templates/ProjectApproval/project_add.html:165
+#: ProjectApproval/templates/ProjectApproval/project_add.html:178
 #: ProjectApproval/templates/ProjectApproval/project_add_social.html:35
 #: ProjectApproval/templates/ProjectApproval/project_update.html:164
 #: SiteReservation/templates/SiteReservation/reservation_add.html:74
@@ -245,9 +247,9 @@ msgstr "请按照格式填写"
 msgid "Submit"
 msgstr "提交"
 
-#: ProjectApproval/templates/ProjectApproval/project_add.html:166
+#: ProjectApproval/templates/ProjectApproval/project_add.html:179
 #: ProjectApproval/templates/ProjectApproval/project_add_social.html:36
-#: ProjectApproval/templates/ProjectApproval/project_detail.html:151
+#: ProjectApproval/templates/ProjectApproval/project_detail.html:154
 #: ProjectApproval/templates/ProjectApproval/project_update.html:165
 #: SiteReservation/templates/SiteReservation/reservation_add.html:75
 #: SiteReservation/templates/SiteReservation/reservation_update.html:74
@@ -268,8 +270,9 @@ msgid "Budget Comment"
 msgstr "预算备注"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:122
-#: ProjectApproval/templates/ProjectApproval/project_detail.html:167
+#: ProjectApproval/templates/ProjectApproval/project_detail.html:170
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:93
+#: const/models.py:55
 msgid "Audit Opinion"
 msgstr "审核意见"
 
@@ -279,7 +282,11 @@ msgid "Update"
 msgstr "修改"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:146
-#: ProjectApproval/templates/ProjectApproval/project_detail.html:176
+msgid "Are you sure you want to cancel the application apply"
+msgstr "确定取消该活动申请吗"
+
+#: ProjectApproval/templates/ProjectApproval/project_detail.html:146
+#: ProjectApproval/templates/ProjectApproval/project_detail.html:179
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:75
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:102
 msgid "Cancel"
@@ -289,12 +296,17 @@ msgstr "取消"
 msgid "Fill Additional Form"
 msgstr "填写附加表单"
 
-#: ProjectApproval/templates/ProjectApproval/project_detail.html:155
+#: ProjectApproval/templates/ProjectApproval/project_detail.html:152
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:78
+msgid "Export"
+msgstr "导出"
+
+#: ProjectApproval/templates/ProjectApproval/project_detail.html:158
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:82
 msgid "Audit"
 msgstr "审核"
 
-#: ProjectApproval/templates/ProjectApproval/project_detail.html:177
+#: ProjectApproval/templates/ProjectApproval/project_detail.html:180
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:103
 msgid "Confirm"
 msgstr "确认"
@@ -309,16 +321,11 @@ msgid "Action"
 msgstr "操作"
 
 #: ProjectApproval/templates/ProjectApproval/project_list.html:24
-#: ProjectApproval/templates/ProjectApproval/project_list.html:30
+#: ProjectApproval/templates/ProjectApproval/project_list.html:27
 #: SiteReservation/templates/SiteReservation/reservation_list.html:22
 #: SiteReservation/templates/SiteReservation/reservation_list.html:24
 msgid "Detail"
 msgstr "详情"
-
-#: ProjectApproval/templates/ProjectApproval/project_list.html:26
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:78
-msgid "Export"
-msgstr "导出"
 
 #: ProjectApproval/views/admin.py:81 ProjectApproval/views/admin.py:84
 #: ProjectApproval/views/admin.py:98 SiteReservation/views/admin.py:91
@@ -489,6 +496,10 @@ msgstr "请选择一个未来时间"
 msgid "Wrong form data, Please check again"
 msgstr "表达信息有误，请再次核对"
 
+#: authentication/forms.py:22 authentication/forms.py:49 const/models.py:67
+msgid "Captcha"
+msgstr "验证码"
+
 #: authentication/forms.py:27
 msgid "Username"
 msgstr "用户名"
@@ -614,3 +625,36 @@ msgstr "学生"
 #: authentication/templates/authentication/update_info.html:8
 msgid "Update Profile"
 msgstr "更新个人信息"
+
+#: const/models.py:22
+msgid "Site Description"
+msgstr "场地"
+
+#: const/models.py:35
+msgid "Workshop Description"
+msgstr "工坊"
+
+#: const/models.py:37
+msgid "Instructor"
+msgstr "指导教师"
+
+#: const/models.py:51
+msgid "Auditor"
+msgstr "审核人"
+
+#: const/models.py:53
+msgid "Audited Target"
+msgstr "被审阅对象"
+
+#: const/models.py:54
+msgid "Audit Time"
+msgstr "审核时间"
+
+#: const/models.py:58 const/models.py:59
+msgid "Audit Feedback"
+msgstr "审核意见"
+
+#: const/models.py:62
+#, python-brace-format
+msgid "Audit Feedback on {target} by {user}"
+msgstr "{user} 对 {target} 的审阅意见"
