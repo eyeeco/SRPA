@@ -100,7 +100,7 @@
     <a type="button" class="btn btn-info srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:update' object.uid %}">{% trans 'Update' %}</a>
     {% endif %}
     {% if object.status in RESERVATION_STATUS_CAN_CANCEL %}
-    <a type="button" class="btn btn-danger" href="{% url 'reservation:ordinary:cancell' object.uid %}" onclick="if(confirm('{% trans 'Are you sure you want to cancel the reservation' %}?')==false)return false;">{% trans 'Cancel' %}</a>
+    <a type="button" class="btn btn-danger" href="{% url 'reservation:ordinary:cancel' object.uid %}" onclick="if(confirm('{% trans 'Are you sure you want to cancel the reservation' %}?')==false)return false;">{% trans 'Cancel' %}</a>
     {% endif %}
     {% if object.status == RESERVATION_APPROVED %}
     <a type="button" class="btn btn-info" href="{% url 'reservation:ordinary:export' object.uid %}">{% trans 'Export' %}</a>

@@ -56,7 +56,7 @@ function init_js()
                     window.location.href=data.redirect;
                 else if(data.status != 1)
                     alert(data.reason);
-                $('#reservation_content').html(data.html);
+                $('#page').html(data.html);
                 init_js();
             },
             error: function(request, data){
