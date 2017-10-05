@@ -170,7 +170,8 @@ class ReservationAdd(ReservationBase, CreateView):
             html = render_to_string(
                 self.template_name, request=self.request,
                 context=context)
-            return JsonResponse({'status': 2, 'reason': '该时间段内已存在其他预约', 'html': html})
+            return JsonResponse({'status': 2, 'reason': '该时间段内已存在其他预约',
+                                'html': html})
 
         site = form.cleaned_data['site']
         activity_time_from = form.cleaned_data['activity_time_from']

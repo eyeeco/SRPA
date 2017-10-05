@@ -19,7 +19,8 @@ from .ordinary import ReservationList, ReservationUpdate, ReservationDetail
 from const.forms import FeedBackForm
 from const.models import FeedBack
 from SiteReservation import RESERVATION_STATUS_CAN_CHECK, RESERVATION_EDITTING
-from SiteReservation import RESERVATION_APPROVED, RESERVATION_TERMINATED, RESERVATION_CANCELLED
+from SiteReservation import RESERVATION_APPROVED, RESERVATION_TERMINATED
+from SiteReservation import RESERVATION_CANCELLED
 from SiteReservation.models import Reservation
 from SiteReservation.utils import is_conflict
 from authentication.models import UserInfo, StudentInfo
@@ -45,7 +46,8 @@ class AdminReservationList(AdminReservationBase, ListView):
 
     def get_queryset(self):
         workshops = self.request.user.user_info.teacher_info.workshop_set.all()
-        return super().get_queryset().filter(workshop__in=workshops).filter(~Q(status=RESERVATION_CANCELLED))
+        temp = super().get_queryset().filter(workshop__in=workshops)
+        return temp.filter(~Q(status=RESERVATION_CANCELLED))
 
 
 class AdminReservationDetail(AdminReservationBase, DetailView):
