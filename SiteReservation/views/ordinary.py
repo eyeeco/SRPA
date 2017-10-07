@@ -12,6 +12,7 @@ from datetime import datetime, timedelta, timezone
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
 from django.views.generic import DetailView, TemplateView, FormView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin as dj_PRM
 from django.http import Http404, JsonResponse, HttpResponseRedirect
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
@@ -114,8 +115,10 @@ class ReservationCancel(PermissionRequiredMixin, DetailView):
     """
     model = Reservation
     raise_exception = True
-    permission_required = 'update_reservation'
+    permission_required = 'view_reservation'
     success_url = reverse_lazy('reservation:index')
+    slug_field = 'uid'
+    slug_url_kwarg = 'uid'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -156,7 +159,7 @@ class ReservationDetail(PermissionRequiredMixin, DetailView):
         return super(ReservationDetail, self).get_context_data(**kwargs)
 
 
-class ReservationAdd(PermissionRequiredMixin, CreateView):
+class ReservationAdd(dj_PRM, CreateView):
     """
     A view for creating a new reservation.
     """
