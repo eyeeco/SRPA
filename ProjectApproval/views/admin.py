@@ -11,13 +11,12 @@ from django.views.generic import ListView, UpdateView
 from django.http import JsonResponse, HttpResponseForbidden
 from django.utils.translation import ugettext_lazy as _
 
-from ProjectApproval.models import Project
 from const.forms import FeedBackForm
+from const.models import FeedBack
+from ProjectApproval.models import Project
 from ProjectApproval import PROJECT_STATUS_CAN_CHECK, PROJECT_SUBMITTED
 from ProjectApproval import PROJECT_APPROVED, PROJECT_EDITTING
 from ProjectApproval import PROJECT_TERMINATED
-from const.models import FeedBack
-
 from .ordinary import ProjectList, ProjectUpdate, ProjectDetail
 
 

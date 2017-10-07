@@ -15,6 +15,7 @@ from ProjectApproval import PROJECT_STATUS_CAN_EDIT
 from ProjectApproval import PROJECT_STATUS_CAN_CHECK
 from ProjectApproval import PROJECT_STATUS_CAN_CANCEL
 from ProjectApproval import PROJECT_STATUS_CAN_EXPORT
+from ProjectApproval import PROJECT_STATUS_CAN_ENDED
 from ProjectApproval import PROJECT_SOCIALFORM_REQUIRED
 
 
@@ -34,5 +35,6 @@ def expose_consts(request):
         'PROJECT_STATUS_CAN_CHECK': PROJECT_STATUS_CAN_CHECK,
         'PROJECT_SOCIALFORM_REQUIRED': PROJECT_SOCIALFORM_REQUIRED,
         'PROJECT_STATUS_CAN_EXPORT': PROJECT_STATUS_CAN_EXPORT,
+        'PROJECT_STATUS_CAN_ENDED': PROJECT_STATUS_CAN_ENDED
     }
     return consts

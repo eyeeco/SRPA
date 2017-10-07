@@ -37,12 +37,12 @@
         {% if page_obj.has_previous %}
         <li>
         {% if request.user.user_info.identity == USER_IDENTITY_STUDENT%}
-            <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:list' page=page_obj.previous_page_number %}">
+            <a href="#" class="srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:list' page=page_obj.previous_page_number %}">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         {% endif %}
         {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
-            <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'project:admin:list' page=page_obj.previous_page_number %}">
+            <a href="#" class="srpa-loader" loader-type='page' loader-target="{% url 'project:admin:list' page=page_obj.previous_page_number %}">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         {% endif %}
@@ -58,12 +58,12 @@
         {% for pageid in paginator.page_range %}
         {% if request.user.user_info.identity == USER_IDENTITY_STUDENT%}
             <li {% if pageid == page_obj.number %}class="active"{% endif %}>
-                <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:list' page=pageid %}">{{ pageid }}</a>
+                <a href="#" class="srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:list' page=pageid %}">{{ pageid }}</a>
             </li>
         {% endif %}
         {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
             <li {% if pageid == page_obj.number %}class="active"{% endif %}>
-                <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'project:admin:list' page=pageid %}">{{ pageid }}</a>
+                <a href="#" class="srpa-loader" loader-type='page' loader-target="{% url 'project:admin:list' page=pageid %}">{{ pageid }}</a>
             </li>
         {% endif %}
         {% endfor %}
@@ -71,12 +71,12 @@
         {% if page_obj.has_next %}
         <li>
         {% if request.user.user_info.identity == USER_IDENTITY_STUDENT%}
-            <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:list' page=page_obj.next_page_number %}">
+            <a href="#" class="srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:list' page=page_obj.next_page_number %}">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         {% endif %}
         {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
-            <a class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'project:admin:list' page=page_obj.next_page_number %}">
+            <a href="#" class="srpa-loader" loader-type='page' loader-target="{% url 'project:admin:list' page=page_obj.next_page_number %}">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         {% endif %}

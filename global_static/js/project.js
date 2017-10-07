@@ -22,6 +22,8 @@ function init_js()
             type: 'POST',
             url: form.attr('action'),
             data: form.serialize(),
+            processData : false, 
+            contentType : false,
             success: function(data){
                 if(data.status == 0)
                     window.location.href=data.redirect;

@@ -151,13 +151,16 @@
     {% if object.status in PROJECT_STATUS_CAN_EXPORT %}
     <a type="button" class="btn btn-info btn-md " href="{% url 'project:ordinary:export' object.uid %}">{% trans 'Export' %}</a>
     {% endif %}
-    <a href="{{ view.success_url }}" class="btn btn-default btn-md ">{% trans 'Back' %}</a>
+    {% if object.status in PROJECT_STATUS_CAN_ENDED %}
+    <a type="button" class="btn btn-success srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:project_end' object.uid %}">{% trans 'Project End' %}</a>
+    {% endif %}
     {% endif %}
     {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
     {% if object.status in PROJECT_STATUS_CAN_CHECK %}
     <a type="button" class="btn btn-info" href="#" data-toggle="modal" data-target="#modal_form">{% trans 'Audit' %}</a>
-    {% endif %}   
+    {% endif %} 
     {% endif %}
+    <a href="{{ view.success_url }}" class="btn btn-default btn-md ">{% trans 'Back' %}</a>
 </div>
 {% endblock %}
 {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
