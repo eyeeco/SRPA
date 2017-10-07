@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-08 20:07
-# Last modified: 2017-10-05 11:35
+# Last modified: 2017-10-07 13:39
 # Filename: auth.py
 # Description:
 import json
@@ -11,6 +11,7 @@ import json
 from django.views.generic import View, CreateView
 from django.views.generic import RedirectView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView as _LoginView
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy, reverse, NoReverseMatch
@@ -34,6 +35,16 @@ class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'authentication/index.html'
 
 
+class LoginView(_LoginView):
+    template_name = 'authentication/login.html'
+    form_class = LoginForm
+
+    def get_success_url(self):
+        if self.request.user.is_superuser:
+            return reverse_lazy('auth:admin:index')
+        return super(LoginView, self).get_success_url()
+
+
 class CaptchaRefresh(View):
     """
     A view for handling Ajax captcha refresh request.
@@ -51,7 +62,7 @@ class CaptchaRefresh(View):
 
 class StudentRegisterView(CreateView):
     """
-    A view for displaying a registration page except for form.
+    A view for student registration.
     """
 
     template_name = 'authentication/register.html'
@@ -87,7 +98,6 @@ class StudentRegisterView(CreateView):
 
     def get_context_data(self, **kwargs):
         kwargs['form_post_url'] = self.form_post_url
-        kwargs['back_url'] = self.success_url
         kwargs['identity'] = self.identity
         return super(StudentRegisterView, self).get_context_data(**kwargs)
 

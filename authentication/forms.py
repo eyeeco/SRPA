@@ -3,19 +3,21 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:09
-# Last modified: 2017-10-04 21:41
+# Last modified: 2017-10-07 16:04
 # Filename: forms.py
 # Description:
 from django import forms
 from django.forms import ModelForm
 from django.conf import settings
+from django.db.models import Q
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.utils.translation import ugettext_lazy as _
 
-from const.models import CaptchaField
-from .models import UserInfo, StudentInfo
-from .allow_ids import ALLOW_IDS
+from const.models import CaptchaField, Workshop
+from authentication import USER_IDENTITY_TEACHER
+from authentication.models import UserInfo, StudentInfo, TeacherInfo
+from authentication.allow_ids import ALLOW_IDS
 
 
 class LoginForm(AuthenticationForm):
@@ -46,12 +48,11 @@ class RegisterForm(ModelForm):
         max_length=11)
     email = forms.EmailField(
         label=_('Email'))
-    captcha = CaptchaField(label=_('Captcha'))
 
     class Meta:
         model = UserInfo
         fields = ['email', 'username', 'password', 'confirm_password',
-                  'name', 'phone', 'captcha']
+                  'name', 'phone']
 
     def clean(self):
         cleaned_data = super(RegisterForm, self).clean()
@@ -74,6 +75,7 @@ class RegisterForm(ModelForm):
 
 
 class StudentRegisterForm(RegisterForm):
+    captcha = CaptchaField(label=_('Captcha'))
     class Meta:
         model = StudentInfo
         fields = ['email', 'username', 'password', 'confirm_password',
@@ -85,3 +87,40 @@ class StudentRegisterForm(RegisterForm):
             raise forms.ValidationError(
                 _('Student ID not in the invited list'))
         return student_id
+
+
+class TeacherRegisterForm(RegisterForm):
+    class Meta:
+        model = TeacherInfo
+        fields = ['email', 'username', 'password', 'confirm_password',
+                  'name', 'phone', 'title']
+
+
+class TeacherUpdateForm(ModelForm):
+    first_name = forms.CharField(
+        label=_('First Name'),
+        widget=forms.TextInput())
+    phone = forms.CharField(
+        label=_('Phone'),
+        widget=forms.TextInput(),
+        min_length=11,
+        max_length=11)
+    email = forms.EmailField(
+        label=_('Email'))
+
+    class Meta:
+        model = TeacherInfo
+        fields = ['email', 'first_name', 'phone', 'title']
+
+
+class WorkshopUpdateForm(ModelForm):
+    group_users = forms.ModelMultipleChoiceField(
+        label=_('Group Users'),
+        queryset=User.objects.filter(Q(
+            user_info__identity=USER_IDENTITY_TEACHER)),
+        widget=forms.SelectMultiple(
+            attrs={'size': 15}))
+
+    class Meta:
+        model = Workshop
+        fields = ['desc', 'group_users']

@@ -3,13 +3,13 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 18:34
-# Last modified: 2017-10-05 08:34
+# Last modified: 2017-10-07 17:05
 # Filename: models.py
 # Description:
 from uuid import uuid4
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.utils.translation import ugettext_lazy as _
 
 from captcha.fields import CaptchaField as _CaptchaField
@@ -34,8 +34,8 @@ class Workshop(models.Model):
     uid = models.UUIDField(default=uuid4, editable=False, unique=True)
     desc = models.CharField(verbose_name=_('Workshop Description'),
                             max_length=50)
-    instructor = models.ForeignKey(TeacherInfo, verbose_name=_('Instructor'),
-                                   on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, verbose_name=_('Group'),
+                              on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _('Workshop')
