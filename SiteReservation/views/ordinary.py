@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:03
-# Last modified: 2017-10-04 15:20
+# Last modified: 2017-10-05 10:17
 # Filename: ordinary.py
 # Description:
 from uuid import UUID
@@ -21,10 +21,12 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
+from guardian.mixins import PermissionRequiredMixin, PermissionListMixin
+from django import forms
 
 from authentication import USER_IDENTITY_STUDENT, USER_IDENTITY_TEACHER
 from authentication import USER_IDENTITY_ADMIN
-from SiteReservation import RESERVATION_APPROVED, RESERVATION_TERMINATED
+from SiteReservation import RESERVATION_APPROVED, RESERVATION_CANCELLED
 from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_CAN_EDIT
 from SiteReservation.models import Reservation
 from SiteReservation.forms import DateForm, ReservationForm
@@ -33,7 +35,6 @@ from const.models import Site, FeedBack
 from tools.utils import assign_perms
 
 
-#  TODO: LoginRequiredMixin --> PermissionRequiredMixin
 class ReservationBase(LoginRequiredMixin):
     """
     A base view for all reservation actions. SHOULD NOT DIRECTLY USE THIS.
@@ -105,7 +106,7 @@ class ReservationList(ReservationBase, ListView):
         return super().get_queryset().filter(user=self.request.user)
 
 
-class ReservationTerminate(ReservationBase, View):
+class ReservationCancel(ReservationBase, View):
     """
     A view for displaying user-related reservations list after terminating.
     """
@@ -114,7 +115,7 @@ class ReservationTerminate(ReservationBase, View):
 
     def get(self, request, *args, **kwargs):
         reservation = Reservation.objects.filter(uid=kwargs['uid'])
-        reservation.update(status=RESERVATION_TERMINATED)
+        reservation.update(status=RESERVATION_CANCELLED)
         return redirect(self.success_url)
 
 
@@ -224,15 +225,12 @@ class ReservationUpdate(ReservationBase, UpdateView):
         return super(ReservationUpdate, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
+        site = form.cleaned_data['site']
         activity_time_from = form.cleaned_data['activity_time_from']
         activity_time_to = form.cleaned_data['activity_time_to']
 
-        q = Reservation.objects.filter(status=RESERVATION_APPROVED)
-        q = q.exclude(uid=form.instance.uid)
-        q = q.filter(Q(activity_time_to__gt=activity_time_from) &
-                     Q(activity_time_from__lt=activity_time_to))
-        cnt = q.count()
-        if cnt != 0:
+        conflict = is_conflict(activity_time_from, activity_time_to, site)
+        if conflict:
             context = self.get_context_data()
             context['form'] = form
             html = render_to_string(
@@ -242,7 +240,8 @@ class ReservationUpdate(ReservationBase, UpdateView):
                                  'reason': _('Conflict with existing '
                                              'reservation'),
                                  'html': html})
-        form.save()
+        self.object.status = RESERVATION_SUBMITTED
+        self.object = form.save()
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
     def form_invalid(self, form):

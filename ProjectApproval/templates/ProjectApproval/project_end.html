@@ -1,9 +1,6 @@
-{% load filters %}
-{% load static %}
 {% load i18n %}
-{% block project_content %}
-{% load i18n %}
-<form id="info-form" class="form-horizontal project-form" method="POST" action="{% url form_post_url object.uid %}" enctype="multipart/form-data">
+{% include 'base/csrf_setup.html' %}
+<form id="upfile-form" class="form-horizontal project-form" method="POST" action="{% url form_post_url object.uid %}" enctype="multipart/form-data">
 {% csrf_token %}
 	{{form}}
 <div>
@@ -11,4 +8,3 @@
     <a href="{{ back_url }}" class="btn btn-primary btn-md">{% trans 'Back' %}</a>
 </div>
 </form>
-{% endblock %}

@@ -20,9 +20,10 @@
 {% endblock %}
 {% block footer_js %}
 {{ block.super }}
-<script>
+<script id="tooltip_init">
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
     })
+    $("#tooltip_init").remove();
 </script>
 {% endblock %}

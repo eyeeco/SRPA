@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 18:34
-# Last modified: 2017-10-04 21:48
+# Last modified: 2017-10-05 08:34
 # Filename: models.py
 # Description:
 from uuid import uuid4
@@ -51,7 +51,8 @@ class FeedBack(models.Model):
     user = models.ForeignKey(User, verbose_name=_('Auditor'),
                              on_delete=models.CASCADE)
     target_uid = models.UUIDField(verbose_name=_('Audited Target'))
-    created = models.DateTimeField(verbose_name=_('Audit Time'), auto_now_add=True)
+    created = models.DateTimeField(verbose_name=_('Audit Time'),
+                                   auto_now_add=True)
     desc = models.TextField(verbose_name=_('Audit Opinion'))
 
     class Meta:

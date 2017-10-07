@@ -12,6 +12,32 @@
             <p class="form-control-static">{{object.workshop}}</p>
         </div>
     </div>
+    {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Student Name' %}:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{student_info.user_info.user}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Student ID' %}:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{student_info.student_id}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Institute' %}:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{student_info.get_institute_display}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Student Phone' %}:</label>
+        <div class="col-sm-8 col-xs-6">
+            <p class="form-control-static">{{student_info.user_info.phone}}</p>
+        </div>
+    </div>
+    {% endif %}
     <div class="form-group">
         <label class="col-sm-4 col-xs-6 control-label">{% trans 'Activity Title' %}:</label>
         <div class="col-sm-8 col-xs-6">
@@ -53,6 +79,7 @@
         <label class="col-sm-4 col-xs-6 control-label">{% trans 'Feedback' %}:</label>
         <div class="col-sm-8 col-xs-6">
             {% for feedback in feedbacks %}
+            {% if feedback.desc %}
             <div class="row">
                 <div class="col-xs-4">
                     <p class="form-control-static">{{feedback.created}}</p>
@@ -61,6 +88,7 @@
                     <p class="form-control-static">{{feedback.desc}}</p>
                 </div>
             </div>
+            {% endif %}
             {% endfor%}
         </div>
     </div>
@@ -72,7 +100,7 @@
     <a type="button" class="btn btn-info srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:update' object.uid %}">{% trans 'Update' %}</a>
     {% endif %}
     {% if object.status in RESERVATION_STATUS_CAN_CANCEL %}
-    <a type="button" class="btn btn-danger" href="{% url 'reservation:ordinary:terminate' object.uid %}" onclick="if(confirm('{% trans 'Are you sure you want to cancel the reservation' %}?')==false)return false;">{% trans 'Cancel' %}</a>
+    <a type="button" class="btn btn-danger" href="{% url 'reservation:ordinary:cancel' object.uid %}" onclick="if(confirm('{% trans 'Are you sure you want to cancel the reservation' %}?')==false)return false;">{% trans 'Cancel' %}</a>
     {% endif %}
     {% if object.status == RESERVATION_APPROVED %}
     <a type="button" class="btn btn-info" href="{% url 'reservation:ordinary:export' object.uid %}">{% trans 'Export' %}</a>

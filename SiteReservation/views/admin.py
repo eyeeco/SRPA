@@ -11,6 +11,8 @@ from django.views.generic import ListView, UpdateView, DetailView
 from django.http import JsonResponse, HttpResponseForbidden
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
+from django.db.models import Q
 
 from .ordinary import ReservationList, ReservationUpdate, ReservationDetail
 
@@ -18,8 +20,10 @@ from const.forms import FeedBackForm
 from const.models import FeedBack
 from SiteReservation import RESERVATION_STATUS_CAN_CHECK, RESERVATION_EDITTING
 from SiteReservation import RESERVATION_APPROVED, RESERVATION_TERMINATED
+from SiteReservation import RESERVATION_CANCELLED
 from SiteReservation.models import Reservation
 from SiteReservation.utils import is_conflict
+from authentication.models import UserInfo, StudentInfo
 
 
 #  TODO: LoginRequiredMixin --> PermissionRequiredMixin
@@ -42,7 +46,8 @@ class AdminReservationList(AdminReservationBase, ListView):
 
     def get_queryset(self):
         workshops = self.request.user.user_info.teacher_info.workshop_set.all()
-        return super().get_queryset().filter(workshop__in=workshops)
+        temp = super().get_queryset().filter(workshop__in=workshops)
+        return temp.filter(~Q(status=RESERVATION_CANCELLED))
 
 
 class AdminReservationDetail(AdminReservationBase, DetailView):
@@ -58,6 +63,9 @@ class AdminReservationDetail(AdminReservationBase, DetailView):
         feedbacks = FeedBack.objects.filter(target_uid=self.object.uid)
         feedbacks.order_by('-created')
         kwargs['feedbacks'] = feedbacks
+        student = Reservation.objects.get(uid=self.object.uid)
+        student_info = StudentInfo.objects.get(user_info__user=student.user)
+        kwargs['student_info'] = student_info
         return super(AdminReservationDetail, self).get_context_data(**kwargs)
 
 

@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:17
-# Last modified: 2017-10-04 16:09
+# Last modified: 2017-10-05 10:01
 # Filename: ordinary.py
 # Description:
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
@@ -17,6 +17,7 @@ from django.http import HttpResponseForbidden
 from django.template.loader import render_to_string
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
+from guardian.mixins import PermissionRequiredMixin, PermissionListMixin
 
 from ProjectApproval import PROJECT_STATUS, PROJECT_SUBMITTED
 from ProjectApproval import PROJECT_SOCIALFORM_REQUIRED
@@ -32,7 +33,6 @@ from ProjectApproval.utils import export_project
 
 
 
-#  TODO: LoginRequiredMixin --> PermissionRequiredMixin
 class ProjectBase(LoginRequiredMixin):
     """
     A base view for all project actions. SHOULD NOT DIRECTLY USE THIS.
@@ -78,13 +78,13 @@ class ProjectAdd(ProjectBase, CreateView):
     """
     A view for creating a new project.
     """
-    template_name = 'ProjectApproval/project_add.html'
+    template_name = 'ProjectApproval/project_form.html'
     form_class = ActivityForm
     success_url = reverse_lazy('project:index')
     form_post_url = 'project:ordinary:add'
 
     def get_context_data(self, **kwargs):
-        kwargs['form_post_url'] = self.form_post_url
+        kwargs['form_post_url'] = reverse(self.form_post_url)
         kwargs['back_url'] = self.success_url
         return super(CreateView, self).get_context_data(**kwargs)
 
@@ -154,7 +154,7 @@ class ProjectUpdate(ProjectBase, UpdateView):
     A view for updating an exist project. Should check status before
     change, reject change if not match specified status.
     """
-    template_name = 'ProjectApproval/project_update.html'
+    template_name = 'ProjectApproval/project_form.html'
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
     form_class = ActivityForm
@@ -178,7 +178,8 @@ class ProjectUpdate(ProjectBase, UpdateView):
 
     def get_context_data(self, **kwargs):
         kwargs['back_url'] = self.success_url
-        kwargs['form_post_url'] = self.form_post_url
+        kwargs['form_post_url'] = reverse(self.form_post_url,
+                                          kwargs={'uid': self.object.uid})
         return super(UpdateView, self).get_context_data(**kwargs)
 
     def form_valid(self, form):
