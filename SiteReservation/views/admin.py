@@ -19,6 +19,7 @@ from .ordinary import ReservationList, ReservationUpdate, ReservationDetail
 
 from const.forms import FeedBackForm
 from const.models import FeedBack
+from authentication.__init__ import USER_IDENTITY_TEACHER as id_teacher
 from SiteReservation import RESERVATION_STATUS_CAN_CHECK, RESERVATION_EDITTING
 from SiteReservation import RESERVATION_APPROVED, RESERVATION_TERMINATED
 from SiteReservation import RESERVATION_CANCELLED
@@ -33,11 +34,14 @@ class AdminReservationBase(LoginRequiredMixin):
     A base view for all admin reservation actions. SHOULD NOT DIRECTLY USE
     THIS. Check admin auth first.
     """
-
     model = Reservation
 
+    def test_func(self):
+        user = self.request.user
+        return user.is_authenticated and user.user_info.identity == id_teacher
 
-class AdminReservationList(AdminReservationBase, PermissionListMixin, 
+
+class AdminReservationList(AdminReservationBase, PermissionListMixin,
                            ListView):
     """
     A view for displaying reservations list for admin. GET only.
@@ -53,7 +57,7 @@ class AdminReservationList(AdminReservationBase, PermissionListMixin,
         return queryset.filter(~Q(status=RESERVATION_CANCELLED))
 
 
-class AdminReservationDetail(AdminReservationBase, PermissionRequiredMixin, 
+class AdminReservationDetail(AdminReservationBase, PermissionRequiredMixin,
                              DetailView):
     """
     A view for displaying specified reservation for admin. GET only.
@@ -75,7 +79,7 @@ class AdminReservationDetail(AdminReservationBase, PermissionRequiredMixin,
         return super(AdminReservationDetail, self).get_context_data(**kwargs)
 
 
-class AdminReservationUpdate(AdminReservationBase, PermissionRequiredMixin, 
+class AdminReservationUpdate(AdminReservationBase, PermissionRequiredMixin,
                              UpdateView):
     """
     A view for admin to update an exist reservation.
