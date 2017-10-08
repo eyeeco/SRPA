@@ -12,7 +12,6 @@ from datetime import datetime, timedelta, timezone
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
 from django.views.generic import DetailView, TemplateView, FormView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.mixins import PermissionRequiredMixin as dj_PRM
 from django.http import Http404, JsonResponse, HttpResponseRedirect
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
@@ -193,7 +192,7 @@ class ReservationAdd(PermissionRequiredMixin, CreateView):
         self.object = form.save()
         assign_perms('reservation', self.request.user, obj=self.object)
         return JsonResponse({'status': 0, 'redirect': self.success_url})
-    
+
     def get_object(self, queryset=None):
         return None
 
