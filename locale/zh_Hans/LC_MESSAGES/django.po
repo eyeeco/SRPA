@@ -282,13 +282,8 @@ msgid "Submit"
 msgstr "提交"
 
 #: ProjectApproval/templates/ProjectApproval/project_add_social.html:36
-<<<<<<< HEAD
-#: ProjectApproval/templates/ProjectApproval/project_detail.html:163
-#: ProjectApproval/templates/ProjectApproval/project_update.html:165
-=======
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:154
 #: ProjectApproval/templates/ProjectApproval/project_form.html:164
->>>>>>> 292500157e7066c4715de74b5c2aae9045cf6a74
 #: SiteReservation/templates/SiteReservation/reservation_add.html:75
 #: SiteReservation/templates/SiteReservation/reservation_update.html:74
 #: authentication/templates/authentication/info_form.html:20
@@ -308,19 +303,9 @@ msgid "Budget Comment"
 msgstr "预算备注"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:122
-<<<<<<< HEAD
-#: ProjectApproval/templates/ProjectApproval/project_detail.html:173
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:93
-#: const/models.py:55
-=======
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:170
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:121
-<<<<<<< HEAD
-#: const/models.py:56
->>>>>>> 292500157e7066c4715de74b5c2aae9045cf6a74
-=======
 #: const/models.py:55
->>>>>>> 5f10a4217b947b3d742508a26d0c43cdfefbbf6f
 msgid "Audit Opinion"
 msgstr "审核意见"
 
@@ -334,15 +319,9 @@ msgid "Are you sure you want to cancel the application apply"
 msgstr "确定取消该活动申请吗"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:146
-<<<<<<< HEAD
-#: ProjectApproval/templates/ProjectApproval/project_detail.html:182
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:75
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:102
-=======
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:179
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:103
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:130
->>>>>>> 292500157e7066c4715de74b5c2aae9045cf6a74
 msgid "Cancel"
 msgstr "取消"
 
@@ -355,15 +334,6 @@ msgstr "填写附加表单"
 msgid "Export"
 msgstr "导出"
 
-<<<<<<< HEAD
-#: ProjectApproval/templates/ProjectApproval/project_detail.html:160
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:82
-msgid "Audit"
-msgstr "审核"
-
-#: ProjectApproval/templates/ProjectApproval/project_detail.html:183
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:103
-=======
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:158
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:110
 msgid "Audit"
@@ -371,7 +341,6 @@ msgstr "审核"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:180
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:131
->>>>>>> 292500157e7066c4715de74b5c2aae9045cf6a74
 msgid "Confirm"
 msgstr "确认"
 
@@ -399,17 +368,10 @@ msgstr "操作"
 msgid "Detail"
 msgstr "详情"
 
-<<<<<<< HEAD
-#: ProjectApproval/views/admin.py:80 ProjectApproval/views/admin.py:83
-#: ProjectApproval/views/admin.py:97 SiteReservation/views/admin.py:91
-#: SiteReservation/views/admin.py:94 SiteReservation/views/admin.py:115
-#: SiteReservation/views/ordinary.py:73
-=======
 #: ProjectApproval/views/admin.py:81 ProjectApproval/views/admin.py:84
 #: ProjectApproval/views/admin.py:98 SiteReservation/views/admin.py:99
 #: SiteReservation/views/admin.py:102 SiteReservation/views/admin.py:123
 #: SiteReservation/views/ordinary.py:74
->>>>>>> 292500157e7066c4715de74b5c2aae9045cf6a74
 msgid "Illegal Input"
 msgstr "无效输入"
 
