@@ -17,13 +17,12 @@ from django.http import HttpResponseForbidden
 from django.template.loader import render_to_string
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.mixins import PermissionRequiredMixin as dj_PRM
 from guardian.mixins import PermissionRequiredMixin, PermissionListMixin
 
 from ProjectApproval import PROJECT_STATUS, PROJECT_SUBMITTED
 from ProjectApproval import PROJECT_SOCIALFORM_REQUIRED
 from ProjectApproval import PROJECT_CANCELLED, PROJECT_END_SUBMITTED
-from ProjectApproval import PROJECT_STATUS_CAN_ENDED
+from ProjectApproval import PROJECT_STATUS_CAN_END_SUBMIT
 from ProjectApproval.forms import ActivityForm, SocialInvitationForm
 from ProjectApproval.models import Project
 from const.models import Workshop, FeedBack
@@ -76,7 +75,7 @@ class ProjectDetail(ProjectBase, PermissionRequiredMixin, DetailView):
         return super(ProjectDetail, self).get_context_data(**kwargs)
 
 
-class ProjectAdd(ProjectBase, dj_PRM, CreateView):
+class ProjectAdd(ProjectBase, PermissionRequiredMixin, CreateView):
     """
     A view for creating a new project.
     """
@@ -101,7 +100,9 @@ class ProjectAdd(ProjectBase, dj_PRM, CreateView):
             form.instance.status = PROJECT_SOCIALFORM_REQUIRED
         self.object = form.save()
         assign_perms(self.info_name, self.request.user, self.object,
-                     perms=['update', 'view', 'delete'])
+                     perms=['update', 'view'])
+        assign_perms(self.info_name, self.object.workshop.group, self.object,
+                     perms=['update', 'view'])
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
     def form_invalid(self, form):
@@ -111,7 +112,9 @@ class ProjectAdd(ProjectBase, dj_PRM, CreateView):
             self.template_name, request=self.request,
             context=context)
         return JsonResponse({'status': 1, 'html': html})
-
+    
+    def get_object(self, queryset=None):
+        return None
 
 class ProjectSocialAdd(ProjectBase, PermissionRequiredMixin, CreateView):
     """
@@ -264,14 +267,14 @@ class ProjectEnd(ProjectBase, PermissionRequiredMixin, UpdateView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         is_ajax = request.is_ajax()
-        allowed_status = self.object.status in PROJECT_STATUS_CAN_ENDED
+        allowed_status = self.object.status in PROJECT_STATUS_CAN_END_SUBMIT
         if not is_ajax or not allowed_status:
             return HttpResponseForbidden()
         return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        allowed_status = self.object.status in PROJECT_STATUS_CAN_ENDED
+        allowed_status = self.object.status in PROJECT_STATUS_CAN_END_SUBMIT
         if not allowed_status:
             return HttpResponseForbidden()
         return super(ProjectEnd, self).post(request, *args,

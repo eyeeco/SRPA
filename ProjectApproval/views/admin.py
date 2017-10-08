@@ -10,13 +10,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, UpdateView, DetailView
 from django.http import JsonResponse, HttpResponseForbidden
 from django.utils.translation import ugettext_lazy as _
+from guardian.mixins import PermissionRequiredMixin, PermissionListMixin
 
-from const.forms import FeedBackForm, FeedBackEndForm
+from const.forms import FeedBackForm
 from const.models import FeedBack
 from ProjectApproval.models import Project
 from ProjectApproval import PROJECT_STATUS_CAN_CHECK, PROJECT_SUBMITTED
 from ProjectApproval import PROJECT_APPROVED, PROJECT_EDITTING
-from ProjectApproval import PROJECT_TERMINATED, PROJECT_STATUS_CAN_FINISHED
+from ProjectApproval import PROJECT_TERMINATED, PROJECT_STATUS_CAN_FINISH
 from ProjectApproval import PROJECT_FINISHED, PROJECT_END_EDITTING
 
 
@@ -28,35 +29,35 @@ class AdminProjectBase(LoginRequiredMixin):
     model = Project
 
 
-class AdminProjectList(AdminProjectBase, ListView):
+class AdminProjectList(AdminProjectBase, PermissionListMixin, ListView):
     """
     A view for displaying projects list for admin. GET only.
     """
     model = Project
     paginate_by = 12
     ordering = ['status', '-apply_time']
+    raise_exception = True
+    permission_required = 'view_project'
 
     def get_queryset(self):
         return super(AdminProjectList, self).get_queryset().filter(
             workshop__group__in=self.request.user.groups.all())
 
 
-class AdminProjectDetail(AdminProjectBase, DetailView):
+class AdminProjectDetail(AdminProjectBase, PermissionRequiredMixin, DetailView):
     """
     A view for displaying specified project for admin. GET only.
     """
     model = Project
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
+    raise_exception = True
+    permission_required = 'view_project'
 
     def get_context_data(self, **kwargs):
         feed = FeedBack.objects.filter(
             target_uid=self.object.uid)
-        form = ''
-        if self.object.status in PROJECT_STATUS_CAN_CHECK:
-            form = FeedBackForm({'target_uid': self.object.uid})
-        if self.object.status in PROJECT_STATUS_CAN_FINISHED:
-            form = FeedBackEndForm({'target_uid': self.object.uid})
+        form = FeedBackForm({'target_uid': self.object.uid})
         kwargs['budgets'] = [x.strip().split(' ') for x in
                              self.object.budget.split('\n')]
         kwargs['feed'] = feed
@@ -64,7 +65,7 @@ class AdminProjectDetail(AdminProjectBase, DetailView):
         return super(AdminProjectDetail, self).get_context_data(**kwargs)
 
 
-class AdminProjectUpdate(AdminProjectBase, UpdateView):
+class AdminProjectUpdate(AdminProjectBase, PermissionRequiredMixin, UpdateView):
     """
     A view for admin to update an exist project.
     Should check status before change, reject change if not match
@@ -74,11 +75,13 @@ class AdminProjectUpdate(AdminProjectBase, UpdateView):
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
     form_class = FeedBackForm
+    raise_exception = True
+    permission_required = 'update_project'
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         allowed_status = self.object.status in PROJECT_STATUS_CAN_CHECK or\
-            self.object.status in PROJECT_STATUS_CAN_FINISHED
+            self.object.status in PROJECT_STATUS_CAN_FINISH
         if not allowed_status:
             return HttpResponseForbidden()
         return super(AdminProjectUpdate, self).post(request, *args,
@@ -90,7 +93,6 @@ class AdminProjectUpdate(AdminProjectBase, UpdateView):
     def form_valid(self, form):
         obj = self.object
         feedback = form.save(commit=False)
-        print(feedback.target_uid)
         if obj.uid != feedback.target_uid:
             # Mismatch target_uid
             return JsonResponse({'status': 2, 'reason': _('Illegal Input')})
@@ -100,24 +102,23 @@ class AdminProjectUpdate(AdminProjectBase, UpdateView):
         feedback.user = self.request.user
         status = form.cleaned_data['status']
         if status == 'APPROVE':
-            obj.status = PROJECT_APPROVED
+            if obj.status in PROJECT_STATUS_CAN_CHECK:
+                obj.status = PROJECT_APPROVED
+            elif obj.status in PROJECT_STATUS_CAN_FINISH:
+                obj.status = PROJECT_FINISHED
         elif status == 'EDITTING':
-            obj.status = PROJECT_EDITTING
+            if obj.status in PROJECT_STATUS_CAN_CHECK:
+                obj.status = PROJECT_EDITTING
+            elif obj.status in PROJECT_STATUS_CAN_FINISH:
+                obj.status = PROJECT_END_EDITTING
         elif status == 'TERMINATED':
-            obj.status = PROJECT_TERMINATED
-        elif status == 'FINISHED':
-            obj.status = PROJECT_FINISHED
-        elif status == 'END_EDITTING':
-            obj.status = PROJECT_END_EDITTING
+            if obj.status in PROJECT_STATUS_CAN_CHECK:
+                obj.status = PROJECT_TERMINATED
+            elif obj.status in PROJECT_STATUS_CAN_FINISH:
+                return JsonResponse({'status': 2, 'reason': _('Illegal Input')})    
         obj.save()
         feedback.save()
         return JsonResponse({'status': 0})
 
     def form_invalid(self, form):
-        print(form.errors.as_data())
         return JsonResponse({'status': 1, 'reason': _('Illegal Input')})
-
-
-class AdminProjectUpdatePlus(AdminProjectUpdate):
-
-    form_class = FeedBackEndForm

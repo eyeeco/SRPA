@@ -149,7 +149,7 @@
 </div>
 {% endif %}
 <!--line 9-->
-{% if object.status in PROJECT_STATUS_CAN_ENDED or object.status == PROJECT_FINISHED %}
+{% if object.status in PROJECT_STATUS_CAN_END_SUBMIT or object.status == PROJECT_FINISH %}
 {% if object.attachment %}
     <div class="form-group col-sm-12" >
         <div class="col-sm-2">
@@ -177,16 +177,15 @@
     {% if object.status in PROJECT_STATUS_CAN_EXPORT %}
     <a type="button" class="btn btn-info btn-md " href="{% url 'project:ordinary:export' object.uid %}">{% trans 'Export' %}</a>
     {% endif %}
-    {% if object.status in PROJECT_STATUS_CAN_ENDED %}
+    {% if object.status in PROJECT_STATUS_CAN_END_SUBMIT %}
     <a type="button" class="btn btn-success srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:project_end' object.uid %}">{% trans 'Project End' %}</a>
     {% endif %}
     {% endif %}
-
     {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
     {% if object.status in PROJECT_STATUS_CAN_CHECK %}
     <a type="button" class="btn btn-info" href="#" data-toggle="modal" data-target="#modal_form">{% trans 'Audit' %}</a>
     {% endif %} 
-    {% if object.status in PROJECT_STATUS_CAN_FINISHED %}
+    {% if object.status in PROJECT_STATUS_CAN_FINISH %}
     <a type="button" class="btn btn-success" href="#" data-toggle="modal" data-target="#modal_form">{% trans 'Ended Audit' %}</a>
     {% endif %} 
     {% endif %}
@@ -197,13 +196,7 @@
 <div class="modal" id="modal_form" tabindex="-1" role="dialog" aria-labelledby="modal">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
-            {% if object.status in PROJECT_STATUS_CAN_CHECK %}
             <form class="form-horizontal" action="{% url 'project:admin:update' object.uid %}" method="POST">
-            {% endif %}
-            {% if object.status in PROJECT_STATUS_CAN_FINISHED %}
-            <form class="form-horizontal" action="{% url 'project:admin:update_plus' object.uid %}" method="POST">
-            {% endif %}
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="modal_title">{% trans 'Audit Opinion' %}</h4>
@@ -223,3 +216,8 @@
     </div>
 </div>
 {% endif %}
+{% if object.status in PROJECT_STATUS_CAN_FINISH %}
+<script type="text/javascript">
+    $('#id_status').children('[value = "TERMINATED"]').hide();
+</script>>
+{% endif %} 

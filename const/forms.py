@@ -30,22 +30,3 @@ class FeedBackForm(ModelForm):
     class Meta:
         model = FeedBack
         fields = ['target_uid', 'desc', 'status']
-
-
-class FeedBackEndForm(ModelForm):
-    target_uid = forms.CharField(
-        widget=forms.HiddenInput(attrs={
-            'class': 'form-control'}))
-    status = forms.ChoiceField(choices=(
-        ('FINISHED', _('Feedback Finshed')),
-        ('END_EDITTING', _('Feedback Editting'))),
-        widget=forms.Select(attrs={
-            'class': 'form-control'}))
-    desc = forms.CharField(
-        required=False,
-        widget=forms.Textarea(attrs={
-            'class': 'form-control'}))
-
-    class Meta:
-        model = FeedBack
-        fields = ['target_uid', 'desc', 'status']
