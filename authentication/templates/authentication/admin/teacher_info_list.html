@@ -1,0 +1,80 @@
+{% extends "authentication/admin/layout.html" %}
+{% load static %}
+{% load filters %}
+{% load i18n %}
+
+{% block web_title %}
+{{block.super}} - {% trans 'Teachers List' %}
+{% endblock %}
+
+{% block container %}
+<div class="col-lg-4 col-lg-offset-4 col-xs-10 col-xs-offset-1 srpa-background">
+    <div class="col-sm-6 col-sm-offset-3">
+        <h1>{% trans 'Teachers List' %}</h1>
+    </div>
+    <div id="page">
+        <table class="table"> 
+            <tr>
+                <th>{% trans 'Username' %}</th>
+                <th>{% trans 'First Name' %}</th>
+                <th>{% trans 'Phone' %}</th>
+                <th>{% trans 'Email' %}</th>
+                <th>{% trans 'Title' %}</th>
+                <th>{% trans 'Action' %}</th>
+            </tr>
+            {% for tf in object_list %}
+            <tr>
+                <td>{{tf.user_info.user.username}}</td>
+                <td>{{tf.user_info.user.first_name}}</td>
+                <td>{{tf.user_info.user.email}}</td>
+                <td>{{tf.user_info.phone}}</td>
+                <td>{{tf.get_title_display}}</td>
+                <td>
+                    <a class="btn btn-info btn-xs" href="{% url 'auth:admin:teacher:detail' tf.uid %}">{% trans 'Detail' %}</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% if is_paginated %}
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li>
+                    <a href="{% url 'auth:admin:teacher:list' page=page_obj.previous_page_number %}">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="disabled">
+                    <a href="#">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for pageid in paginator.page_range %}
+                <li {% if pageid == page_obj.number %}class="active"{% endif %}>
+                    <a href="{% url 'auth:admin:teacher:list' page=pageid %}">{{ pageid }}</a>
+                </li>
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li>
+                    <a href="{% url 'auth:admin:teacher:list' page=page_obj.next_page_number %}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li {% if not page_obj.has_next %}class="disabled"{% endif %}>
+                    <a href="#">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

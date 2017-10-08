@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:05
-# Last modified: 2017-10-04 21:42
+# Last modified: 2017-10-07 21:37
 # Filename: settings.py
 # Description:
 """
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'guardian',
     'captcha',
+    'Analytics',
     'tools',
     'const',
     'authentication',
@@ -69,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Analytics.middlewares.AnalyticsMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = [

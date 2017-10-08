@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-05 10:49+0800\n"
+"POT-Creation-Date: 2017-10-07 21:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+#: Analytics/models.py:17
+msgid "Scheme"
+msgstr "协议"
+
+#: Analytics/models.py:18
+msgid "URI"
+msgstr "URI"
+
+#: Analytics/models.py:19
+msgid "Method"
+msgstr "方法"
+
+#: Analytics/models.py:20
+msgid "Referer"
+msgstr "来源"
+
+#: Analytics/models.py:22
+msgid "User-Agent"
+msgstr "用户代理"
+
+#: Analytics/models.py:24
+msgid "User ID"
+msgstr "用户ID"
+
+#: Analytics/models.py:25
+msgid "IP"
+msgstr "IP地址"
+
+#: Analytics/models.py:26
+msgid "Status Code"
+msgstr "状态码"
+
+#: Analytics/models.py:28
+msgid "Timestamp"
+msgstr "时间戳"
+
+#: Analytics/models.py:31 Analytics/models.py:32
+msgid "BehaviorFlow"
+msgstr "行为流"
 
 #: ProjectApproval/__init__.py:23
 msgid "Project Submitted"
@@ -151,7 +191,7 @@ msgstr "用户"
 #: SiteReservation/models.py:24
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:10
 #: SiteReservation/templates/SiteReservation/reservation_list.html:5
-#: const/models.py:41 const/models.py:42
+#: const/models.py:40 const/models.py:41
 msgid "Workshop"
 msgstr "工坊"
 
@@ -171,7 +211,7 @@ msgstr "申请时间"
 #: SiteReservation/models.py:22
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:4
 #: SiteReservation/templates/SiteReservation/reservation_list.html:4
-#: const/models.py:25 const/models.py:26
+#: const/models.py:24 const/models.py:25
 msgid "Site"
 msgstr "场地"
 
@@ -265,7 +305,7 @@ msgstr "预算备注"
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:122
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:170
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:121
-#: const/models.py:56
+#: const/models.py:55
 msgid "Audit Opinion"
 msgstr "审核意见"
 
@@ -314,6 +354,8 @@ msgstr "活动状态"
 
 #: ProjectApproval/templates/ProjectApproval/project_list.html:12
 #: SiteReservation/templates/SiteReservation/reservation_list.html:10
+#: authentication/templates/authentication/admin/teacher_info_list.html:23
+#: authentication/templates/authentication/admin/workshop_list.html:20
 msgid "Action"
 msgstr "操作"
 
@@ -321,21 +363,23 @@ msgstr "操作"
 #: ProjectApproval/templates/ProjectApproval/project_list.html:27
 #: SiteReservation/templates/SiteReservation/reservation_list.html:22
 #: SiteReservation/templates/SiteReservation/reservation_list.html:24
+#: authentication/templates/authentication/admin/teacher_info_list.html:33
+#: authentication/templates/authentication/admin/workshop_list.html:27
 msgid "Detail"
 msgstr "详情"
 
 #: ProjectApproval/views/admin.py:81 ProjectApproval/views/admin.py:84
-#: ProjectApproval/views/admin.py:98 SiteReservation/views/admin.py:97
-#: SiteReservation/views/admin.py:100 SiteReservation/views/admin.py:121
+#: ProjectApproval/views/admin.py:98 SiteReservation/views/admin.py:99
+#: SiteReservation/views/admin.py:102 SiteReservation/views/admin.py:123
 #: SiteReservation/views/ordinary.py:74
 msgid "Illegal Input"
 msgstr "无效输入"
 
-#: SRPA/settings.py:116
+#: SRPA/settings.py:118
 msgid "English"
 msgstr "英语"
 
-#: SRPA/settings.py:117
+#: SRPA/settings.py:119
 msgid "Simplified Chinese"
 msgstr "简体中文"
 
@@ -374,6 +418,11 @@ msgstr "登出"
 #: authentication/templates/authentication/register.html:8
 msgid "Register"
 msgstr "注册"
+
+#: SRPA/templates/base/layout.html:70
+#, python-format
+msgid "Copyright ©  %(current_year)s SIE. All Rights Reserved."
+msgstr "© %(current_year)s 大连理工大学创新创业学院 版权所有"
 
 #: SRPA/templates/captcha/image.html:3
 msgid "play audio captcha"
@@ -500,8 +549,8 @@ msgstr "可预约"
 msgid "Not Available"
 msgstr "已预约"
 
-#: SiteReservation/views/admin.py:109 SiteReservation/views/ordinary.py:187
-#: SiteReservation/views/ordinary.py:259
+#: SiteReservation/views/admin.py:111 SiteReservation/views/ordinary.py:171
+#: SiteReservation/views/ordinary.py:240
 msgid "Conflict with existing reservation"
 msgstr "与已存在的预约信息冲突"
 
@@ -513,46 +562,57 @@ msgstr "请选择一个未来时间"
 msgid "Wrong form data, Please check again"
 msgstr "表达信息有误，请再次核对"
 
-#: authentication/forms.py:22 authentication/forms.py:49 const/models.py:68
+#: authentication/forms.py:24 authentication/forms.py:78 const/models.py:67
 msgid "Captcha"
 msgstr "验证码"
 
-#: authentication/forms.py:27
+#: authentication/forms.py:29
+#: authentication/templates/authentication/admin/teacher_info_list.html:18
 msgid "Username"
 msgstr "用户名"
 
-#: authentication/forms.py:30
+#: authentication/forms.py:32 authentication/forms.py:102
+#: authentication/templates/authentication/admin/teacher_info_list.html:19
 #: authentication/templates/authentication/user_info_detail.html:3
 msgid "First Name"
 msgstr "姓名"
 
-#: authentication/forms.py:33
+#: authentication/forms.py:35
 msgid "Password"
 msgstr "密码"
 
-#: authentication/forms.py:38
+#: authentication/forms.py:40
 msgid "Confirm Password"
 msgstr "确认密码"
 
-#: authentication/forms.py:43 authentication/models.py:27
+#: authentication/forms.py:45 authentication/forms.py:105
+#: authentication/models.py:27
+#: authentication/templates/authentication/admin/teacher_info_list.html:20
 msgid "Phone"
 msgstr "电话"
 
-#: authentication/forms.py:48
+#: authentication/forms.py:50 authentication/forms.py:110
+#: authentication/templates/authentication/admin/teacher_info_detail.html:19
+#: authentication/templates/authentication/admin/teacher_info_list.html:21
 msgid "Email"
 msgstr "邮箱"
 
-#: authentication/forms.py:65
+#: authentication/forms.py:66
 msgid "Username has been used"
 msgstr "该用户名已被使用"
 
-#: authentication/forms.py:70
+#: authentication/forms.py:71
 msgid "Please confirm the password is the same"
 msgstr "请确认密码一致"
 
-#: authentication/forms.py:86
+#: authentication/forms.py:89
 msgid "Student ID not in the invited list"
 msgstr "该学号不在受邀名单中"
+
+#: authentication/forms.py:119
+#: authentication/templates/authentication/admin/workshop_detail.html:24
+msgid "Group Users"
+msgstr "组用户"
 
 #: authentication/models.py:24
 #: authentication/templates/authentication/user_info_detail.html:15
@@ -569,12 +629,73 @@ msgid "StudentInfo"
 msgstr "学生信息"
 
 #: authentication/models.py:58
+#: authentication/templates/authentication/admin/teacher_info_detail.html:25
+#: authentication/templates/authentication/admin/teacher_info_list.html:22
 msgid "Title"
 msgstr "职务"
 
 #: authentication/models.py:63 authentication/models.py:64
+#: authentication/templates/authentication/admin/teacher_info_detail.html:7
+#: authentication/templates/authentication/admin/teacher_info_detail.html:13
 msgid "TeacherInfo"
 msgstr "教师信息"
+
+#: authentication/templates/authentication/admin/layout.html:6
+#: authentication/templates/authentication/admin/teacher_add.html:7
+#: authentication/templates/authentication/admin/teacher_add.html:13
+msgid "New Teacher"
+msgstr "新的教师"
+
+#: authentication/templates/authentication/admin/layout.html:7
+#: authentication/templates/authentication/admin/workshop_add.html:8
+msgid "New Workshop"
+msgstr "新的工坊"
+
+#: authentication/templates/authentication/admin/layout.html:8
+#: authentication/templates/authentication/admin/teacher_info_list.html:7
+#: authentication/templates/authentication/admin/teacher_info_list.html:13
+msgid "Teachers List"
+msgstr "教师列表"
+
+#: authentication/templates/authentication/admin/layout.html:9
+#: authentication/templates/authentication/admin/workshop_list.html:7
+#: authentication/templates/authentication/admin/workshop_list.html:13
+msgid "Workshops List"
+msgstr "工坊列表"
+
+#: authentication/templates/authentication/admin/teacher_info_detail.html:32
+#: authentication/templates/authentication/student_info_detail.html:28
+#: authentication/templates/authentication/update_info.html:8
+msgid "Update Profile"
+msgstr "更新个人信息"
+
+#: authentication/templates/authentication/admin/teacher_info_update.html:8
+msgid "Update Teacher"
+msgstr "更新教师信息"
+
+#: authentication/templates/authentication/admin/workshop_detail.html:7
+#: authentication/templates/authentication/admin/workshop_detail.html:13
+msgid "Workshop Info"
+msgstr "工坊信息"
+
+#: authentication/templates/authentication/admin/workshop_detail.html:18
+#: const/models.py:21
+msgid "Site Description"
+msgstr "场地"
+
+#: authentication/templates/authentication/admin/workshop_detail.html:37
+#: authentication/templates/authentication/admin/workshop_update.html:8
+msgid "Update Workshop"
+msgstr "更新工坊"
+
+#: authentication/templates/authentication/admin/workshop_list.html:18
+#: const/models.py:34
+msgid "Workshop Description"
+msgstr "工坊"
+
+#: authentication/templates/authentication/admin/workshop_list.html:19
+msgid "Number of Current Staff"
+msgstr "当前工作人员数量"
 
 #: authentication/templates/authentication/login.html:7
 #: authentication/templates/authentication/login.html:13
@@ -628,40 +749,27 @@ msgstr "确认新密码"
 msgid "Student"
 msgstr "学生"
 
-#: authentication/templates/authentication/student_info_detail.html:28
-#: authentication/templates/authentication/update_info.html:8
-msgid "Update Profile"
-msgstr "更新个人信息"
+#: const/models.py:36
+msgid "Group"
+msgstr "组别"
 
-#: const/models.py:22
-msgid "Site Description"
-msgstr "场地"
-
-#: const/models.py:35
-msgid "Workshop Description"
-msgstr "工坊"
-
-#: const/models.py:37
-msgid "Instructor"
-msgstr "指导教师"
-
-#: const/models.py:51
+#: const/models.py:50
 msgid "Auditor"
 msgstr "审核人"
 
-#: const/models.py:53
+#: const/models.py:52
 msgid "Audited Target"
 msgstr "被审阅对象"
 
-#: const/models.py:54
+#: const/models.py:53
 msgid "Audit Time"
 msgstr "审核时间"
 
-#: const/models.py:59 const/models.py:60
+#: const/models.py:58 const/models.py:59
 msgid "Audit Feedback"
 msgstr "审核意见"
 
-#: const/models.py:63
+#: const/models.py:62
 #, python-brace-format
 msgid "Audit Feedback on {target} by {user}"
 msgstr "{user} 对 {target} 的审阅意见"
