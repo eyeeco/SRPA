@@ -11,7 +11,7 @@ from datetime import datetime, timedelta, timezone
 
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
 from django.views.generic import DetailView, TemplateView, FormView, View
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User, Group
 from django.http import Http404, JsonResponse, HttpResponseRedirect
 from django.http import HttpResponse
@@ -25,7 +25,7 @@ from django.utils.translation import ugettext_lazy as _
 from guardian.mixins import PermissionRequiredMixin, PermissionListMixin
 from django import forms
 
-from authentication import USER_IDENTITY_STUDENT as id_student
+from authentication import USER_IDENTITY_STUDENT
 from authentication import USER_IDENTITY_ADMIN
 from SiteReservation import RESERVATION_APPROVED, RESERVATION_CANCELLED
 from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_CAN_EDIT
@@ -36,15 +36,17 @@ from const.models import Site, FeedBack
 from tools.utils import assign_perms
 
 
-class ReservationBase(LoginRequiredMixin):
+class ReservationBase(UserPassesTestMixin):
     """
     A base view for all reservation actions. SHOULD NOT DIRECTLY USE THIS.
     """
     model = Reservation
+    raise_exception = True
 
     def test_func(self):
         user = self.request.user
-        return user.is_authenticated and user.user_info.identity == id_student
+        return user.is_authenticated and \
+            user.user_info.identity == USER_IDENTITY_STUDENT
 
 
 class ReservationIndex(ReservationBase, TemplateView):

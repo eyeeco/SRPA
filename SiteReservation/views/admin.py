@@ -6,7 +6,7 @@
 # Last modified: 2017-10-04 15:11
 # Filename: admin.py
 # Description:
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, UpdateView, DetailView
 from django.http import JsonResponse, HttpResponseForbidden
 from django.urls import reverse_lazy
@@ -19,7 +19,7 @@ from .ordinary import ReservationList, ReservationUpdate, ReservationDetail
 
 from const.forms import FeedBackForm
 from const.models import FeedBack
-from authentication.__init__ import USER_IDENTITY_TEACHER as id_teacher
+from authentication import USER_IDENTITY_TEACHER
 from SiteReservation import RESERVATION_STATUS_CAN_CHECK, RESERVATION_EDITTING
 from SiteReservation import RESERVATION_APPROVED, RESERVATION_TERMINATED
 from SiteReservation import RESERVATION_CANCELLED
@@ -29,16 +29,18 @@ from authentication.models import UserInfo, StudentInfo
 
 
 #  TODO: LoginRequiredMixin --> PermissionRequiredMixin
-class AdminReservationBase(LoginRequiredMixin):
+class AdminReservationBase(UserPassesTestMixin):
     """
     A base view for all admin reservation actions. SHOULD NOT DIRECTLY USE
     THIS. Check admin auth first.
     """
     model = Reservation
+    raise_exception = True
 
     def test_func(self):
         user = self.request.user
-        return user.is_authenticated and user.user_info.identity == id_teacher
+        return user.is_authenticated and \
+            user.user_info.identity == USER_IDENTITY_TEACHER
 
 
 class AdminReservationList(AdminReservationBase, PermissionListMixin,
