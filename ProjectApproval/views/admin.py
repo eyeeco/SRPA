@@ -22,14 +22,14 @@ from ProjectApproval import PROJECT_FINISHED, PROJECT_END_EDITTING
 
 
 #  TODO: LoginRequiredMixin --> PermissionRequiredMixin
-class AdminProjectBase(LoginRequiredMixin):
+class AdminProBase(LoginRequiredMixin):
     """
     A base view for all project actions. SHOULD NOT DIRECTLY USE THIS.
     """
     model = Project
 
 
-class AdminProjectList(AdminProjectBase, PermissionListMixin, ListView):
+class AdminProjectList(AdminProBase, PermissionListMixin, ListView):
     """
     A view for displaying projects list for admin. GET only.
     """
@@ -44,7 +44,7 @@ class AdminProjectList(AdminProjectBase, PermissionListMixin, ListView):
             workshop__group__in=self.request.user.groups.all())
 
 
-class AdminProjectDetail(AdminProjectBase, PermissionRequiredMixin, DetailView):
+class AdminProjectDetail(AdminProBase, PermissionRequiredMixin, DetailView):
     """
     A view for displaying specified project for admin. GET only.
     """
@@ -65,7 +65,7 @@ class AdminProjectDetail(AdminProjectBase, PermissionRequiredMixin, DetailView):
         return super(AdminProjectDetail, self).get_context_data(**kwargs)
 
 
-class AdminProjectUpdate(AdminProjectBase, PermissionRequiredMixin, UpdateView):
+class AdminProjectUpdate(AdminProBase, PermissionRequiredMixin, UpdateView):
     """
     A view for admin to update an exist project.
     Should check status before change, reject change if not match
@@ -115,7 +115,8 @@ class AdminProjectUpdate(AdminProjectBase, PermissionRequiredMixin, UpdateView):
             if obj.status in PROJECT_STATUS_CAN_CHECK:
                 obj.status = PROJECT_TERMINATED
             elif obj.status in PROJECT_STATUS_CAN_FINISH:
-                return JsonResponse({'status': 2, 'reason': _('Illegal Input')})    
+                return JsonResponse({
+                    'status': 2, 'reason': _('Illegal Input')})
         obj.save()
         feedback.save()
         return JsonResponse({'status': 0})

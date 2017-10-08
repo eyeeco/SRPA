@@ -112,9 +112,10 @@ class ProjectAdd(ProjectBase, PermissionRequiredMixin, CreateView):
             self.template_name, request=self.request,
             context=context)
         return JsonResponse({'status': 1, 'html': html})
-    
+
     def get_object(self, queryset=None):
         return None
+
 
 class ProjectSocialAdd(ProjectBase, PermissionRequiredMixin, CreateView):
     """
