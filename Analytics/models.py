@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-10-07 20:58
-# Last modified: 2017-10-07 21:52
+# Last modified: 2017-10-08 13:56
 # Filename: models.py
 # Description:
 from uuid import uuid4
@@ -26,6 +26,8 @@ class BehaviorFlow(models.Model):
     request_user_ip = models.GenericIPAddressField(verbose_name=_('IP'))
     response_status_code = models.CharField(verbose_name=_('Status Code'),
                                             max_length=3)
+    response_render_time = models.FloatField(
+        verbose_name=_('Response Render Time'))
     timestamp = models.DateTimeField(_('Timestamp'), default=timezone.now)
 
     class Meta:
