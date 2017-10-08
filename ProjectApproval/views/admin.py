@@ -19,7 +19,6 @@ from ProjectApproval import PROJECT_STATUS_CAN_CHECK, PROJECT_SUBMITTED
 from ProjectApproval import PROJECT_APPROVED, PROJECT_EDITTING
 from ProjectApproval import PROJECT_TERMINATED, PROJECT_STATUS_CAN_FINISH
 from ProjectApproval import PROJECT_FINISHED, PROJECT_END_EDITTING
-from tools.utils import check_perm
 
 
 #  TODO: LoginRequiredMixin --> PermissionRequiredMixin
