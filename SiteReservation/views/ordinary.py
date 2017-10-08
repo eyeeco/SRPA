@@ -159,11 +159,12 @@ class ReservationDetail(PermissionRequiredMixin, DetailView):
         return super(ReservationDetail, self).get_context_data(**kwargs)
 
 
-class ReservationAdd(dj_PRM, CreateView):
+class ReservationAdd(PermissionRequiredMixin, CreateView):
     """
     A view for creating a new reservation.
     """
     model = Reservation
+    accept_global_perms = True
     raise_exception = True
     permission_required = 'SiteReservation.add_reservation'
     template_name = 'SiteReservation/reservation_add.html'
@@ -192,6 +193,9 @@ class ReservationAdd(dj_PRM, CreateView):
         self.object = form.save()
         assign_perms('reservation', self.request.user, obj=self.object)
         return JsonResponse({'status': 0, 'redirect': self.success_url})
+    
+    def get_object(self, queryset=None):
+        return None
 
     def form_invalid(self, form):
         context = self.get_context_data()
