@@ -21,6 +21,7 @@ from ProjectApproval import PROJECT_TERMINATED, PROJECT_STATUS_CAN_FINISH
 from ProjectApproval import PROJECT_FINISHED, PROJECT_END_EDITTING
 from authentication import USER_IDENTITY_TEACHER
 
+
 class AdminProBase(UserPassesTestMixin):
 
     model = Project
@@ -28,7 +29,8 @@ class AdminProBase(UserPassesTestMixin):
 
     def test_func(self):
         user = self.request.user
-        return user.is_authenticated and user.user_info.identity == USER_IDENTITY_TEACHER
+        return user.is_authenticated and\
+            user.user_info.identity == USER_IDENTITY_TEACHER
 
 
 class AdminProjectList(AdminProBase, PermissionListMixin, ListView):

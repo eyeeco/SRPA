@@ -41,7 +41,8 @@ class ProjectBase(UserPassesTestMixin):
 
     def test_func(self):
         user = self.request.user
-        return user.is_authenticated and user.user_info.identity == USER_IDENTITY_STUDENT
+        return user.is_authenticated and\
+            user.user_info.identity == USER_IDENTITY_STUDENT
 
 
 class ProjectIndex(TemplateView):
