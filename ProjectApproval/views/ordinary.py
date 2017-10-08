@@ -17,6 +17,7 @@ from django.http import HttpResponseForbidden
 from django.template.loader import render_to_string
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.mixins import PermissionRequiredMixin as dj_PRM
 from guardian.mixins import PermissionRequiredMixin, PermissionListMixin
 
 from ProjectApproval import PROJECT_STATUS, PROJECT_SUBMITTED
@@ -30,39 +31,36 @@ from authentication.models import UserInfo
 from authentication import USER_IDENTITIES
 from ProjectApproval import PROJECT_STATUS_CAN_EDIT
 from ProjectApproval.utils import export_project
+from tools.utils import assign_perms
 
 
-
-class ProjectBase(LoginRequiredMixin):
-    """
-    A base view for all project actions. SHOULD NOT DIRECTLY USE THIS.
-    """
-    model = Project
-
-
-class ProjectIndex(ProjectBase, TemplateView):
+class ProjectIndex(TemplateView):
 
     template_name = "ProjectApproval/index.html"
 
 
-class ProjectList(ProjectBase, ListView):
+class ProjectList(PermissionListMixin, ListView):
     """
     A view for displaying user-related projects list. GET only.
     """
+    model = Project
     paginate_by = 12
     ordering = ['status', '-apply_time']
-
+    raise_exception = True
+    permission_required = 'view_project'
     def get_queryset(self):
-        return super().get_queryset().filter(user=self.request.user)
+        return super(ProjectList,self).get_queryset().filter(user=self.request.user)
 
 
-class ProjectDetail(ProjectBase, DetailView):
+class ProjectDetail(PermissionRequiredMixin, DetailView):
     """
     A view for displaying specified project. GET only.
-
     """
+    model = Project
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
+    permission_required = 'view_project' 
+    raise_exception = True 
 
     def get_context_data(self, **kwargs):
         feed = FeedBack.objects.filter(
@@ -74,14 +72,19 @@ class ProjectDetail(ProjectBase, DetailView):
         return super(ProjectDetail, self).get_context_data(**kwargs)
 
 
-class ProjectAdd(ProjectBase, CreateView):
+class ProjectAdd(dj_PRM, CreateView):
     """
     A view for creating a new project.
     """
+    model = Project
     template_name = 'ProjectApproval/project_form.html'
     form_class = ActivityForm
     success_url = reverse_lazy('project:index')
     form_post_url = 'project:ordinary:add'
+    info_name = 'project'
+    raise_exception = True
+    accept_global_perms = True
+    permission_required = 'ProjectApproval.add_project'
 
     def get_context_data(self, **kwargs):
         kwargs['form_post_url'] = reverse(self.form_post_url)
@@ -94,6 +97,8 @@ class ProjectAdd(ProjectBase, CreateView):
         if has_social:
             form.instance.status = PROJECT_SOCIALFORM_REQUIRED
         self.object = form.save()
+        assign_perms(self.info_name, self.request.user, self.object,
+                     perms=['update', 'view', 'delete'])
         return JsonResponse({'status': 0, 'redirect': self.success_url})
 
     def form_invalid(self, form):
@@ -105,15 +110,18 @@ class ProjectAdd(ProjectBase, CreateView):
         return JsonResponse({'status': 1, 'html': html})
 
 
-class ProjectSocialAdd(ProjectBase, CreateView):
+class ProjectSocialAdd(PermissionRequiredMixin, CreateView):
     """
     A view for creating a information set for social people.
     """
+    model = Project
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
     template_name = 'ProjectApproval/project_add_social.html'
     form_class = SocialInvitationForm
     success_url = reverse_lazy('project:index')
+    raise_exception = True
+    permission_required = 'update_project'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -149,17 +157,20 @@ class ProjectSocialAdd(ProjectBase, CreateView):
         return JsonResponse({'status': 1, 'html': html})
 
 
-class ProjectUpdate(ProjectBase, UpdateView):
+class ProjectUpdate(PermissionRequiredMixin, UpdateView):
     """
     A view for updating an exist project. Should check status before
     change, reject change if not match specified status.
     """
+    model = Project
     template_name = 'ProjectApproval/project_form.html'
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
     form_class = ActivityForm
     success_url = reverse_lazy('project:index')
     form_post_url = 'project:ordinary:update'
+    raise_exception = True
+    permission_required = 'update_project'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -205,39 +216,51 @@ class ProjectUpdate(ProjectBase, UpdateView):
         return JsonResponse({'status': 1, 'html': html})
 
 
-class ProjectExport(ProjectBase, DetailView):
+class ProjectExport(PermissionRequiredMixin, DetailView):
     """
     A view for exporting project application
     """
+    model = Project
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
+    raise_exception = True
+    permission_required = 'view_project'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         return redirect(export_project(self.object))
 
 
-class ProjectCancel(ProjectBase, View):
+class ProjectCancel(PermissionRequiredMixin, DetailView):
     """
     A view for student to cancel the project application himself
     """
+    model = Project
+    slug_field = 'uid'
+    slug_url_kwarg = 'uid'
     success_url = reverse_lazy('project:index')
+    raise_exception = True
+    permission_required = 'update_project'
 
     def get(self, request, *args, **kwargs):
-        reservation = Project.objects.filter(uid=kwargs['uid'])
-        reservation.update(status=PROJECT_CANCELLED)
+        self.object = self.get_object()
+        self.object.status = PROJECT_CANCELLED
+        self.object.save()
         return redirect(self.success_url)
 
-class ProjectEnd(ProjectBase, UpdateView):
+class ProjectEnd(PermissionRequiredMixin, UpdateView):
     """
     A view for student to end the project application 
     """
+    model = Project
     template_name = 'ProjectApproval/project_end.html'
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
     success_url = reverse_lazy('project:index')
     form_post_url = 'project:ordinary:project_end'
     fields = ['attachment']
+    raise_exception = True
+    permission_required = 'update_project'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()

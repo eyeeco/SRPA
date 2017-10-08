@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:09
-# Last modified: 2017-10-07 16:04
+# Last modified: 2017-10-07 19:29
 # Filename: forms.py
 # Description:
 from django import forms
@@ -76,6 +76,7 @@ class RegisterForm(ModelForm):
 
 class StudentRegisterForm(RegisterForm):
     captcha = CaptchaField(label=_('Captcha'))
+
     class Meta:
         model = StudentInfo
         fields = ['email', 'username', 'password', 'confirm_password',

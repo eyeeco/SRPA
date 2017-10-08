@@ -10,6 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 "POT-Creation-Date: 2017-10-05 17:49+0800\n"
 =======
 "POT-Creation-Date: 2017-10-05 10:49+0800\n"
@@ -17,6 +18,9 @@ msgstr ""
 =======
 "POT-Creation-Date: 2017-10-07 17:17+0800\n"
 >>>>>>> 5359ac9874ce2d5393255ede8aeb69e822f83cfc
+=======
+"POT-Creation-Date: 2017-10-07 19:26+0800\n"
+>>>>>>> f2ab99da4712d7ba7de89e1a68b5c4754e937fef
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -370,8 +374,8 @@ msgstr "详情"
 #: SiteReservation/views/ordinary.py:73
 =======
 #: ProjectApproval/views/admin.py:81 ProjectApproval/views/admin.py:84
-#: ProjectApproval/views/admin.py:98 SiteReservation/views/admin.py:97
-#: SiteReservation/views/admin.py:100 SiteReservation/views/admin.py:121
+#: ProjectApproval/views/admin.py:98 SiteReservation/views/admin.py:99
+#: SiteReservation/views/admin.py:102 SiteReservation/views/admin.py:123
 #: SiteReservation/views/ordinary.py:74
 >>>>>>> 292500157e7066c4715de74b5c2aae9045cf6a74
 msgid "Illegal Input"
@@ -420,6 +424,11 @@ msgstr "登出"
 #: authentication/templates/authentication/register.html:8
 msgid "Register"
 msgstr "注册"
+
+#: SRPA/templates/base/layout.html:70
+#, python-format
+msgid "Copyright ©  %(current_year)s SIE. All Rights Reserved."
+msgstr "© %(current_year)s 大连理工大学创新创业学院 版权所有"
 
 #: SRPA/templates/captcha/image.html:3
 msgid "play audio captcha"
@@ -546,8 +555,8 @@ msgstr "可预约"
 msgid "Not Available"
 msgstr "已预约"
 
-#: SiteReservation/views/admin.py:109 SiteReservation/views/ordinary.py:187
-#: SiteReservation/views/ordinary.py:259
+#: SiteReservation/views/admin.py:111 SiteReservation/views/ordinary.py:171
+#: SiteReservation/views/ordinary.py:240
 msgid "Conflict with existing reservation"
 msgstr "与已存在的预约信息冲突"
 

@@ -46,3 +46,13 @@ p.text-danger{
     text-align: right;
     color: rgb(235, 66, 56);
 }
+
+.copyright-section{
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    z-index: -1;
+}

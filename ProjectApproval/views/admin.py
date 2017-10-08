@@ -35,9 +35,9 @@ class AdminProjectList(AdminProjectBase, ProjectList):
     ordering = ['status', '-apply_time']
 
     def get_queryset(self):
-        teacher = self.request.user.user_info.teacher_info
+        print(self.request.user.groups)
         return super(ProjectList, self).get_queryset().filter(
-            workshop=teacher.workshop_set.all()[0])
+            workshop__group__in=self.request.user.groups)
 
 
 class AdminProjectDetail(AdminProjectBase, ProjectDetail):

@@ -38,10 +38,10 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% trans 'Welcome' %},{{user.first_name}}<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>
-                                {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+                                    {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
                                     <a href="{% url 'auth:info:student' request.user.user_info.uid %}">{% trans 'Profile' %}</a>
                                     <a href="{% url 'auth:password_change' %}">{% trans 'Update password' %}</a>
-                                {% endif %}
+                                    {% endif %}
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'auth:logout' %}">{% trans 'Logout' %}</a></li>
@@ -61,6 +61,14 @@
             <div id="module" class="row">
                 {% block container %}
                 {% endblock %}
+            </div>
+        </div>
+        <div class="container-fluid copyright-section">
+            <div class="row">
+                <div class="col-xs-12">
+                    {% now "Y" as current_year %}
+                    <span>{% blocktrans %}Copyright ©  {{ current_year }} SIE. All Rights Reserved.{% endblocktrans %}</span>
+                </div>
             </div>
         </div>
         {% block footer_js %}
