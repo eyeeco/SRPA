@@ -6,7 +6,7 @@
 # Last modified: 2017-10-04 15:46
 # Filename: admin.py
 # Description:
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import ListView, UpdateView, DetailView
 from django.http import JsonResponse, HttpResponseForbidden
 from django.utils.translation import ugettext_lazy as _
@@ -19,14 +19,16 @@ from ProjectApproval import PROJECT_STATUS_CAN_CHECK, PROJECT_SUBMITTED
 from ProjectApproval import PROJECT_APPROVED, PROJECT_EDITTING
 from ProjectApproval import PROJECT_TERMINATED, PROJECT_STATUS_CAN_FINISH
 from ProjectApproval import PROJECT_FINISHED, PROJECT_END_EDITTING
+from authentication import USER_IDENTITY_TEACHER
 
+class AdminProBase(UserPassesTestMixin):
 
-#  TODO: LoginRequiredMixin --> PermissionRequiredMixin
-class AdminProBase(LoginRequiredMixin):
-    """
-    A base view for all project actions. SHOULD NOT DIRECTLY USE THIS.
-    """
     model = Project
+    raise_exception = True
+
+    def test_func(self):
+        user = self.request.user
+        return user.is_authenticated and user.user_info.identity == USER_IDENTITY_TEACHER
 
 
 class AdminProjectList(AdminProBase, PermissionListMixin, ListView):

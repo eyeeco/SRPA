@@ -8,7 +8,7 @@
 # Description:
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
 from django.views.generic import DetailView, View
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy, reverse, NoReverseMatch
 from django.http import Http404, JsonResponse, HttpResponseRedirect
@@ -28,17 +28,23 @@ from ProjectApproval.models import Project
 from const.models import Workshop, FeedBack
 from authentication.models import UserInfo
 from authentication import USER_IDENTITIES
+from authentication import USER_IDENTITY_STUDENT
 from ProjectApproval import PROJECT_STATUS_CAN_EDIT
 from ProjectApproval.utils import export_project
 from tools.utils import assign_perms
 
 
-class ProjectBase(LoginRequiredMixin):
+class ProjectBase(UserPassesTestMixin):
 
     model = Project
+    raise_exception = True
+
+    def test_func(self):
+        user = self.request.user
+        return user.is_authenticated and user.user_info.identity == USER_IDENTITY_STUDENT
 
 
-class ProjectIndex(ProjectBase, TemplateView):
+class ProjectIndex(TemplateView):
 
     template_name = "ProjectApproval/index.html"
 
