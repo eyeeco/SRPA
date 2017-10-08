@@ -19,6 +19,7 @@ from ProjectApproval import PROJECT_STATUS_CAN_CHECK, PROJECT_SUBMITTED
 from ProjectApproval import PROJECT_APPROVED, PROJECT_EDITTING
 from ProjectApproval import PROJECT_TERMINATED, PROJECT_STATUS_CAN_FINISH
 from ProjectApproval import PROJECT_FINISHED, PROJECT_END_EDITTING
+from tools.utils import check_perm
 
 
 #  TODO: LoginRequiredMixin --> PermissionRequiredMixin
@@ -95,9 +96,6 @@ class AdminProjectUpdate(AdminProBase, PermissionRequiredMixin, UpdateView):
         feedback = form.save(commit=False)
         if obj.uid != feedback.target_uid:
             # Mismatch target_uid
-            return JsonResponse({'status': 2, 'reason': _('Illegal Input')})
-        if obj.workshop.group not in self.request.user.groups.all():
-            # Mismatch current teacher
             return JsonResponse({'status': 2, 'reason': _('Illegal Input')})
         feedback.user = self.request.user
         status = form.cleaned_data['status']
