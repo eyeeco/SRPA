@@ -102,16 +102,16 @@ class AdminProjectUpdate(AdminProBase, PermissionRequiredMixin, UpdateView):
             return JsonResponse({'status': 2, 'reason': _('Illegal Input')})
         feedback.user = self.request.user
         status = form.cleaned_data['status']
+        if obj.status not in PROJECT_STATUS_CAN_CHECK and\
+                obj.status not in PROJECT_STATUS_CAN_FINISH:
+            return JsonResponse({
+                'status': 2, 'reason': _('Illegal Input')})
         if status == 'APPROVE':
-            if obj.status in PROJECT_STATUS_CAN_CHECK:
-                obj.status = PROJECT_APPROVED
-            elif obj.status in PROJECT_STATUS_CAN_FINISH:
-                obj.status = PROJECT_FINISHED
+            obj.status = PROJECT_APPROVED if obj.status in\
+                PROJECT_STATUS_CAN_CHECK else PROJECT_FINISHED
         elif status == 'EDITTING':
-            if obj.status in PROJECT_STATUS_CAN_CHECK:
-                obj.status = PROJECT_EDITTING
-            elif obj.status in PROJECT_STATUS_CAN_FINISH:
-                obj.status = PROJECT_END_EDITTING
+            obj.status = PROJECT_EDITTING if obj.status in\
+                PROJECT_STATUS_CAN_CHECK else PROJECT_END_EDITTING
         elif status == 'TERMINATED':
             if obj.status in PROJECT_STATUS_CAN_CHECK:
                 obj.status = PROJECT_TERMINATED
