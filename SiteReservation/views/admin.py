@@ -13,6 +13,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.db.models import Q
+from guardian.mixins import PermissionRequiredMixin, PermissionListMixin
 
 from .ordinary import ReservationList, ReservationUpdate, ReservationDetail
 
@@ -36,24 +37,29 @@ class AdminReservationBase(LoginRequiredMixin):
     model = Reservation
 
 
-class AdminReservationList(AdminReservationBase, ListView):
+class AdminReservationList(AdminReservationBase, PermissionListMixin, 
+                           ListView):
     """
     A view for displaying reservations list for admin. GET only.
     """
     paginate_by = 12
+    permission_required = 'view_reservation'
     ordering = ['status', '-reservation_time']
     template = 'SiteReservation/reservation_list.html'
 
     def get_queryset(self):
-        workshops = self.request.user.user_info.teacher_info.workshop_set.all()
-        temp = super().get_queryset().filter(workshop__in=workshops)
-        return temp.filter(~Q(status=RESERVATION_CANCELLED))
+        groups = self.request.user.groups.all()
+        queryset = super().get_queryset().filter(workshop__group=groups)
+        return queryset.filter(~Q(status=RESERVATION_CANCELLED))
 
 
-class AdminReservationDetail(AdminReservationBase, DetailView):
+class AdminReservationDetail(AdminReservationBase, PermissionRequiredMixin, 
+                             DetailView):
     """
     A view for displaying specified reservation for admin. GET only.
     """
+    raise_exception = True
+    permission_required = 'view_reservation'
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
 
@@ -69,12 +75,15 @@ class AdminReservationDetail(AdminReservationBase, DetailView):
         return super(AdminReservationDetail, self).get_context_data(**kwargs)
 
 
-class AdminReservationUpdate(AdminReservationBase, UpdateView):
+class AdminReservationUpdate(AdminReservationBase, PermissionRequiredMixin, 
+                             UpdateView):
     """
     A view for admin to update an exist reservation.
     Should check status before change, reject change if not match
     specified status.
     """
+    raise_exception = True
+    permission_required = 'update_reservation'
     http_method_names = ['post']
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
@@ -96,9 +105,6 @@ class AdminReservationUpdate(AdminReservationBase, UpdateView):
         feedback = form.save(commit=False)
         if obj.uid != feedback.target_uid:
             # Mismatch target_uid
-            return JsonResponse({'status': 2, 'reason': _('Illegal Input')})
-        if obj.workshop.instructor.user_info.user != self.request.user:
-            # Mismatch current teacher
             return JsonResponse({'status': 2, 'reason': _('Illegal Input')})
         feedback.user = self.request.user
         status = form.cleaned_data['status']
