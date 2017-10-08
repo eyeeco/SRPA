@@ -34,6 +34,8 @@ admin_patterns = [
         name='detail'),
     url(r'^update/(?P<uid>.+)$', views.AdminProjectUpdate.as_view(),
         name='update'),
+    url(r'^update_plus/(?P<uid>.+)$', views.AdminProjectUpdatePlus.as_view(),
+        name='update_plus'),
 ]
 
 

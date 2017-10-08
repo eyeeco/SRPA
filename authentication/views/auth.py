@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-08 20:07
-# Last modified: 2017-10-07 13:39
+# Last modified: 2017-10-07 21:35
 # Filename: auth.py
 # Description:
 import json
@@ -29,7 +29,7 @@ from tools.utils import assign_perms
 
 class IndexView(LoginRequiredMixin, TemplateView):
     """
-    A index view, nothing done yet.
+    A index view.
     """
 
     template_name = 'authentication/index.html'

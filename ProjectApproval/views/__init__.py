@@ -9,7 +9,8 @@
 from .ordinary import ProjectList, ProjectAdd, ProjectUpdate, ProjectIndex
 from .ordinary import ProjectDetail, ProjectSocialAdd, ProjectExport
 from .ordinary import ProjectCancel, ProjectEnd
-from .admin import AdminProjectList, AdminProjectUpdate, AdminProjectDetail
+from .admin import AdminProjectList, AdminProjectUpdate
+from .admin import AdminProjectDetail, AdminProjectUpdatePlus
 
 
 __all__ = [
@@ -17,5 +18,5 @@ __all__ = [
     'ProjectList', 'ProjectAdd', 'ProjectUpdate',
     'AdminProjectList', 'AdminProjectUpdate',
     'ProjectSocialAdd', 'ProjectExport', 'ProjectCancel'
-    'ProjectEnd'
+    'ProjectEnd', 'AdminProjectUpdatePlus'
 ]

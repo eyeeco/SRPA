@@ -34,49 +34,52 @@ from ProjectApproval.utils import export_project
 from tools.utils import assign_perms
 
 
-class ProjectIndex(TemplateView):
+class ProjectBase(LoginRequiredMixin):
+
+    model = Project
+
+
+class ProjectIndex(ProjectBase, TemplateView):
 
     template_name = "ProjectApproval/index.html"
 
 
-class ProjectList(PermissionListMixin, ListView):
+class ProjectList(ProjectBase, PermissionListMixin, ListView):
     """
     A view for displaying user-related projects list. GET only.
     """
-    model = Project
     paginate_by = 12
     ordering = ['status', '-apply_time']
     raise_exception = True
     permission_required = 'view_project'
+
     def get_queryset(self):
-        return super(ProjectList,self).get_queryset().filter(user=self.request.user)
+        return super(ProjectList, self).get_queryset().filter(
+            user=self.request.user)
 
 
-class ProjectDetail(PermissionRequiredMixin, DetailView):
+class ProjectDetail(ProjectBase, PermissionRequiredMixin, DetailView):
     """
     A view for displaying specified project. GET only.
     """
-    model = Project
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
-    permission_required = 'view_project' 
-    raise_exception = True 
+    permission_required = 'view_project'
+    raise_exception = True
 
     def get_context_data(self, **kwargs):
         feed = FeedBack.objects.filter(
             target_uid=self.object.uid)
-        
         kwargs['budgets'] = [x.strip().split(' ') for x in
                              self.object.budget.split('\n')]
         kwargs['feed'] = feed
         return super(ProjectDetail, self).get_context_data(**kwargs)
 
 
-class ProjectAdd(dj_PRM, CreateView):
+class ProjectAdd(ProjectBase, dj_PRM, CreateView):
     """
     A view for creating a new project.
     """
-    model = Project
     template_name = 'ProjectApproval/project_form.html'
     form_class = ActivityForm
     success_url = reverse_lazy('project:index')
@@ -110,11 +113,10 @@ class ProjectAdd(dj_PRM, CreateView):
         return JsonResponse({'status': 1, 'html': html})
 
 
-class ProjectSocialAdd(PermissionRequiredMixin, CreateView):
+class ProjectSocialAdd(ProjectBase, PermissionRequiredMixin, CreateView):
     """
     A view for creating a information set for social people.
     """
-    model = Project
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
     template_name = 'ProjectApproval/project_add_social.html'
@@ -157,12 +159,11 @@ class ProjectSocialAdd(PermissionRequiredMixin, CreateView):
         return JsonResponse({'status': 1, 'html': html})
 
 
-class ProjectUpdate(PermissionRequiredMixin, UpdateView):
+class ProjectUpdate(ProjectBase, PermissionRequiredMixin, UpdateView):
     """
     A view for updating an exist project. Should check status before
     change, reject change if not match specified status.
     """
-    model = Project
     template_name = 'ProjectApproval/project_form.html'
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
@@ -216,11 +217,10 @@ class ProjectUpdate(PermissionRequiredMixin, UpdateView):
         return JsonResponse({'status': 1, 'html': html})
 
 
-class ProjectExport(PermissionRequiredMixin, DetailView):
+class ProjectExport(ProjectBase, PermissionRequiredMixin, DetailView):
     """
     A view for exporting project application
     """
-    model = Project
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
     raise_exception = True
@@ -231,11 +231,10 @@ class ProjectExport(PermissionRequiredMixin, DetailView):
         return redirect(export_project(self.object))
 
 
-class ProjectCancel(PermissionRequiredMixin, DetailView):
+class ProjectCancel(ProjectBase, PermissionRequiredMixin, DetailView):
     """
     A view for student to cancel the project application himself
     """
-    model = Project
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
     success_url = reverse_lazy('project:index')
@@ -248,11 +247,11 @@ class ProjectCancel(PermissionRequiredMixin, DetailView):
         self.object.save()
         return redirect(self.success_url)
 
-class ProjectEnd(PermissionRequiredMixin, UpdateView):
+
+class ProjectEnd(ProjectBase, PermissionRequiredMixin, UpdateView):
     """
-    A view for student to end the project application 
+    A view for student to end the project application
     """
-    model = Project
     template_name = 'ProjectApproval/project_end.html'
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
@@ -276,7 +275,7 @@ class ProjectEnd(PermissionRequiredMixin, UpdateView):
         if not allowed_status:
             return HttpResponseForbidden()
         return super(ProjectEnd, self).post(request, *args,
-                                                    **kwargs)
+                                            **kwargs)
 
     def get_context_data(self, **kwargs):
         kwargs['back_url'] = self.success_url
