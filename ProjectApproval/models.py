@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 19:33
-# Last modified: 2017-10-04 15:51
+# Last modified: 2017-10-09 14:36
 # Filename: models.py
 # Description:
 from uuid import uuid4
@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from const.models import Workshop
 from authentication.models import TeacherInfo
 from . import PROJECT_STATUS, PROJECT_SUBMITTED
-from . import ACTIVITY_RANGES, ACTIVITY_RANGE_WORKSHOP
+from . import ACTIVITY_RANGES, ACTIVITY_RANGE_WORKSHOP, ACTIVITY_FORMS
 from .utils import get_user_project_attachments_path
 
 
@@ -35,7 +35,8 @@ class Project(models.Model):
     activity_time_to = models.DateTimeField(
         verbose_name=_('Activity Time To'))
     site = models.CharField(verbose_name=_('Site'), max_length=100)
-    form = models.CharField(verbose_name=_('Project Form'), max_length=30)
+    form = models.IntegerField(verbose_name=_('Project Form'),
+                               choices=ACTIVITY_FORMS)
     charger = models.CharField(verbose_name=_('Person in Charge'),
                                max_length=20)
     contact_info = models.CharField(verbose_name=_('Contact Info'),
@@ -45,7 +46,6 @@ class Project(models.Model):
                                          default=ACTIVITY_RANGE_WORKSHOP)
     amount = models.IntegerField(verbose_name=_('Participant Number'))
     has_social = models.BooleanField(verbose_name=_('Has Social'))
-    budget = models.TextField(verbose_name=_('Budget Detail'))
     comment = models.TextField(verbose_name=_('Comment'))
     content = models.TextField(verbose_name=_('Project Content'), default='')
     attachment = models.FileField(
@@ -69,4 +69,18 @@ class SocialInvitation(models.Model):
     class Meta:
         verbose_name = _('Social Invitation')
         verbose_name_plural = _('Social Invitation')
+        default_permissions = ('add', 'delete', 'update', 'view')
+
+
+class Budget(models.Model):
+    uid = models.UUIDField(default=uuid4, editable=False, unique=True)
+    project = models.ForeignKey(Project, verbose_name=_('Project'),
+                                on_delete=models.CASCADE)
+    item = models.CharField(verbose_name=_('Budget Item'), max_length=30)
+    amount = models.FloatField(verbose_name=_('Budget Amount'))
+    detail = models.CharField(verbose_name=_('Budget Detail'), max_length=50)
+
+    class Meta:
+        verbose_name = _('Budget')
+        verbose_name_plural = _('Budget')
         default_permissions = ('add', 'delete', 'update', 'view')
