@@ -49,11 +49,11 @@ class ReservationBase(UserPassesTestMixin):
             user.user_info.identity == USER_IDENTITY_STUDENT
 
 
-class ReservationIndex(ReservationBase, TemplateView):
+class ReservationIndex(TemplateView):
     template_name = 'SiteReservation/index.html'
 
 
-class ReservationStatus(ReservationBase, FormView):
+class ReservationStatus(FormView):
     template_name = 'SiteReservation/reservation_status.html'
     status_table_name = 'SiteReservation/status_table.html'
     form_class = DateForm
