@@ -68,7 +68,7 @@ class ReservationForm(ModelForm):
                     _('Activity Time To should be '
                       'later than Activity Time From')]
 
-        if (t2 - t1).total_seconds()/3600 > 4:
+        if (t2 - t1).total_seconds() / 3600 > 4:
             if 'activity_time_to' in errors:
                 errors['activity_time_to'].append(
                     _('Reservation can not be '
