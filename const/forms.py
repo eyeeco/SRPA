@@ -8,7 +8,7 @@
 # Description:
 from django.forms import ModelForm
 from django import forms
-
+from django.utils.translation import ugettext_lazy as _
 from const.models import FeedBack
 
 
@@ -17,9 +17,9 @@ class FeedBackForm(ModelForm):
         widget=forms.HiddenInput(attrs={
             'class': 'form-control'}))
     status = forms.ChoiceField(choices=(
-        ('APPROVE', '审核通过'),
-        ('EDITTING', '审核不通过，需进行内容修改'),
-        ('TERMINATED', '审核不通过，直接终止')),
+        ('APPROVE', _('Feedback Approve')),
+        ('EDITTING', _('Feedback Editting')),
+        ('TERMINATED', _('Feedback teminated'))),
         widget=forms.Select(attrs={
             'class': 'form-control'}))
     desc = forms.CharField(

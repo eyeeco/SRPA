@@ -23,6 +23,8 @@ ord_patterns = [
         name='export'),
     url(r'^cancel/(?P<uid>.+)$', views.ProjectCancel.as_view(),
         name='cancel'),
+    url(r'^project_end/(?P<uid>.+)$', views.ProjectEnd.as_view(),
+        name='project_end'),
 ]
 
 admin_patterns = [

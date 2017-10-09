@@ -6,52 +6,70 @@
 # Last modified: 2017-10-04 15:46
 # Filename: admin.py
 # Description:
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, UpdateView
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic import ListView, UpdateView, DetailView
 from django.http import JsonResponse, HttpResponseForbidden
 from django.utils.translation import ugettext_lazy as _
+from guardian.mixins import PermissionRequiredMixin, PermissionListMixin
 
-from ProjectApproval.models import Project
 from const.forms import FeedBackForm
+from const.models import FeedBack
+from ProjectApproval.models import Project
 from ProjectApproval import PROJECT_STATUS_CAN_CHECK, PROJECT_SUBMITTED
 from ProjectApproval import PROJECT_APPROVED, PROJECT_EDITTING
-from ProjectApproval import PROJECT_TERMINATED
-from const.models import FeedBack
+from ProjectApproval import PROJECT_TERMINATED, PROJECT_STATUS_CAN_FINISH
+from ProjectApproval import PROJECT_FINISHED, PROJECT_END_EDITTING
+from authentication import USER_IDENTITY_TEACHER
 
-from .ordinary import ProjectList, ProjectUpdate, ProjectDetail
 
+class AdminProBase(UserPassesTestMixin):
 
-#  TODO: LoginRequiredMixin --> PermissionRequiredMixin
-class AdminProjectBase(LoginRequiredMixin):
-    """
-    A base view for all project actions. SHOULD NOT DIRECTLY USE THIS.
-    """
     model = Project
+    raise_exception = True
+
+    def test_func(self):
+        user = self.request.user
+        return user.is_authenticated and\
+            user.user_info.identity == USER_IDENTITY_TEACHER
 
 
-class AdminProjectList(AdminProjectBase, ProjectList):
+class AdminProjectList(AdminProBase, PermissionListMixin, ListView):
     """
     A view for displaying projects list for admin. GET only.
     """
+    model = Project
+    paginate_by = 12
     ordering = ['status', '-apply_time']
+    raise_exception = True
+    permission_required = 'view_project'
 
     def get_queryset(self):
-        teacher = self.request.user.user_info.teacher_info
-        return super(ProjectList, self).get_queryset().filter(
-            workshop=teacher.workshop_set.all()[0])
+        return super(AdminProjectList, self).get_queryset().filter(
+            workshop__group__in=self.request.user.groups.all())
 
 
-class AdminProjectDetail(AdminProjectBase, ProjectDetail):
+class AdminProjectDetail(AdminProBase, PermissionRequiredMixin, DetailView):
     """
     A view for displaying specified project for admin. GET only.
     """
+    model = Project
+    slug_field = 'uid'
+    slug_url_kwarg = 'uid'
+    raise_exception = True
+    permission_required = 'view_project'
+
     def get_context_data(self, **kwargs):
+        feed = FeedBack.objects.filter(
+            target_uid=self.object.uid)
         form = FeedBackForm({'target_uid': self.object.uid})
+        kwargs['budgets'] = [x.strip().split(' ') for x in
+                             self.object.budget.split('\n')]
+        kwargs['feed'] = feed
         kwargs['form'] = form
         return super(AdminProjectDetail, self).get_context_data(**kwargs)
 
 
-class AdminProjectUpdate(AdminProjectBase, UpdateView):
+class AdminProjectUpdate(AdminProBase, PermissionRequiredMixin, UpdateView):
     """
     A view for admin to update an exist project.
     Should check status before change, reject change if not match
@@ -61,10 +79,13 @@ class AdminProjectUpdate(AdminProjectBase, UpdateView):
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
     form_class = FeedBackForm
+    raise_exception = True
+    permission_required = 'update_project'
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        allowed_status = self.object.status in PROJECT_STATUS_CAN_CHECK
+        allowed_status = self.object.status in PROJECT_STATUS_CAN_CHECK or\
+            self.object.status in PROJECT_STATUS_CAN_FINISH
         if not allowed_status:
             return HttpResponseForbidden()
         return super(AdminProjectUpdate, self).post(request, *args,
@@ -79,17 +100,24 @@ class AdminProjectUpdate(AdminProjectBase, UpdateView):
         if obj.uid != feedback.target_uid:
             # Mismatch target_uid
             return JsonResponse({'status': 2, 'reason': _('Illegal Input')})
-        if obj.workshop.instructor.user_info.user != self.request.user:
-            # Mismatch current teacher
-            return JsonResponse({'status': 2, 'reason': _('Illegal Input')})
         feedback.user = self.request.user
         status = form.cleaned_data['status']
+        if obj.status not in PROJECT_STATUS_CAN_CHECK and\
+                obj.status not in PROJECT_STATUS_CAN_FINISH:
+            return JsonResponse({
+                'status': 2, 'reason': _('Illegal Input')})
         if status == 'APPROVE':
-            obj.status = PROJECT_APPROVED
+            obj.status = PROJECT_APPROVED if obj.status in\
+                PROJECT_STATUS_CAN_CHECK else PROJECT_FINISHED
         elif status == 'EDITTING':
-            obj.status = PROJECT_EDITTING
+            obj.status = PROJECT_EDITTING if obj.status in\
+                PROJECT_STATUS_CAN_CHECK else PROJECT_END_EDITTING
         elif status == 'TERMINATED':
-            obj.status = PROJECT_TERMINATED
+            if obj.status in PROJECT_STATUS_CAN_CHECK:
+                obj.status = PROJECT_TERMINATED
+            elif obj.status in PROJECT_STATUS_CAN_FINISH:
+                return JsonResponse({
+                    'status': 2, 'reason': _('Illegal Input')})
         obj.save()
         feedback.save()
         return JsonResponse({'status': 0})

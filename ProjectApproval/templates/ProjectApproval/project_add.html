@@ -2,22 +2,25 @@
 {% load static %}
 {% load i18n %}
 {% block project_content %}
-<form id="info-form" class="form-horizontal project-form" method="POST" action="{{ form_post_url }}">
+<!--line 1-->
+<form id="info-form" class="form-horizontal project-form" method="POST" action="{% url form_post_url %}">
 {% csrf_token %}
-<div class="form-group" >
-    <div class="col-sm-2">
+<div class="form-group col-sm-6" >
+    <div class="col-sm-5">
         <label class="control-label">{{form.title.label}}:</label>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-7">
         {{form.title|addcls:'form-control'}}
     </div>
     {% if form.title.errors %}
         <p class="text-danger">{{form.title.errors.as_text}}</p>
     {% endif %}
-    <div class="col-sm-2">
+</div>
+<div class="form-group col-sm-6" >
+    <div class="col-sm-5">
         <label class="control-label">{{form.form.label}}:</label>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-7">
         {{form.form|addcls:'form-control'}}
     </div>
     {% if form.form.errors %}
@@ -25,42 +28,45 @@
     {% endif %}
 </div>
 <!--line 2-->
-<div class="form-group" >
-    <div class="col-sm-2">
+<div class="form-group col-sm-6" >
+    <div class="col-sm-5">
         <label class="control-label">{{form.charger.label}}:</label>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-7">
         {{form.charger|addcls:'form-control'}}
     </div>
     {% if form.charger.errors %}
         <p class="text-danger">{{form.charger.errors.as_text}}</p>
     {% endif %}
-    <div class="col-sm-2">
+</div>
+<div class="form-group col-sm-6">
+    <div class="col-sm-5">
         <label class="control-label">{{form.contact_info.label}}:</label>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-7">
         {{form.contact_info|addcls:'form-control'}}
     </div>
     {% if form.contact_info.errors %}
         <p class="text-danger">{{form.contact_info.errors.as_text}}</p>
     {% endif %}
-
 </div> 
 <!--line 3-->
-<div class="form-group" >
-    <div class="col-sm-2">
+<div class="form-group col-sm-6" >
+    <div class="col-sm-5">
         <label class="control-label">{{form.workshop.label}}:</label>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-7">
         {{form.workshop|addcls:'form-control'}}
     </div>
     {% if form.workshop.errors %}
         <p class="text-danger">{{form.workshop.errors.as_text}}</p>
     {% endif %}
-     <div class="col-sm-2">
+</div>
+<div class="form-group col-sm-6">
+     <div class="col-sm-5">
         <label class="control-label">{{form.site.label}}:</label>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-7">
         {{form.site|addcls:'form-control'}}
     </div>
     {% if form.site.errors %}
@@ -68,20 +74,22 @@
     {% endif %}
 </div>
 <!--line 4-->
-<div class="form-group" >
-    <div class="col-sm-2">
+<div class="form-group col-sm-6" >
+    <div class="col-sm-5">
         <label class="control-label">{{form.activity_time_from.label}}:</label>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-7">
         {{form.activity_time_from}}
     </div>
     {% if form.activity_time_from.errors %}
         <p class="text-danger">{{form.activity_time_from.errors.as_text}}</p>
     {% endif %}
-    <div class="col-sm-2">
+</div>
+<div class="form-group col-sm-6">
+    <div class="col-sm-5">
         <label class="control-label">{{form.activity_time_to.label}}:</label>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-7">
         {{form.activity_time_to}}
     </div>
     {% if form.activity_time_to.errors %}
@@ -89,37 +97,44 @@
     {% endif %}
 </div> 
 <!--line 5-->
-<div class="form-group" >
-    <div class="col-sm-2">
-        <label class="control-label">{{form.activity_range.label}}:</label>
-    </div>
-    <div class="col-sm-2">
-        {{form.activity_range|addcls:'form-control'}}
-    </div>
-    {% if form.activity_range.errors %}
-        <p class="text-danger">{{form.activity_range.errors.as_text}}</p>
-    {% endif %}
-    <div class="col-sm-2">
-        <label class="control-label">{{form.amount.label}}:</label>
-    </div>
-    <div class="col-sm-2">
-        {{form.amount|addcls:'form-control'}}
-    </div>
-    {% if form.amount.errors %}
-        <p class="text-danger">{{form.amount.errors.as_text}}</p>
-    {% endif %}
-    <div class="col-sm-3">
-        <label class="control-label">{{form.has_social.label}}:</label>
-    </div>
-    <div class="col-sm-1">
-        {{form.has_social|addcls:'form-control'}}
-    </div>
-    {% if form.has_social.errors %}
-        <p class="text-danger">{{form.has_social.errors.as_text}}</p>
-    {% endif %}
-</div> 
+<div class="form-group col-sm-6" >
+        <div class="col-sm-5">
+            <label class="control-label">{{form.activity_range.label}}:</label>
+        </div>
+        <div class="col-sm-7">
+            {{form.activity_range|addcls:'form-control'}}
+        </div>
+        {% if form.activity_range.errors %}
+            <p class="text-danger">{{form.activity_range.errors.as_text}}</p>
+        {% endif %}
+</div>
+<div class="form-group col-sm-6">
+        <div class="col-sm-5">
+            <label class="control-label">{{form.amount.label}}:</label>
+        </div>
+        <div class="col-sm-7">
+            {{form.amount|addcls:'form-control'}}
+        </div>
+        {% if form.amount.errors %}
+            <p class="text-danger">{{form.amount.errors.as_text}}</p>
+        {% endif %}
+</div>
 <!--line 6-->
-<div class="form-group" >
+<div class="form-group col-sm-12">
+        <div class="col-sm-2">
+            <label class="control-label">{{form.has_social.label}}:</label>
+        </div>
+        <div class="col-sm-2">
+            <div class="checkbox">
+                <label>{{form.has_social}}</label>
+            </div>
+        </div>
+        {% if form.has_social.errors %}
+            <p class="text-danger">{{form.has_social.errors.as_text}}</p>
+        {% endif %}
+</div>
+<!--line 7-->
+<div class="form-group col-sm-12" >
     <div class="col-sm-2">
         <label class="control-label">{{form.content.label}}:</label>
     </div>
@@ -130,8 +145,8 @@
         <p class="text-danger">{{form.content.errors.as_text}}</p>
     {% endif %}
 </div> 
-<!--line 7-->
-<div class="form-group" >
+<!--line 8-->
+<div class="form-group col-sm-12" >
     <div class="col-sm-2">
         <label class="control-label">{{form.comment.label}}:</label>
     </div>
@@ -142,8 +157,8 @@
         <p class="text-danger">{{form.comment.errors.as_text}}</p>
     {% endif %}
 </div>    
-<!--line 8-->
-<div class="form-group" data-toggle="tooltip" data-placement="top" title="{% trans 'Please fill the form in format' %}">
+<!--line 9-->
+<div class="form-group col-sm-12" data-toggle="tooltip" data-placement="top" title="{% trans 'Please fill the form in format' %}">
     <div class="col-sm-2">
         <label class="control-label">{{form.budget.label}}:</label>
     </div>
@@ -153,13 +168,13 @@
     {% if form.budget.errors %}
         <p class="text-danger">{{form.budget.errors.as_text}}</p>
     {% endif %}
-</div>
+</div> 
 {% if form.errors %}
 {% for error in form.non_field_errors %}
 <p class="text-danger">{{ error }}</p>
 {% endfor %}
 {% endif %}
-<div>
+<div class="form-group col-sm-12">
     <button type="submit" class="btn btn-primary btn-md">{% trans 'Submit' %}</button>
     <a href="{{ back_url }}" class="btn btn-primary btn-md">{% trans 'Back' %}</a>
 </div>

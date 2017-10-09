@@ -40,4 +40,33 @@ function init_js()
             }
         });
     });
+    $('#upfile-form').on('submit', function(e){
+        var formData = new FormData();
+        var form = $('#upfile-form');
+        e.preventDefault();
+        formData.append("attachment",$("#id_attachment")[0].files[0]);
+        $.ajax({ 
+            url : form.attr('action'), 
+            type : 'POST', 
+            data : formData, 
+            processData : false, 
+            contentType : false,
+            success: function(data){
+               if(data.status == 0)
+                    window.location.href=data.redirect;
+                else
+                {
+                    if(data.status != 1)
+                        alert(data.reason);
+                    $('#status_table').html('');
+                }
+                clean_js();
+                $('#page').html(data.html);
+                init_js();
+            },
+            error: function(request, data){
+                alert('与服务器通信发生错误');
+            }
+        });
+    });
 }
