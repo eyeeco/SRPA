@@ -68,6 +68,16 @@ class ReservationForm(ModelForm):
                     _('Activity Time To should be '
                       'later than Activity Time From')]
 
+        if t2.hour - t1.hour > 4:
+            if 'activity_time_to' in errors:
+                errors['activity_time_to'].append(
+                    _('Reservation can not be '
+                      'longer than 4 hours'))
+            else:
+                errors['activity_time_to'] = [
+                    _('Reservation can not be '
+                      'longer than 4 hours')]
+
         if t1 < datetime.now(timezone.utc) + timedelta(days=2):
             if 'activity_time_from' in errors:
                 errors['activity_time_from'].append(

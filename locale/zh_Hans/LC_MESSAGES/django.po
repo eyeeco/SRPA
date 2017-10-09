@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-09 18:10+0800\n"
+"POT-Creation-Date: 2017-10-09 18:25+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -418,7 +418,7 @@ msgstr "详情"
 #: ProjectApproval/views/admin.py:102 ProjectApproval/views/admin.py:108
 #: ProjectApproval/views/admin.py:120 ProjectApproval/views/admin.py:126
 #: SiteReservation/views/admin.py:114 SiteReservation/views/admin.py:135
-#: SiteReservation/views/ordinary.py:81
+#: SiteReservation/views/ordinary.py:80
 msgid "Illegal Input"
 msgstr "无效输入"
 
@@ -503,11 +503,15 @@ msgstr "日期"
 msgid "Activity time should between 8 am and 10 pm"
 msgstr "活动时间应在上午8点与晚上10点之间"
 
-#: SiteReservation/forms.py:74 SiteReservation/forms.py:77
+#: SiteReservation/forms.py:74 SiteReservation/forms.py:78
+msgid "Reservation can not be longer than 4 hours"
+msgstr "预约时间不能超过4小时"
+
+#: SiteReservation/forms.py:84 SiteReservation/forms.py:87
 msgid "Can only reserve later than two days after now"
 msgstr "只能预约两天以后的时间段"
 
-#: SiteReservation/forms.py:82 SiteReservation/forms.py:85
+#: SiteReservation/forms.py:92 SiteReservation/forms.py:95
 msgid "Can only reserve within a day"
 msgstr "只能预约同一天的时间段"
 
@@ -596,22 +600,18 @@ msgstr "可预约"
 msgid "Not Available"
 msgstr "已预约"
 
-#: SiteReservation/views/admin.py:123 SiteReservation/views/ordinary.py:200
-#: SiteReservation/views/ordinary.py:276
+#: SiteReservation/views/admin.py:123 SiteReservation/views/ordinary.py:188
+#: SiteReservation/views/ordinary.py:264
 msgid "Conflict with existing reservation"
 msgstr "与已存在的预约信息冲突"
 
-#: SiteReservation/views/ordinary.py:71
+#: SiteReservation/views/ordinary.py:70
 msgid "Please choose a future time"
 msgstr "请选择一个未来时间"
 
-#: SiteReservation/views/ordinary.py:101
+#: SiteReservation/views/ordinary.py:100
 msgid "Wrong form data, Please check again"
 msgstr "表达信息有误，请再次核对"
-
-#: SiteReservation/views/ordinary.py:188
-msgid "Reservation can not be loonger than 4 hours"
-msgstr "预约时间不能超过4个小时"
 
 #: authentication/forms.py:24 authentication/forms.py:78 const/models.py:68
 msgid "Captcha"

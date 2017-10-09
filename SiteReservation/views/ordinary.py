@@ -29,7 +29,6 @@ from authentication import USER_IDENTITY_STUDENT
 from authentication import USER_IDENTITY_ADMIN
 from SiteReservation import RESERVATION_APPROVED, RESERVATION_CANCELLED
 from SiteReservation import RESERVATION_SUBMITTED, RESERVATION_STATUS_CAN_EDIT
-from SiteReservation import RESERVATION_TERMINATED
 from SiteReservation.models import Reservation
 from SiteReservation.forms import DateForm, ReservationForm
 from SiteReservation.utils import is_conflict, export_reservation
@@ -177,17 +176,6 @@ class ReservationAdd(ReservationBase, PermissionRequiredMixin, CreateView):
         site = form.cleaned_data['site']
         activity_time_from = form.cleaned_data['activity_time_from']
         activity_time_to = form.cleaned_data['activity_time_to']
-
-        if activity_time_to.hour - activity_time_from.hour > 4:
-            context = self.get_context_data()
-            context['form'] = form
-            html = render_to_string(
-                self.template_name, request=self.request,
-                context=context)
-            return JsonResponse({'status': 3,
-                                 'reason': _('Reservation can not be '
-                                             'loonger than 4 hours'),
-                                 'html': html})
 
         conflict = is_conflict(activity_time_from, activity_time_to, site)
         if conflict:
