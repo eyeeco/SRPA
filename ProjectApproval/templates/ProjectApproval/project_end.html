@@ -1,10 +1,13 @@
+{% extends 'ProjectApproval/base.html' %}
 {% load i18n %}
+{% block project_content %}
 {% include 'base/csrf_setup.html' %}
 <form id="upfile-form" class="form-horizontal project-form" method="POST" action="{% url form_post_url object.uid %}" enctype="multipart/form-data">
 {% csrf_token %}
 	{{form}}
 <div>
     <button type="submit" class="btn btn-primary btn-md">{% trans 'Submit' %}</button>
-    <a href="{{ back_url }}" class="btn btn-primary btn-md">{% trans 'Back' %}</a>
+    <a href="javascript:history.go(-1)" class="btn btn-primary btn-md">{% trans 'Back' %}</a>
 </div>
 </form>
+{% endblock%}

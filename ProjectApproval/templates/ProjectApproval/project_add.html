@@ -176,7 +176,7 @@
 {% endif %}
 <div class="form-group col-sm-12">
     <button type="submit" class="btn btn-primary btn-md">{% trans 'Submit' %}</button>
-    <a href="{{ back_url }}" class="btn btn-primary btn-md">{% trans 'Back' %}</a>
+    <a href="javascript:history.go(-1)" class="btn btn-primary btn-md">{% trans 'Back' %}</a>
 </div>
 </form>
 {% endblock %}

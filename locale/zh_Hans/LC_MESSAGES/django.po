@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-09 10:38+0800\n"
+"POT-Creation-Date: 2017-10-09 18:25+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,17 +110,37 @@ msgstr "工社内部"
 msgid "Whole School"
 msgstr "全校"
 
-#: ProjectApproval/forms.py:23 ProjectApproval/models.py:48
+#: ProjectApproval/__init__.py:48
+msgid "Free To Join"
+msgstr ""
+
+#: ProjectApproval/__init__.py:49
+#, fuzzy
+#| msgid "Social Invitation"
+msgid "Limited Invivation"
+msgstr "邀请校外人员申请表"
+
+#: ProjectApproval/__init__.py:50
+#, fuzzy
+#| msgid "New Reservation"
+msgid "Advance Reservation"
+msgstr "新的预约"
+
+#: ProjectApproval/__init__.py:51
+msgid "Others"
+msgstr ""
+
+#: ProjectApproval/forms.py:23 ProjectApproval/models.py:81
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:103
 msgid "Budget Detail"
 msgstr "预算明细"
 
-#: ProjectApproval/forms.py:26
+#: ProjectApproval/forms.py:26 ProjectApproval/models.py:79
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:108
 msgid "Budget Item"
 msgstr "预算项目"
 
-#: ProjectApproval/forms.py:27
+#: ProjectApproval/forms.py:27 ProjectApproval/models.py:80
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:109
 msgid "Budget Amount"
 msgstr "预算金额"
@@ -158,7 +178,7 @@ msgstr "活动开始时间"
 msgid "Activity Time To"
 msgstr "活动结束时间"
 
-#: ProjectApproval/forms.py:50 ProjectApproval/models.py:47
+#: ProjectApproval/forms.py:50 ProjectApproval/models.py:48
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:90
 msgid "Has Social"
 msgstr "是否有社会人员参与"
@@ -224,24 +244,24 @@ msgstr "场地"
 msgid "Project Form"
 msgstr "活动形式"
 
-#: ProjectApproval/models.py:39
+#: ProjectApproval/models.py:40
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:23
 #: ProjectApproval/templates/ProjectApproval/project_list.html:10
 msgid "Person in Charge"
 msgstr "联系人"
 
-#: ProjectApproval/models.py:41
+#: ProjectApproval/models.py:42
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:31
 #: authentication/templates/authentication/user_info_detail.html:9
 msgid "Contact Info"
 msgstr "联系方式"
 
-#: ProjectApproval/models.py:43
+#: ProjectApproval/models.py:44
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:74
 msgid "Project Participant"
 msgstr "活动范围"
 
-#: ProjectApproval/models.py:46
+#: ProjectApproval/models.py:47
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:82
 msgid "Participant Number"
 msgstr "参与人数"
@@ -251,13 +271,19 @@ msgid "Project Attachment"
 msgstr "活动附件"
 
 #: ProjectApproval/models.py:56 ProjectApproval/models.py:57
-#: ProjectApproval/models.py:63
+#: ProjectApproval/models.py:63 ProjectApproval/models.py:77
 msgid "Project"
 msgstr "活动"
 
 #: ProjectApproval/models.py:70 ProjectApproval/models.py:71
 msgid "Social Invitation"
 msgstr "邀请校外人员申请表"
+
+#: ProjectApproval/models.py:84 ProjectApproval/models.py:85
+#, fuzzy
+#| msgid "Budget Item"
+msgid "Budget"
+msgstr "预算项目"
 
 #: ProjectApproval/templates/ProjectApproval/base.html:10
 #: SRPA/templates/base/layout.html:31
@@ -477,11 +503,15 @@ msgstr "日期"
 msgid "Activity time should between 8 am and 10 pm"
 msgstr "活动时间应在上午8点与晚上10点之间"
 
-#: SiteReservation/forms.py:74 SiteReservation/forms.py:77
+#: SiteReservation/forms.py:74 SiteReservation/forms.py:78
+msgid "Reservation can not be longer than 4 hours"
+msgstr "预约时间不能超过4小时"
+
+#: SiteReservation/forms.py:84 SiteReservation/forms.py:87
 msgid "Can only reserve later than two days after now"
 msgstr "只能预约两天以后的时间段"
 
-#: SiteReservation/forms.py:82 SiteReservation/forms.py:85
+#: SiteReservation/forms.py:92 SiteReservation/forms.py:95
 msgid "Can only reserve within a day"
 msgstr "只能预约同一天的时间段"
 
@@ -806,3 +836,6 @@ msgstr "审核意见"
 #, python-brace-format
 msgid "Audit Feedback on {target} by {user}"
 msgstr "{user} 对 {target} 的审阅意见"
+
+#~ msgid "More than 4 reservations have been added"
+#~ msgstr "不能同时预约四个以上时间段"

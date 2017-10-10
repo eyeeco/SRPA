@@ -47,14 +47,14 @@ class ProjectBase(UserPassesTestMixin):
 
 class ProjectIndex(TemplateView):
 
-    template_name = "ProjectApproval/index.html"
+    template_name = 'ProjectApproval/index.html'
 
 
 class ProjectList(ProjectBase, PermissionListMixin, ListView):
     """
     A view for displaying user-related projects list. GET only.
     """
-    paginate_by = 2
+    paginate_by = 12
     ordering = ['status', '-apply_time']
     raise_exception = True
     permission_required = 'view_project'
@@ -76,8 +76,9 @@ class ProjectDetail(ProjectBase, PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         feed = FeedBack.objects.filter(
             target_uid=self.object.uid)
-
         kwargs['feed'] = feed
+        project = Project.objects.get(uid=self.object.uid)
+        print(project.budget_set.all())
         return super(ProjectDetail, self).get_context_data(**kwargs)
 
 
@@ -96,7 +97,7 @@ class ProjectAdd(ProjectBase, PermissionRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         kwargs['form_post_url'] = reverse(self.form_post_url)
-        kwargs['back_url'] = self.success_url
+        kwargs['new_project'] = 1
         return super(CreateView, self).get_context_data(**kwargs)
 
     def form_valid(self, form):
@@ -137,7 +138,6 @@ class ProjectSocialAdd(ProjectBase, PermissionRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         kwargs['form_post_url'] = reverse('project:ordinary:social_add',
                                           args=(kwargs['uid'],))
-        kwargs['back_url'] = self.success_url
         return super(ProjectSocialAdd, self).get_context_data(**kwargs)
 
     def form_valid(self, form):
@@ -169,7 +169,6 @@ class ProjectUpdate(ProjectBase, PermissionRequiredMixin, UpdateView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        is_ajax = request.is_ajax()
         allowed_status = self.object.status in PROJECT_STATUS_CAN_EDIT
         if not allowed_status:
             return HttpResponseForbidden()
@@ -183,7 +182,6 @@ class ProjectUpdate(ProjectBase, PermissionRequiredMixin, UpdateView):
         return super(ProjectUpdate, self).post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        kwargs['back_url'] = self.success_url
         kwargs['form_post_url'] = reverse(self.form_post_url,
                                           kwargs={'uid': self.object.uid})
         return super(UpdateView, self).get_context_data(**kwargs)
@@ -249,9 +247,8 @@ class ProjectEnd(ProjectBase, PermissionRequiredMixin, UpdateView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        is_ajax = request.is_ajax()
         allowed_status = self.object.status in PROJECT_STATUS_CAN_END_SUBMIT
-        if not is_ajax or not allowed_status:
+        if not allowed_status:
             return HttpResponseForbidden()
         return self.render_to_response(self.get_context_data())
 
@@ -264,7 +261,6 @@ class ProjectEnd(ProjectBase, PermissionRequiredMixin, UpdateView):
                                             **kwargs)
 
     def get_context_data(self, **kwargs):
-        kwargs['back_url'] = self.success_url
         kwargs['form_post_url'] = self.form_post_url
         return super(UpdateView, self).get_context_data(**kwargs)
 

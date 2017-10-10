@@ -1,5 +1,6 @@
 {% extends 'ProjectApproval/base.html' %}
 {% load i18n %}
+{% load static %}
 {% block project_content %}
 <form class="form-horizontal project-detail">
 <!--line 1-->
@@ -226,7 +227,7 @@
     <a type="button" class="btn btn-success" href="#" data-toggle="modal" data-target="#modal_form">{% trans 'Ended Audit' %}</a>
     {% endif %} 
     {% endif %}
-    <a href="{{ view.success_url }}" class="btn btn-default btn-md ">{% trans 'Back' %}</a>
+    <a href="javascript:history.go(-1)" class="btn btn-default btn-md ">{% trans 'Back' %}</a>
 </div>
 {% endblock %}
 {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
@@ -253,9 +254,11 @@
     </div>
 </div>
 {% endif %}
+
+{% block footer_js %}
+{{ block.super }}
 {% if object.status in PROJECT_STATUS_CAN_FINISH %}
-<script type="text/javascript">
-    $('#id_status').children('[value = "TERMINATED"]').hide();
-</script>>
-{% endif %} 
+<script type="text/javascript"> $('#id_status').children('[value = "TERMINATED"]').hide();</script>>
+{% endif %}
+{% endblock %}
 {% endblock %}

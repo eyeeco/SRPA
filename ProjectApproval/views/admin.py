@@ -9,9 +9,11 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import ListView, UpdateView, DetailView
 from django.http import JsonResponse, HttpResponseForbidden
+from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from guardian.mixins import PermissionRequiredMixin, PermissionListMixin
 from django.contrib.auth.models import User
+from django.urls import reverse_lazy
 
 from const.forms import FeedBackForm
 from const.models import FeedBack
@@ -86,6 +88,7 @@ class AdminProjectUpdate(AdminProBase, PermissionRequiredMixin, UpdateView):
     form_class = FeedBackForm
     raise_exception = True
     permission_required = 'update_project'
+    success_url = reverse_lazy('project:index')
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -104,13 +107,12 @@ class AdminProjectUpdate(AdminProBase, PermissionRequiredMixin, UpdateView):
         feedback = form.save(commit=False)
         if obj.uid != feedback.target_uid:
             # Mismatch target_uid
-            return JsonResponse({'status': 2, 'reason': _('Illegal Input')})
+            return HttpResponseForbidden()
         feedback.user = self.request.user
         status = form.cleaned_data['status']
         if obj.status not in PROJECT_STATUS_CAN_CHECK and\
                 obj.status not in PROJECT_STATUS_CAN_FINISH:
-            return JsonResponse({
-                'status': 2, 'reason': _('Illegal Input')})
+            return HttpResponseForbidden()
         if status == 'APPROVE':
             obj.status = PROJECT_APPROVED if obj.status in\
                 PROJECT_STATUS_CAN_CHECK else PROJECT_FINISHED
@@ -121,11 +123,7 @@ class AdminProjectUpdate(AdminProBase, PermissionRequiredMixin, UpdateView):
             if obj.status in PROJECT_STATUS_CAN_CHECK:
                 obj.status = PROJECT_TERMINATED
             elif obj.status in PROJECT_STATUS_CAN_FINISH:
-                return JsonResponse({
-                    'status': 2, 'reason': _('Illegal Input')})
+                return HttpResponseForbidden()
         obj.save()
         feedback.save()
-        return JsonResponse({'status': 0})
-
-    def form_invalid(self, form):
-        return JsonResponse({'status': 1, 'reason': _('Illegal Input')})
+        return HttpResponseRedirect(self.get_success_url())
