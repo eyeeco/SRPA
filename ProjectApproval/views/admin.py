@@ -71,7 +71,7 @@ class AdminProjectDetail(AdminProBase, PermissionRequiredMixin, DetailView):
         kwargs['user_phone'] = user_info.phone
         kwargs['user_study_id'] = user_info.student_info.student_id
         kwargs['user_institute'] = user_info.student_info.institute
-        kwargs['feed'] = feeds
+        kwargs['feeds'] = feeds
         kwargs['form'] = form
         return super(AdminProjectDetail, self).get_context_data(**kwargs)
 

@@ -1,4 +1,4 @@
-{% extends 'ProjectApproval/project_form.html' %}
+{% extends 'ProjectApproval/base.html' %}
 {% load i18n %}
 {% block tabs %}
 <ul class="nav nav-tabs" role="tablist">
@@ -9,4 +9,7 @@
     <li class="li-page white "><a type="button" class="btn" href="{% url 'project:admin:list' page=1 %}">{% trans 'Workshop Projects' %}</a></li>
     {% endif %}
 </ul>
+{% endblock %}
+{% block project_content %}
+{% include 'ProjectApproval/project_form.html' %}
 {% endblock %}

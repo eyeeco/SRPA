@@ -1,16 +1,5 @@
-{% extends 'ProjectApproval/base.html' %}
 {% load filters %}
 {% load i18n %}
-{% block tabs %}
-<ul class="nav nav-tabs" role="tablist">
-    {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
-    <li class="li-page white "><a type="button" class="btn" href="{% url 'project:ordinary:list' page=1 %}">{% trans 'My Projects' %}</a></li>
-    <li class="li-page white "><a type="button" class="btn" href="{% url 'project:ordinary:add' %}">{% trans 'New Project' %}</a></li>
-    {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
-    <li class="li-page white "><a type="button" class="btn" href="{% url 'project:admin:list' page=1 %}">{% trans 'Workshop Projects' %}</a></li>
-    {% endif %}
-</ul>
-{% endblock %}
 {% block project_content %}
 <form id="info-form" class="form-horizontal project-form" method="POST" action="{{ form_post_url }}">
 {% csrf_token %}
