@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-10-07 21:05
-# Last modified: 2017-10-08 13:56
+# Last modified: 2017-10-09 11:43
 # Filename: settings.py
 # Description:
 from django.conf import settings
@@ -23,6 +23,6 @@ IP_HEADERS = getattr(settings, 'IP_HEADERS',
                      ('HTTP_X_REAL_IP', 'HTTP_CLIENT_IP',
                       'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'))
 
-DB_BACKENDS = getattr(settings, 'DB_BACKENDS', ('mysql'))
+DB_BACKENDS = getattr(settings, 'DB_BACKENDS', ('mysql',))
 
 assert DB_BACKENDS

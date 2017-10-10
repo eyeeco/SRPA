@@ -54,7 +54,7 @@ class ProjectList(ProjectBase, PermissionListMixin, ListView):
     """
     A view for displaying user-related projects list. GET only.
     """
-    paginate_by = 12
+    paginate_by = 2
     ordering = ['status', '-apply_time']
     raise_exception = True
     permission_required = 'view_project'
@@ -76,8 +76,7 @@ class ProjectDetail(ProjectBase, PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         feed = FeedBack.objects.filter(
             target_uid=self.object.uid)
-        kwargs['budgets'] = [x.strip().split(' ') for x in
-                             self.object.budget.split('\n')]
+
         kwargs['feed'] = feed
         return super(ProjectDetail, self).get_context_data(**kwargs)
 
@@ -110,15 +109,7 @@ class ProjectAdd(ProjectBase, PermissionRequiredMixin, CreateView):
                      perms=['update', 'view'])
         assign_perms(self.info_name, self.object.workshop.group, self.object,
                      perms=['update', 'view'])
-        return JsonResponse({'status': 0, 'redirect': self.success_url})
-
-    def form_invalid(self, form):
-        context = self.get_context_data()
-        context['form'] = form
-        html = render_to_string(
-            self.template_name, request=self.request,
-            context=context)
-        return JsonResponse({'status': 1, 'html': html})
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_object(self, queryset=None):
         return None
@@ -159,15 +150,7 @@ class ProjectSocialAdd(ProjectBase, PermissionRequiredMixin, CreateView):
         form.instance.project = project
         self.object = form.save()
         project.save()
-        return JsonResponse({'status': 0, 'redirect': self.success_url})
-
-    def form_invalid(self, form):
-        context = self.get_context_data()
-        context['form'] = form
-        html = render_to_string(
-            self.template_name, request=self.request,
-            context=context)
-        return JsonResponse({'status': 1, 'html': html})
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class ProjectUpdate(ProjectBase, PermissionRequiredMixin, UpdateView):
@@ -188,7 +171,7 @@ class ProjectUpdate(ProjectBase, PermissionRequiredMixin, UpdateView):
         self.object = self.get_object()
         is_ajax = request.is_ajax()
         allowed_status = self.object.status in PROJECT_STATUS_CAN_EDIT
-        if not is_ajax or not allowed_status:
+        if not allowed_status:
             return HttpResponseForbidden()
         return self.render_to_response(self.get_context_data())
 
@@ -217,15 +200,7 @@ class ProjectUpdate(ProjectBase, PermissionRequiredMixin, UpdateView):
             if social_invitation:
                 social_invitation.delete()
         self.object = form.save()
-        return JsonResponse({'status': 0, 'redirect': self.success_url})
-
-    def form_invalid(self, form):
-        context = self.get_context_data()
-        context['form'] = form
-        html = render_to_string(
-            self.template_name, request=self.request,
-            context=context)
-        return JsonResponse({'status': 1, 'html': html})
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class ProjectExport(ProjectBase, PermissionRequiredMixin, DetailView):
@@ -296,12 +271,4 @@ class ProjectEnd(ProjectBase, PermissionRequiredMixin, UpdateView):
     def form_valid(self, form):
         self.object.status = PROJECT_END_SUBMITTED
         self.object.save()
-        return JsonResponse({'status': 0, 'redirect': self.success_url})
-
-    def form_invalid(self, form):
-        context = self.get_context_data()
-        context['form'] = form
-        html = render_to_string(
-            self.template_name, request=self.request,
-            context=context)
-        return JsonResponse({'status': 1, 'html': html})
+        return HttpResponseRedirect(self.get_success_url())

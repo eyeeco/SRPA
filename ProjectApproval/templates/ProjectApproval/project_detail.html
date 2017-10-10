@@ -1,4 +1,6 @@
+{% extends 'ProjectApproval/base.html' %}
 {% load i18n %}
+{% block project_content %}
 <form class="form-horizontal project-detail">
 <!--line 1-->
 <div class="form-group col-sm-6" >
@@ -34,6 +36,41 @@
         <p class="form-control-static">{{object.contact_info}}</p>
     </div>
 </div> 
+<!--extra part of student_info (if teacher)-->
+{% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+<div class="form-group col-sm-6" >
+    <div class="col-sm-4">
+        <label class="control-label">{% trans 'Student Name' %}:</label>
+    </div>
+    <div class="col-sm-8">
+        <p class="form-control-static">{{user_name}}</p>
+    </div>
+</div>
+<div class="form-group col-sm-6" >
+     <div class="col-sm-4">
+         <label class="control-label">{% trans 'Student Id' %}:</label>
+    </div>
+    <div class="col-sm-8">
+        <p class="form-control-static">{{user_study_id}}</p>
+    </div>
+</div>
+<div class="form-group col-sm-6" >
+    <div class="col-sm-4">
+        <label class="control-label">{% trans 'Student Institute' %}:</label>
+    </div>
+    <div class="col-sm-8">
+        <p class="form-control-static">{{user_institute}}</p>
+    </div>
+</div>
+<div class="form-group col-sm-6" >
+     <div class="col-sm-4">
+         <label class="control-label">{% trans 'Student Phone' %}:</label>
+    </div>
+    <div class="col-sm-8">
+        <p class="form-control-static">{{user_phone}}</p>
+    </div>
+</div>
+{% endif %}
 <!--line 3-->
 <div class="form-group col-sm-6" >
     <div class="col-sm-4">
@@ -166,19 +203,19 @@
 <div class="col-sm-6 col-sm-offset-3">
     {% if request.user.user_info.identity == USER_IDENTITY_STUDENT%}
     {% if object.status in PROJECT_STATUS_CAN_EDIT %}
-    <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:update' object.uid %}">{% trans 'Update' %}</a>
+    <a type="button" class="btn btn-primary" href="{% url 'project:ordinary:update' object.uid %}">{% trans 'Update' %}</a>
     {% endif %}
     {% if object.status in PROJECT_STATUS_CAN_CANCEL %}
     <a type="button" class="btn btn-danger" href="{% url 'project:ordinary:cancel' object.uid %}" onclick="if(confirm('{% trans 'Are you sure you want to cancel the application apply' %}?')==false)return false;">{% trans 'Cancel' %}</a>
     {% endif %}
     {% if object.status == PROJECT_SOCIALFORM_REQUIRED %}
-    <a type="button" class="btn btn-primary srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:social_add' object.uid %}">{% trans 'Fill Additional Form' %}</a>
+    <a type="button" class="btn btn-primary" href="{% url 'project:ordinary:social_add' object.uid %}">{% trans 'Fill Additional Form' %}</a>
     {% endif %}
     {% if object.status in PROJECT_STATUS_CAN_EXPORT %}
     <a type="button" class="btn btn-info btn-md " href="{% url 'project:ordinary:export' object.uid %}">{% trans 'Export' %}</a>
     {% endif %}
     {% if object.status in PROJECT_STATUS_CAN_END_SUBMIT %}
-    <a type="button" class="btn btn-success srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:project_end' object.uid %}">{% trans 'Project End' %}</a>
+    <a type="button" class="btn btn-success" href="{% url 'project:ordinary:project_end' object.uid %}">{% trans 'Project End' %}</a>
     {% endif %}
     {% endif %}
     {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
@@ -221,3 +258,4 @@
     $('#id_status').children('[value = "TERMINATED"]').hide();
 </script>>
 {% endif %} 
+{% endblock %}

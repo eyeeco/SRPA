@@ -11,6 +11,7 @@ from django.views.generic import ListView, UpdateView, DetailView
 from django.http import JsonResponse, HttpResponseForbidden
 from django.utils.translation import ugettext_lazy as _
 from guardian.mixins import PermissionRequiredMixin, PermissionListMixin
+from django.contrib.auth.models import User
 
 from const.forms import FeedBackForm
 from const.models import FeedBack
@@ -62,8 +63,12 @@ class AdminProjectDetail(AdminProBase, PermissionRequiredMixin, DetailView):
         feed = FeedBack.objects.filter(
             target_uid=self.object.uid)
         form = FeedBackForm({'target_uid': self.object.uid})
-        kwargs['budgets'] = [x.strip().split(' ') for x in
-                             self.object.budget.split('\n')]
+        user = User.objects.get(id=self.object.user_id)
+        user_info = user.user_info
+        kwargs['user_name'] = user.first_name
+        kwargs['user_phone'] = user_info.phone
+        kwargs['user_study_id'] = user_info.student_info.student_id
+        kwargs['user_institute'] = user_info.student_info.institute
         kwargs['feed'] = feed
         kwargs['form'] = form
         return super(AdminProjectDetail, self).get_context_data(**kwargs)
