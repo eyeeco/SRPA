@@ -77,8 +77,6 @@ class ProjectDetail(ProjectBase, PermissionRequiredMixin, DetailView):
         feed = FeedBack.objects.filter(
             target_uid=self.object.uid)
         kwargs['feed'] = feed
-        project = Project.objects.get(uid=self.object.uid)
-        print(project.budget_set.all())
         return super(ProjectDetail, self).get_context_data(**kwargs)
 
 

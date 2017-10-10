@@ -11,7 +11,7 @@ $(function () {
 
 /*
 $(function () {
-   $('.srpa-loader[loader-type="page"]').first().click();
+    $('.srpa-loader[loader-type="page"]').first().click();
 })
 function clean_js()
 {

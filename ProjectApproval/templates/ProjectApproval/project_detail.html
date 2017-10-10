@@ -258,7 +258,7 @@
 {% block footer_js %}
 {{ block.super }}
 {% if object.status in PROJECT_STATUS_CAN_FINISH %}
-<script type="text/javascript"> $('#id_status').children('[value = "TERMINATED"]').hide();</script>>
+<script type="text/javascript"> $('#id_status').children('[value = "TERMINATED"]').hide();</script>
 {% endif %}
 {% endblock %}
 {% endblock %}
