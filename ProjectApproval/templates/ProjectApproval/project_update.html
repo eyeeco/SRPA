@@ -3,8 +3,8 @@
 {% block tabs %}
 <ul class="nav nav-tabs" role="tablist">
     {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
-    <li class="li-page white "><a type="button" class="btn" href="{% url 'project:ordinary:list' page=1 %}">{% trans 'My Projects' %}</a></li>
-    <li class="li-page white active"><a type="button" class="btn" href="{% url 'project:ordinary:add' %}">{% trans 'New Project' %}</a></li>
+    <li class="li-page white active"><a type="button" class="btn" href="{% url 'project:ordinary:list' page=1 %}">{% trans 'My Projects' %}</a></li>
+    <li class="li-page white "><a type="button" class="btn" href="{% url 'project:ordinary:add' %}">{% trans 'New Project' %}</a></li>
     {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
     <li class="li-page white "><a type="button" class="btn" href="{% url 'project:admin:list' page=1 %}">{% trans 'Workshop Projects' %}</a></li>
     {% endif %}

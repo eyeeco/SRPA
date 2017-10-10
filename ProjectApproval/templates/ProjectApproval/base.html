@@ -8,14 +8,16 @@
 {% block container %}
 <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 srpa-background">
     <h3>{% trans 'Project Approval' %}</h3>
-    <ul class="nav nav-tabs" role="tablist">
-        {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
-        <li class="li-page white {% if not new_project %}active{% endif %}"><a type="button" class="btn" href="{% url 'project:ordinary:list' page=1 %}">{% trans 'My Projects' %}</a></li>
-        <li class="li-page white {% if new_project %}active{% endif %}"><a type="button" class="btn" href="{% url 'project:ordinary:add' %}">{% trans 'New Project' %}</a></li>
-        {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
-        <li class="li-page white active"><a type="button" class="btn" href="{% url 'project:admin:list' page=1 %}">{% trans 'Workshop Projects' %}</a></li>
-        {% endif %}
-    </ul>
+        {% block tabs %}
+        <ul class="nav nav-tabs" role="tablist">
+            {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+            <li class="li-page white "><a type="button" class="btn" href="{% url 'project:ordinary:list' page=1 %}">{% trans 'My Projects' %}</a></li>
+            <li class="li-page white "><a type="button" class="btn" href="{% url 'project:ordinary:add' %}">{% trans 'New Project' %}</a></li>
+            {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+            <li class="li-page white "><a type="button" class="btn" href="{% url 'project:admin:list' page=1 %}">{% trans 'Workshop Projects' %}</a></li>
+            {% endif %}
+        </ul>
+        {% endblock %}
     <div id="page">
         {% block project_content %}
         {% endblock %}

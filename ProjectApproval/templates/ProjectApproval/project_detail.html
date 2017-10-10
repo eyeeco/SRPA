@@ -1,6 +1,15 @@
 {% extends 'ProjectApproval/base.html' %}
 {% load i18n %}
-{% load static %}
+{% block tabs %}
+<ul class="nav nav-tabs" role="tablist">
+    {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+    <li class="li-page white active"><a type="button" class="btn" href="{% url 'project:ordinary:list' page=1 %}">{% trans 'My Projects' %}</a></li>
+    <li class="li-page white "><a type="button" class="btn" href="{% url 'project:ordinary:add' %}">{% trans 'New Project' %}</a></li>
+    {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+    <li class="li-page white active"><a type="button" class="btn" href="{% url 'project:admin:list' page=1 %}">{% trans 'Workshop Projects' %}</a></li>
+    {% endif %}
+</ul>
+{% endblock %}
 {% block project_content %}
 <form class="form-horizontal project-detail">
 <!--line 1-->
@@ -200,7 +209,6 @@
 {% endif %}
 {% endif %}
 </form>
-{% block opreate %}
 <div class="col-sm-6 col-sm-offset-3">
     {% if request.user.user_info.identity == USER_IDENTITY_STUDENT%}
     {% if object.status in PROJECT_STATUS_CAN_EDIT %}
@@ -218,6 +226,7 @@
     {% if object.status in PROJECT_STATUS_CAN_END_SUBMIT %}
     <a type="button" class="btn btn-success" href="{% url 'project:ordinary:project_end' object.uid %}">{% trans 'Project End' %}</a>
     {% endif %}
+    <a href="{% url 'project:ordinary:list' page=1 %}" class="btn btn-default btn-md ">{% trans 'Back' %}</a>
     {% endif %}
     {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
     {% if object.status in PROJECT_STATUS_CAN_CHECK %}
@@ -225,11 +234,11 @@
     {% endif %} 
     {% if object.status in PROJECT_STATUS_CAN_FINISH %}
     <a type="button" class="btn btn-success" href="#" data-toggle="modal" data-target="#modal_form">{% trans 'Ended Audit' %}</a>
-    {% endif %} 
     {% endif %}
-    <a href="javascript:history.go(-1)" class="btn btn-default btn-md ">{% trans 'Back' %}</a>
+    <a href="{% url 'project:admin:list' page=1 %}" class="btn btn-default btn-md ">{% trans 'Back' %}</a>
+    {% endif %}
+    
 </div>
-{% endblock %}
 {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
 <div class="modal" id="modal_form" tabindex="-1" role="dialog" aria-labelledby="modal">
     <div class="modal-dialog modal-sm" role="document">
@@ -254,11 +263,11 @@
     </div>
 </div>
 {% endif %}
+{% endblock %}
 
 {% block footer_js %}
 {{ block.super }}
 {% if object.status in PROJECT_STATUS_CAN_FINISH %}
-<script type="text/javascript"> $('#id_status').children('[value = "TERMINATED"]').hide();</script>
+<script type="text/javascript"> $('#id_status').children('[value = "TERMINATED"]').remove();</script>
 {% endif %}
-{% endblock %}
 {% endblock %}

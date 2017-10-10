@@ -62,7 +62,7 @@ class AdminProjectDetail(AdminProBase, PermissionRequiredMixin, DetailView):
     permission_required = 'view_project'
 
     def get_context_data(self, **kwargs):
-        feed = FeedBack.objects.filter(
+        feeds = FeedBack.objects.filter(
             target_uid=self.object.uid)
         form = FeedBackForm({'target_uid': self.object.uid})
         user = User.objects.get(id=self.object.user_id)
@@ -71,7 +71,7 @@ class AdminProjectDetail(AdminProBase, PermissionRequiredMixin, DetailView):
         kwargs['user_phone'] = user_info.phone
         kwargs['user_study_id'] = user_info.student_info.student_id
         kwargs['user_institute'] = user_info.student_info.institute
-        kwargs['feed'] = feed
+        kwargs['feed'] = feeds
         kwargs['form'] = form
         return super(AdminProjectDetail, self).get_context_data(**kwargs)
 
@@ -88,7 +88,6 @@ class AdminProjectUpdate(AdminProBase, PermissionRequiredMixin, UpdateView):
     form_class = FeedBackForm
     raise_exception = True
     permission_required = 'update_project'
-    success_url = reverse_lazy('project:index')
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -104,6 +103,7 @@ class AdminProjectUpdate(AdminProBase, PermissionRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         obj = self.object
+        success_url = reverse_lazy('project:admin:detail', args=(obj.uid,))
         feedback = form.save(commit=False)
         if obj.uid != feedback.target_uid:
             # Mismatch target_uid
@@ -126,4 +126,4 @@ class AdminProjectUpdate(AdminProBase, PermissionRequiredMixin, UpdateView):
                 return HttpResponseForbidden()
         obj.save()
         feedback.save()
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(success_url)

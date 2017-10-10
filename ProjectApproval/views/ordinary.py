@@ -84,7 +84,7 @@ class ProjectAdd(ProjectBase, PermissionRequiredMixin, CreateView):
     """
     A view for creating a new project.
     """
-    template_name = 'ProjectApproval/project_form.html'
+    template_name = 'ProjectApproval/project_add.html'
     form_class = ActivityForm
     success_url = reverse_lazy('project:index')
     form_post_url = 'project:ordinary:add'
@@ -95,7 +95,6 @@ class ProjectAdd(ProjectBase, PermissionRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         kwargs['form_post_url'] = reverse(self.form_post_url)
-        kwargs['new_project'] = 1
         return super(CreateView, self).get_context_data(**kwargs)
 
     def form_valid(self, form):
@@ -156,7 +155,7 @@ class ProjectUpdate(ProjectBase, PermissionRequiredMixin, UpdateView):
     A view for updating an exist project. Should check status before
     change, reject change if not match specified status.
     """
-    template_name = 'ProjectApproval/project_form.html'
+    template_name = 'ProjectApproval/project_update.html'
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
     form_class = ActivityForm
@@ -237,7 +236,6 @@ class ProjectEnd(ProjectBase, PermissionRequiredMixin, UpdateView):
     template_name = 'ProjectApproval/project_end.html'
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
-    success_url = reverse_lazy('project:index')
     form_post_url = 'project:ordinary:project_end'
     fields = ['attachment']
     raise_exception = True
@@ -263,6 +261,8 @@ class ProjectEnd(ProjectBase, PermissionRequiredMixin, UpdateView):
         return super(UpdateView, self).get_context_data(**kwargs)
 
     def form_valid(self, form):
+        success_url = reverse_lazy('project:ordinary:detail',
+                                   args=(self.object.uid,))
         self.object.status = PROJECT_END_SUBMITTED
         self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(success_url)
