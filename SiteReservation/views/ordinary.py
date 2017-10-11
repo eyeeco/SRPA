@@ -200,14 +200,6 @@ class ReservationAdd(ReservationBase, PermissionRequiredMixin, CreateView):
     def get_object(self, queryset=None):
         return None
 
-    def form_invalid(self, form):
-        context = self.get_context_data()
-        context['form'] = form
-        html = render_to_string(
-            self.template_name, request=self.request,
-            context=context)
-        return JsonResponse({'status': 1, 'html': html})
-
     def get_context_data(self, **kwargs):
         kwargs['form_post_url'] = self.form_post_url
         kwargs['back_url'] = self.success_url

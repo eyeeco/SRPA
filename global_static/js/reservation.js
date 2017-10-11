@@ -1,13 +1,5 @@
 $(function () {
     $('.srpa-loader[loader-type="page"]').first().click();
-})
-function clean_js()
-{
-    $('.form_datetime_day').datetimepicker('remove');
-    $('.form_datetime_hour').datetimepicker('remove');
-}
-function init_js()
-{
     $('[data-toggle="tooltip"]').tooltip();
     $('.form_datetime_day').datetimepicker({
         language: 'zh',
@@ -23,6 +15,14 @@ function init_js()
         autoclose: true,
         minView: 1,
     });
+})
+function clean_js()
+{
+    $('.form_datetime_day').datetimepicker('remove');
+    $('.form_datetime_hour').datetimepicker('remove');
+}
+function init_js()
+{
     $('#search-form').on('submit', function(e){
         var form = $('#search-form');
         e.preventDefault();

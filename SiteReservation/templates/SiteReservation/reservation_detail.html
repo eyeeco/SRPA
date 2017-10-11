@@ -1,137 +1,163 @@
+{% extends 'base/layout.html' %}
+{% load static %}
 {% load i18n %}
-<form class="form-horizontal">
-    <div class="form-group">
-        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Site' %}:</label>
-        <div class="col-sm-8 col-xs-6">
-            <p class="form-control-static">{{object.site}}</p>
+{% block header_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/reservation.css' %}">
+{% endblock %}
+
+{% block container %}
+<div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 srpa-background">
+    <h3>{% trans 'Site Reservation' %}</h3>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:status' %}" loader-target="#">{% trans 'Reservation Status' %}</a></li>
+        {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:ordinary:list' page=1 %}" loader-target="#">{% trans 'My Reservations' %}</a></li>
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:ordinary:add' %}" loader-target="#">{% trans 'New Reservation' %}</a></li>
+        {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:admin:list' page=1 %}" loader-target="#">{% trans 'Workshop Reservations' %}</a></li>
+        {% endif %}
+    </ul>
+    {% load i18n %}
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-4 col-xs-6 control-label">{% trans 'Site' %}:</label>
+            <div class="col-sm-8 col-xs-6">
+                <p class="form-control-static">{{object.site}}</p>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Workshop' %}:</label>
-        <div class="col-sm-8 col-xs-6">
-            <p class="form-control-static">{{object.workshop}}</p>
+        <div class="form-group">
+            <label class="col-sm-4 col-xs-6 control-label">{% trans 'Workshop' %}:</label>
+            <div class="col-sm-8 col-xs-6">
+                <p class="form-control-static">{{object.workshop}}</p>
+            </div>
         </div>
+        {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+        <div class="form-group">
+            <label class="col-sm-4 col-xs-6 control-label">{% trans 'Student Name' %}:</label>
+            <div class="col-sm-8 col-xs-6">
+                <p class="form-control-static">{{student_info.user_info.user}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 col-xs-6 control-label">{% trans 'Student ID' %}:</label>
+            <div class="col-sm-8 col-xs-6">
+                <p class="form-control-static">{{student_info.student_id}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 col-xs-6 control-label">{% trans 'Institute' %}:</label>
+            <div class="col-sm-8 col-xs-6">
+                <p class="form-control-static">{{student_info.get_institute_display}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 col-xs-6 control-label">{% trans 'Student Phone' %}:</label>
+            <div class="col-sm-8 col-xs-6">
+                <p class="form-control-static">{{student_info.user_info.phone}}</p>
+            </div>
+        </div>
+        {% endif %}
+        <div class="form-group">
+            <label class="col-sm-4 col-xs-6 control-label">{% trans 'Activity Title' %}:</label>
+            <div class="col-sm-8 col-xs-6">
+                <p class="form-control-static">{{object.title}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 col-xs-6 control-label">{% trans 'Activity Time From' %}:</label>
+            <div class="col-sm-8 col-xs-6">
+                <p class="form-control-static">{{object.activity_time_from}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 col-xs-6 control-label">{% trans 'Activity Time To' %}:</label>
+            <div class="col-sm-8 col-xs-6">
+                <p class="form-control-static">{{object.activity_time_to}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 col-xs-6 control-label">{% trans 'Reservation Time' %}:</label>
+            <div class="col-sm-8 col-xs-6">
+                <p class="form-control-static">{{object.reservation_time}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 col-xs-6 control-label">{% trans 'Status' %}:</label>
+            <div class="col-sm-8 col-xs-6">
+                <p class="form-control-static">{{object.get_status_display}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 col-xs-6 control-label">{% trans 'Comment' %}:</label>
+            <div class="col-sm-8 col-xs-6">
+                <p class="form-control-static">{{object.comment}}</p>
+            </div>
+        </div>
+        {% if feedbacks %}
+        <div class="form-group" >
+            <label class="col-sm-4 col-xs-6 control-label">{% trans 'Feedback' %}:</label>
+            <div class="col-sm-8 col-xs-6">
+                {% for feedback in feedbacks %}
+                {% if feedback.desc %}
+                <div class="row">
+                    <div class="col-xs-4">
+                        <p class="form-control-static">{{feedback.created}}</p>
+                    </div>
+                    <div class="col-xs-8">
+                        <p class="form-control-static">{{feedback.desc}}</p>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor%}
+            </div>
+        </div>
+        {% endif %}
+    </form>
+    <div class="col-sm-6 col-sm-offset-3">
+        {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+        {% if object.status in RESERVATION_STATUS_CAN_EDIT %}
+        <a type="button" class="btn btn-info srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:update' object.uid %}">{% trans 'Update' %}</a>
+        {% endif %}
+        {% if object.status in RESERVATION_STATUS_CAN_CANCEL %}
+        <a type="button" class="btn btn-danger" href="{% url 'reservation:ordinary:cancel' object.uid %}" onclick="if(confirm('{% trans 'Are you sure you want to cancel the reservation' %}?')==false)return false;">{% trans 'Cancel' %}</a>
+        {% endif %}
+        {% if object.status == RESERVATION_APPROVED %}
+        <a type="button" class="btn btn-info" href="{% url 'reservation:ordinary:export' object.uid %}">{% trans 'Export' %}</a>
+        {% endif %}
+        {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+        {% if object.status in RESERVATION_STATUS_CAN_CHECK %}
+        <a type="button" class="btn btn-info" href="#" data-toggle="modal" data-target="#modal_form">{% trans 'Audit' %}</a>
+        {% endif %}
+        {% endif %}
     </div>
     {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
-    <div class="form-group">
-        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Student Name' %}:</label>
-        <div class="col-sm-8 col-xs-6">
-            <p class="form-control-static">{{student_info.user_info.user}}</p>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Student ID' %}:</label>
-        <div class="col-sm-8 col-xs-6">
-            <p class="form-control-static">{{student_info.student_id}}</p>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Institute' %}:</label>
-        <div class="col-sm-8 col-xs-6">
-            <p class="form-control-static">{{student_info.get_institute_display}}</p>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Student Phone' %}:</label>
-        <div class="col-sm-8 col-xs-6">
-            <p class="form-control-static">{{student_info.user_info.phone}}</p>
-        </div>
-    </div>
-    {% endif %}
-    <div class="form-group">
-        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Activity Title' %}:</label>
-        <div class="col-sm-8 col-xs-6">
-            <p class="form-control-static">{{object.title}}</p>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Activity Time From' %}:</label>
-        <div class="col-sm-8 col-xs-6">
-            <p class="form-control-static">{{object.activity_time_from}}</p>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Activity Time To' %}:</label>
-        <div class="col-sm-8 col-xs-6">
-            <p class="form-control-static">{{object.activity_time_to}}</p>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Reservation Time' %}:</label>
-        <div class="col-sm-8 col-xs-6">
-            <p class="form-control-static">{{object.reservation_time}}</p>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Status' %}:</label>
-        <div class="col-sm-8 col-xs-6">
-            <p class="form-control-static">{{object.get_status_display}}</p>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Comment' %}:</label>
-        <div class="col-sm-8 col-xs-6">
-            <p class="form-control-static">{{object.comment}}</p>
-        </div>
-    </div>
-    {% if feedbacks %}
-    <div class="form-group" >
-        <label class="col-sm-4 col-xs-6 control-label">{% trans 'Feedback' %}:</label>
-        <div class="col-sm-8 col-xs-6">
-            {% for feedback in feedbacks %}
-            {% if feedback.desc %}
-            <div class="row">
-                <div class="col-xs-4">
-                    <p class="form-control-static">{{feedback.created}}</p>
-                </div>
-                <div class="col-xs-8">
-                    <p class="form-control-static">{{feedback.desc}}</p>
-                </div>
+    <div class="modal" id="modal_form" tabindex="-1" role="dialog" aria-labelledby="modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <form class="form-horizontal" action="{% url 'reservation:admin:update' object.uid %}" method="POST">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="modal_title">{% trans 'Audit Opinion' %}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        {{ form.target_uid }}
+                        {{ form.desc }}
+                        {{ form.status }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+                        <button type="submit" class="btn btn-primary">{% trans 'Confirm' %}</button>
+                    </div>
+                </form>
             </div>
-            {% endif %}
-            {% endfor%}
         </div>
     </div>
     {% endif %}
-</form>
-<div class="col-sm-6 col-sm-offset-3">
-    {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
-    {% if object.status in RESERVATION_STATUS_CAN_EDIT %}
-    <a type="button" class="btn btn-info srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:update' object.uid %}">{% trans 'Update' %}</a>
-    {% endif %}
-    {% if object.status in RESERVATION_STATUS_CAN_CANCEL %}
-    <a type="button" class="btn btn-danger" href="{% url 'reservation:ordinary:cancel' object.uid %}" onclick="if(confirm('{% trans 'Are you sure you want to cancel the reservation' %}?')==false)return false;">{% trans 'Cancel' %}</a>
-    {% endif %}
-    {% if object.status == RESERVATION_APPROVED %}
-    <a type="button" class="btn btn-info" href="{% url 'reservation:ordinary:export' object.uid %}">{% trans 'Export' %}</a>
-    {% endif %}
-    {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
-    {% if object.status in RESERVATION_STATUS_CAN_CHECK %}
-    <a type="button" class="btn btn-info" href="#" data-toggle="modal" data-target="#modal_form">{% trans 'Audit' %}</a>
-    {% endif %}
-    {% endif %}
 </div>
-{% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
-<div class="modal" id="modal_form" tabindex="-1" role="dialog" aria-labelledby="modal">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <form class="form-horizontal" action="{% url 'reservation:admin:update' object.uid %}" method="POST">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal_title">{% trans 'Audit Opinion' %}</h4>
-                </div>
-                <div class="modal-body">
-                    {% csrf_token %}
-                    {{ form.target_uid }}
-                    {{ form.desc }}
-                    {{ form.status }}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
-                    <button type="submit" class="btn btn-primary">{% trans 'Confirm' %}</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-{% endif %}
+{% endblock %}
+{% block footer_js %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'js/reservation.js' %}"></script>
+{% endblock %}

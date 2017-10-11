@@ -1,3 +1,15 @@
+$(function () {    
+    $('[data-toggle="tooltip"]').tooltip();
+    $('.form_datetime_hour').datetimepicker({
+        format: 'yyyy-mm-dd hh:00:00',
+        weekStart: 1,
+        autoclose: true,
+        todayBtn: true,
+        minView: 1,
+    });
+})
+
+/*
 $(function () {
     $('.srpa-loader[loader-type="page"]').first().click();
 })
@@ -70,3 +82,4 @@ function init_js()
         });
     });
 }
+*/

@@ -9,8 +9,11 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import ListView, UpdateView, DetailView
 from django.http import JsonResponse, HttpResponseForbidden
+from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from guardian.mixins import PermissionRequiredMixin, PermissionListMixin
+from django.contrib.auth.models import User
+from django.urls import reverse_lazy
 
 from const.forms import FeedBackForm
 from const.models import FeedBack
@@ -59,12 +62,16 @@ class AdminProjectDetail(AdminProBase, PermissionRequiredMixin, DetailView):
     permission_required = 'view_project'
 
     def get_context_data(self, **kwargs):
-        feed = FeedBack.objects.filter(
+        feeds = FeedBack.objects.filter(
             target_uid=self.object.uid)
         form = FeedBackForm({'target_uid': self.object.uid})
-        kwargs['budgets'] = [x.strip().split(' ') for x in
-                             self.object.budget.split('\n')]
-        kwargs['feed'] = feed
+        user = User.objects.get(id=self.object.user_id)
+        user_info = user.user_info
+        kwargs['user_name'] = user.first_name
+        kwargs['user_phone'] = user_info.phone
+        kwargs['user_study_id'] = user_info.student_info.student_id
+        kwargs['user_institute'] = user_info.student_info.institute
+        kwargs['feeds'] = feeds
         kwargs['form'] = form
         return super(AdminProjectDetail, self).get_context_data(**kwargs)
 
@@ -96,16 +103,16 @@ class AdminProjectUpdate(AdminProBase, PermissionRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         obj = self.object
+        success_url = reverse_lazy('project:admin:detail', args=(obj.uid,))
         feedback = form.save(commit=False)
         if obj.uid != feedback.target_uid:
             # Mismatch target_uid
-            return JsonResponse({'status': 2, 'reason': _('Illegal Input')})
+            return HttpResponseForbidden()
         feedback.user = self.request.user
         status = form.cleaned_data['status']
         if obj.status not in PROJECT_STATUS_CAN_CHECK and\
                 obj.status not in PROJECT_STATUS_CAN_FINISH:
-            return JsonResponse({
-                'status': 2, 'reason': _('Illegal Input')})
+            return HttpResponseForbidden()
         if status == 'APPROVE':
             obj.status = PROJECT_APPROVED if obj.status in\
                 PROJECT_STATUS_CAN_CHECK else PROJECT_FINISHED
@@ -116,11 +123,7 @@ class AdminProjectUpdate(AdminProBase, PermissionRequiredMixin, UpdateView):
             if obj.status in PROJECT_STATUS_CAN_CHECK:
                 obj.status = PROJECT_TERMINATED
             elif obj.status in PROJECT_STATUS_CAN_FINISH:
-                return JsonResponse({
-                    'status': 2, 'reason': _('Illegal Input')})
+                return HttpResponseForbidden()
         obj.save()
         feedback.save()
-        return JsonResponse({'status': 0})
-
-    def form_invalid(self, form):
-        return JsonResponse({'status': 1, 'reason': _('Illegal Input')})
+        return HttpResponseRedirect(success_url)

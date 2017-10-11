@@ -1,87 +1,113 @@
+{% extends 'base/layout.html' %}
+{% load static %}
 {% load i18n %}
-<table class="table"> 
-    <tr>
-        <th>{% trans 'Site' %}</th>
-        <th>{% trans 'Workshop' %}</th>
-        <th>{% trans 'Activity Time From' %}</th>
-        <th>{% trans 'Activity Time To' %}</th>
-        <th>{% trans 'Reservation Time' %}</th>
-        <th>{% trans 'Status' %}</th>
-        <th>{% trans 'Action' %}</th>
-    </tr>
-    {% for sheet in object_list %}
-    <tr>
-        <td>{{sheet.site}}</td>
-        <td>{{sheet.workshop}}</td>
-        <td>{{sheet.activity_time_from}}</td>
-        <td>{{sheet.activity_time_to}}</td>
-        <td>{{sheet.reservation_time}}</td>
-        <td>{{sheet.get_status_display}}</td>
-        <td>
-            {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
-            <button class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:ordinary:detail' sheet.uid %}">{% trans 'Detail' %}</button>
-            {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
-            <button class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'reservation:admin:detail' sheet.uid %}">{% trans 'Detail' %}</button>
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+{% block header_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/reservation.css' %}">
+{% endblock %}
 
-{% if is_paginated %}
-<nav>
-    <ul class="pagination">
-        {% if page_obj.has_previous %}
-        <li>
-            {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
-            <a class="srpa-loader" loader-type='page' href="#" loader-target="{% url 'reservation:ordinary:list' page=page_obj.previous_page_number %}">
-                <span aria-hidden="true">&laquo;</span>
-            {% endif %}
-            {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
-            <a class="srpa-loader" loader-type='page' href="#" loader-target="{% url 'reservation:admin:list' page=page_obj.previous_page_number %}">
-                <span aria-hidden="true">&laquo;</span>
-            {% endif %}
-        </a>
-        </li>
-        {% else %}
-        <li class="disabled">
-            <a href="#">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-        {% endif %}
-
-        {% for pageid in paginator.page_range %}
-            <li {% if pageid == page_obj.number %}class="active"{% endif %}>
-                {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
-                <a class="srpa-loader" loader-type='page' href="#" loader-target="{% url 'reservation:ordinary:list' page=pageid %}">{{ pageid }}</a>
-                {% endif %}
-                {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
-                <a class="srpa-loader" loader-type='page' href="#" loader-target="{% url 'reservation:admin:list' page=pageid %}">{{ pageid }}</a>
-                {% endif %}
-            </li>
-        {% endfor %}
-
-        {% if page_obj.has_next %}
-        <li>
-            {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
-            <a class="srpa-loader" loader-type='page' href="#" loader-target="{% url 'reservation:ordinary:list' page=page_obj.next_page_number %}">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-            {% endif %}
-            {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
-            <a class="srpa-loader" loader-type='page' href="#" loader-target="{% url 'reservation:admin:list' page=page_obj.next_page_number %}">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-            {% endif %}
-        </li>
-        {% else %}
-        <li {% if not page_obj.has_next %}class="disabled"{% endif %}>
-            <a href="#">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
+{% block container %}
+<div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 srpa-background">
+    <h3>{% trans 'Site Reservation' %}</h3>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:status' %}" loader-target="#">{% trans 'Reservation Status' %}</a></li>
+        {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:ordinary:list' page=1 %}" loader-target="#">{% trans 'My Reservations' %}</a></li>
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:ordinary:add' %}" loader-target="#">{% trans 'New Reservation' %}</a></li>
+        {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:admin:list' page=1 %}" loader-target="#">{% trans 'Workshop Reservations' %}</a></li>
         {% endif %}
     </ul>
-</nav>
-{% endif %}
+    {% load i18n %}
+    <table class="table"> 
+        <tr>
+            <th>{% trans 'Site' %}</th>
+            <th>{% trans 'Workshop' %}</th>
+            <th>{% trans 'Activity Time From' %}</th>
+            <th>{% trans 'Activity Time To' %}</th>
+            <th>{% trans 'Reservation Time' %}</th>
+            <th>{% trans 'Status' %}</th>
+            <th>{% trans 'Action' %}</th>
+        </tr>
+        {% for sheet in object_list %}
+        <tr>
+            <td>{{sheet.site}}</td>
+            <td>{{sheet.workshop}}</td>
+            <td>{{sheet.activity_time_from}}</td>
+            <td>{{sheet.activity_time_to}}</td>
+            <td>{{sheet.reservation_time}}</td>
+            <td>{{sheet.get_status_display}}</td>
+            <td>
+                {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+                <button class="btn btn-info btn-xs" href="{% url 'reservation:ordinary:detail' sheet.uid %}">{% trans 'Detail' %}</button>
+                {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+                <button class="btn btn-info btn-xs" href="{% url 'reservation:admin:detail' sheet.uid %}">{% trans 'Detail' %}</button>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div>
+    {% if is_paginated %}
+    <nav>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li>
+                {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+                <a href="{% url 'reservation:ordinary:list' page=page_obj.previous_page_number %}" loader-target="#">
+                    <span aria-hidden="true">&laquo;</span>
+                {% endif %}
+                {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+                <a href="{% url 'reservation:admin:list' page=page_obj.previous_page_number %}" loader-target="#">
+                    <span aria-hidden="true">&laquo;</span>
+                {% endif %}
+            </a>
+            </li>
+            {% else %}
+            <li class="disabled">
+                <a href="#">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            {% for pageid in paginator.page_range %}
+                <li {% if pageid == page_obj.number %}class="active"{% endif %}>
+                    {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+                    <a href="{% url 'reservation:ordinary:list' page=pageid %}" loader-target="#">{{ pageid }}</a>
+                    {% endif %}
+                    {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+                    <a href="{% url 'reservation:admin:list' page=pageid %}" loader-target="#">{{ pageid }}</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+    
+            {% if page_obj.has_next %}
+            <li>
+                {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+                <a href="{% url 'reservation:ordinary:list' page=page_obj.next_page_number %}" loader-target="#">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                {% endif %}
+                {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+                <a href="{% url 'reservation:admin:list' page=page_obj.next_page_number %}" loader-target="#">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                {% endif %}
+            </li>
+            {% else %}
+            <li {% if not page_obj.has_next %}class="disabled"{% endif %}>
+                <a href="#">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}
+{% block footer_js %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'js/reservation.js' %}"></script>
+{% endblock %}

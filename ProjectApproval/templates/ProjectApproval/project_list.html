@@ -1,8 +1,18 @@
+{% extends 'ProjectApproval/base.html' %}
 {% load i18n %}
-{% load static %}
+{% block tabs %}
+<ul class="nav nav-tabs" role="tablist">
+    {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+    <li class="li-page white active"><a type="button" class="btn" href="{% url 'project:ordinary:list' page=1 %}">{% trans 'My Projects' %}</a></li>
+    <li class="li-page white "><a type="button" class="btn" href="{% url 'project:ordinary:add' %}">{% trans 'New Project' %}</a></li>
+    {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+    <li class="li-page white active"><a type="button" class="btn" href="{% url 'project:admin:list' page=1 %}">{% trans 'Workshop Projects' %}</a></li>
+    {% endif %}
+</ul>
+{% endblock %}
 {% block project_content %}
 <table class="table"> 
-    <tr class="fir_tr">
+    <tr>
         <th>{% trans 'Workshop' %}</th>
         <th>{% trans 'Project Title' %}</th>
         <th>{% trans 'Activity Time From' %}</th>
@@ -21,28 +31,27 @@
         <td>{{sheet.get_status_display}}</td>
         <td>
             {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
-            <a type="button" class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:detail' sheet.uid %}">{% trans 'Detail' %}</a>
+            <a type="button" class="btn btn-info btn-xs" href="{% url 'project:ordinary:detail' sheet.uid %}">{% trans 'Detail' %}</a>
             {% endif %}
             {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}
-            <a type="button" class="btn btn-info btn-xs srpa-loader" loader-type='page' loader-target="{% url 'project:admin:detail' sheet.uid %}">{% trans 'Detail' %}</a>
+            <a type="button" class="btn btn-info btn-xs" href="{% url 'project:admin:detail' sheet.uid %}">{% trans 'Detail' %}</a>
             {% endif %}
         </td>
     </tr>
     {% endfor %}
 </table>
-{% endblock %}
 {% if is_paginated %}
 <nav>
     <ul class="pagination">
         {% if page_obj.has_previous %}
         <li>
         {% if request.user.user_info.identity == USER_IDENTITY_STUDENT%}
-            <a href="#" class="srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:list' page=page_obj.previous_page_number %}">
+            <a href="{% url 'project:ordinary:list' page=page_obj.previous_page_number %}">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         {% endif %}
         {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
-            <a href="#" class="srpa-loader" loader-type='page' loader-target="{% url 'project:admin:list' page=page_obj.previous_page_number %}">
+            <a href="{% url 'project:admin:list' page=page_obj.previous_page_number %}">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         {% endif %}
@@ -58,12 +67,12 @@
         {% for pageid in paginator.page_range %}
         {% if request.user.user_info.identity == USER_IDENTITY_STUDENT%}
             <li {% if pageid == page_obj.number %}class="active"{% endif %}>
-                <a href="#" class="srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:list' page=pageid %}">{{ pageid }}</a>
+                <a href="{% url 'project:ordinary:list' page=pageid %}">{{ pageid }}</a>
             </li>
         {% endif %}
         {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
             <li {% if pageid == page_obj.number %}class="active"{% endif %}>
-                <a href="#" class="srpa-loader" loader-type='page' loader-target="{% url 'project:admin:list' page=pageid %}">{{ pageid }}</a>
+                <a href="{% url 'project:admin:list' page=pageid %}">{{ pageid }}</a>
             </li>
         {% endif %}
         {% endfor %}
@@ -71,12 +80,12 @@
         {% if page_obj.has_next %}
         <li>
         {% if request.user.user_info.identity == USER_IDENTITY_STUDENT%}
-            <a href="#" class="srpa-loader" loader-type='page' loader-target="{% url 'project:ordinary:list' page=page_obj.next_page_number %}">
+            <a href="{% url 'project:ordinary:list' page=page_obj.next_page_number %}">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         {% endif %}
         {% if request.user.user_info.identity == USER_IDENTITY_TEACHER%}
-            <a href="#" class="srpa-loader" loader-type='page' loader-target="{% url 'project:admin:list' page=page_obj.next_page_number %}">
+            <a href="{% url 'project:admin:list' page=page_obj.next_page_number %}">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         {% endif %}
@@ -91,3 +100,4 @@
     </ul>
 </nav>
 {% endif %}
+{% endblock %}
