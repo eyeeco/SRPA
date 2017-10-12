@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:49
-# Last modified: 2017-10-03 15:59
+# Last modified: 2017-10-12 11:20
 # Filename: utils.py
 # Description:
 import os.path as osp
@@ -218,22 +218,27 @@ def export_project(project, max_budget_row=5, row=0):
     sheet.write_merge(row, row, 4, 7, '预算金额(元)', style=budget_style)
     sheet.write_merge(row, row, 8, 11, '描述', style=budget_style)
     row_offset = 1
-    budgets = [x.strip().split(' ') for x in project.budget.split('\n')]
-    total_budget = sum(int(budget) for item, budget, desc in budgets)
+    budgets = list(project.budget_set.all())
+    total_budget = sum(budget.amount for budget in budgets)
     if len(budgets) > max_budget_row:
-        rest_budget = sum(int(budget) for item, budget, desc
-                          in budgets[max_budget_row:])
+        rest_budget = sum(budget.amount for budget in budgets[max_budget_row:])
         budgets[max_budget_row:] = [['其他', rest_budget, '无']]
-    else:
-        budgets.extend(['', '', ''] for _ in
-                       range(max_budget_row - len(budgets)))
-    for item, budget, desc in budgets:
+    for budget in budgets:
         budget_row = row + row_offset
-        sheet.write_merge(budget_row, budget_row, 1, 3, item,
+        sheet.write_merge(budget_row, budget_row, 1, 3, budget.item,
                           style=budget_style)
-        sheet.write_merge(budget_row, budget_row, 4, 7, budget,
+        sheet.write_merge(budget_row, budget_row, 4, 7, budget.amount,
                           style=budget_style)
-        sheet.write_merge(budget_row, budget_row, 8, 11, desc,
+        sheet.write_merge(budget_row, budget_row, 8, 11, budget.detail,
+                          style=budget_style)
+        row_offset += 1
+    for placeholder in range(max_budget_row - len(budgets)):
+        budget_row = row + row_offset
+        sheet.write_merge(budget_row, budget_row, 1, 3, '',
+                          style=budget_style)
+        sheet.write_merge(budget_row, budget_row, 4, 7, '',
+                          style=budget_style)
+        sheet.write_merge(budget_row, budget_row, 8, 11, '',
                           style=budget_style)
         row_offset += 1
     row += 1 + max_budget_row  # 13 + max_budget_row

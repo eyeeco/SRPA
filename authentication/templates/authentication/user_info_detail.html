@@ -6,6 +6,12 @@
     </div>
 </div>
 <div class="form-group">
+    <label class="col-sm-4 col-xs-6 control-label">{% trans 'Email' %}:</label>
+    <div class="col-sm-8 col-xs-6">
+        <p class="form-control-static">{{object.user.email}}</p>
+    </div>
+</div>
+<div class="form-group">
     <label class="col-sm-4 col-xs-6 control-label">{% trans 'Contact Info' %}:</label>
     <div class="col-sm-8 col-xs-6">
         <p class="form-control-static">{{object.phone}}</p>
