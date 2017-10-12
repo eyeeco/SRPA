@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:09
-# Last modified: 2017-10-12 10:05
+# Last modified: 2017-10-12 12:12
 # Filename: forms.py
 # Description:
 from django import forms
@@ -90,6 +90,7 @@ class StudentRegisterForm(RegisterForm):
                 _('Student ID not in the invited list'))
         return student_id
 
+
 class StudentUpdateForm(ModelForm):
     name = forms.CharField(
         label=_('First Name'),
@@ -103,7 +104,7 @@ class StudentUpdateForm(ModelForm):
         label=_('Email'))
 
     class Meta:
-        model = StudentInfo 
+        model = StudentInfo
         fields = ['name', 'email', 'phone', 'student_id', 'institute']
 
 

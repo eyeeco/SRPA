@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-08 20:06
-# Last modified: 2017-10-12 10:14
+# Last modified: 2017-10-12 12:12
 # Filename: info_update.py
 # Description:
 from django.views.generic import UpdateView
@@ -57,7 +57,7 @@ class StudentInfoUpdate(UserPassesTestMixin, InfoUpdateBase):
 
     def get_context_data(self, **kwargs):
         kwargs['back_url'] = reverse_lazy('auth:info:student',
-                                     args=(self.object.uid,))
+                                          args=(self.object.uid,))
         return super(StudentInfoUpdate, self).get_context_data(**kwargs)
 
     def get_initial(self):
