@@ -15,7 +15,6 @@ from django.utils.translation import ugettext
 
 from ProjectApproval.models import Project
 from ProjectApproval.models import SocialInvitation
-import re
 
 
 class ActivityForm(ModelForm):
@@ -42,13 +41,18 @@ class ActivityForm(ModelForm):
     has_social = forms.BooleanField(
         label=_('Has Social'),
         widget=forms.CheckboxInput(attrs={}), required=False)
+    contact_info = forms.CharField(
+        label=_('Contact Info'),
+        widget=forms.TextInput(),
+        min_length=11,
+        max_length=11)
 
     class Meta:
         model = Project
         fields = ['title', 'workshop', 'activity_time_from',
                   'activity_time_to', 'site', 'form', 'charger',
                   'contact_info', 'activity_range', 'amount', 'has_social',
-                  'comment', 'attachment', 'content']
+                  'comment', 'attachment', 'content', 'contact_info']
 
     def clean(self):
         cleaned_data = super(ActivityForm, self).clean()
