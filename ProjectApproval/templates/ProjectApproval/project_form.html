@@ -149,7 +149,7 @@
     <div class="col-sm-10" id = "data-forms">
         {% if object %}
         {% for budget in object.budget_set.all %}
-        <div class="col-sm-12 budget">
+        <div class="col-sm-12 budget form-group">
         <div class="col-sm-2"><label class="control-label">项目:</label></div>
         <div class="col-sm-2"><input type="text" name="item_{{forloop.counter}}" value="{{budget.item}}" class="form-control item"></div>
         <div class="col-sm-2"><label class="control-label">金额:</label></div>

@@ -41,7 +41,7 @@ $(function () {
             }
         });
         if(has_empty){
-            alert("不能为空");
+            alert("预算明细不能为空");
             e.preventDefault();
         }
     });
