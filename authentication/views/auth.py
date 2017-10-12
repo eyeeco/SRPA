@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-08 20:07
-# Last modified: 2017-10-07 21:35
+# Last modified: 2017-10-12 10:14
 # Filename: auth.py
 # Description:
 import json
@@ -67,7 +67,6 @@ class StudentRegisterView(CreateView):
 
     template_name = 'authentication/register.html'
     form_class = StudentRegisterForm
-    success_url = reverse_lazy('index')
     identity = USER_IDENTITY_STUDENT
     form_post_url = reverse_lazy('auth:register:index')
     info_name = 'studentinfo'
@@ -99,6 +98,7 @@ class StudentRegisterView(CreateView):
     def get_context_data(self, **kwargs):
         kwargs['form_post_url'] = self.form_post_url
         kwargs['identity'] = self.identity
+        kwargs['back_url'] = reverse_lazy('auth:login')
         return super(StudentRegisterView, self).get_context_data(**kwargs)
 
     def get(self, request, *args, **kwargs):

@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-10-06 14:12
-# Last modified: 2017-10-07 17:05
+# Last modified: 2017-10-12 11:04
 # Filename: admin.py
 # Description:
 from django.views.generic import TemplateView, CreateView, UpdateView
@@ -37,7 +37,6 @@ class AdminTeacherAdd(AdminBase, CreateView):
     template_name = 'authentication/admin/teacher_add.html'
     form_class = TeacherRegisterForm
     identity = USER_IDENTITY_TEACHER
-    success_url = reverse_lazy('auth:admin:index')
     form_post_url = reverse_lazy('auth:admin:teacher:add')
     info_name = 'teacherinfo'
 
@@ -60,6 +59,7 @@ class AdminTeacherAdd(AdminBase, CreateView):
 
     def get_context_data(self, **kwargs):
         kwargs['form_post_url'] = self.form_post_url
+        kwargs['back_url'] = reverse_lazy('auth:admin:teacher:list', args=(1,))
         return super(AdminTeacherAdd, self).get_context_data(**kwargs)
 
 
@@ -69,7 +69,11 @@ class AdminTeacherUpdate(AdminBase, UpdateView):
     template_name = 'authentication/admin/teacher_info_update.html'
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
-    success_url = reverse_lazy('auth:admin:teacher:list', args=(1,))
+
+    def get_context_data(self, **kwargs):
+        kwargs['back_url'] = reverse_lazy('auth:admin:teacher:detail',
+                                          args=(self.object.uid,))
+        return super(AdminTeacherUpdate, self).get_context_data(**kwargs)
 
     def get_initial(self):
         kwargs = {}
@@ -108,7 +112,12 @@ class AdminWorkshopAdd(AdminBase, CreateView):
     model = Workshop
     template_name = 'authentication/admin/workshop_add.html'
     fields = ['desc']
-    success_url = reverse_lazy('auth:admin:workshop:list', args=(1,))
+    form_post_url = reverse_lazy('auth:admin:workshop:add')
+
+    def get_context_data(self, **kwargs):
+        kwargs['back_url'] = reverse_lazy('auth:admin:workshop:list',
+                                          args=(1,))
+        return super(AdminWorkshopAdd, self).get_context_data(**kwargs)
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -124,7 +133,15 @@ class AdminWorkshopUpdate(AdminBase, UpdateView):
     template_name = 'authentication/admin/workshop_update.html'
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
-    success_url = reverse_lazy('auth:admin:workshop:list', args=(1,))
+
+    def get_success_url(self):
+        return reverse_lazy('auth:admin:workshop:detail',
+                            args=(self.object.uid,))
+
+    def get_context_data(self, **kwargs):
+        kwargs['back_url'] = reverse_lazy('auth:admin:workshop:detail',
+                                          args=(self.object.uid,))
+        return super(AdminWorkshopUpdate, self).get_context_data(**kwargs)
 
     def get_initial(self):
         kwargs = {}

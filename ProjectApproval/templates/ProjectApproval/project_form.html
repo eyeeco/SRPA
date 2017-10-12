@@ -141,16 +141,27 @@
     {% endif %}
 </div>    
 <!--line 8-->
-<div class="form-group" data-toggle="tooltip" data-placement="top" title="{% trans 'Please fill the form in format' %}">
+<div class="form-group">
     <div class="col-sm-2">
-        <label class="control-label">{{form.budget.label}}:</label>
+            <label class="control-label" name="label">预算明细:</label>
     </div>
-    <div class="col-sm-10">
-        {{form.budget|addcls:'form-control'}}
+    <div class="col-sm-10" id = "data-forms">
+        {% if object %}
+        {% for budget in object.budget_set.all %}
+        <div class="col-sm-12 budget form-group">
+        <div class="col-sm-2"><label class="control-label">项目:</label></div>
+        <div class="col-sm-2"><input type="text" name="item_{{forloop.counter}}" value="{{budget.item}}" class="form-control item"></div>
+        <div class="col-sm-2"><label class="control-label">金额:</label></div>
+        <div class="col-sm-2"><input type="number" step="0.01"  value="{{budget.amount}}" name="amount_{{forloop.counter}}" class="form-control amount"></div>
+        <div class="col-sm-2"><input type="text" value="{{budget.detail}}" name="detail_{{forloop.counter}}" class="form-control detail" placeholder="描述(可选)"></div>
+        <div class="col-sm-2"><button type="button" class="btn btn-danger btn-default delete-one-term">删除</button></div>
+        </div>
+        {% endfor%}
+        {% endif %}
+        <div>
+            <button type="button" class="btn btn-success btn-default" id="add-one-term" action="{% url 'project:ordinary:budget_get' %}">添加</button>
+        </div>
     </div>
-    {% if form.budget.errors %}
-        <p class="text-danger">{{form.budget.errors.as_text}}</p>
-    {% endif %}
 </div>
 {% if form.errors %}
 {% for error in form.non_field_errors %}
@@ -159,6 +170,6 @@
 {% endif %}
 <div>
     <button type="submit" class="btn btn-primary btn-md">{% trans 'Submit' %}</button>
-    <a href="javascript:history.go(-1)" class="btn btn-primary btn-md">{% trans 'Back' %}</a>
+    <a href="javascript:history.go(-1)" class="btn btn-primary btn-md">{% trans 'Back' %}</a> 
 </div>
 </form>

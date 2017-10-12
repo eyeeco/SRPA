@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:05
-# Last modified: 2017-10-07 21:37
+# Last modified: 2017-10-11 13:39
 # Filename: settings.py
 # Description:
 """
@@ -167,3 +167,5 @@ CAPTCHA_TIMEOUT = 1
 # Context variables related to SRPA
 LOGIN_URL = reverse_lazy('auth:login')
 LOGIN_REDIRECT_URL = reverse_lazy('index')
+
+INVITED_REGISTRATION = False

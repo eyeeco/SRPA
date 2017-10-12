@@ -156,20 +156,20 @@
                 <th>{% trans 'Budget Amount' %}</th>
                 <th>{% trans 'Budget Description' %}</th>
             </tr>
-        {% for item, budget, desc in budgets %}    
+            {% for budget in object.budget_set.all %} 
             <tr>
-                <th>{{item}}</th>
-                <th>{{budget}}</th>
-                <th>{{desc}}</th>
+                <th>{{budget.item}}</th>
+                <th>{{budget.amount}}</th>
+                <th>{{budget.detail}}</th>
             </tr>
-        {% endfor%}
+            {% endfor%}
         </table>
     </div>
 </div> 
 <!--line 7-->
 <div class="form-group col-sm-12" >
     <div class="col-sm-2">
-        <label class="control-label">{% trans 'Budget Comment' %}:</label>
+        <label class="control-label">{% trans 'Comment' %}:</label>
     </div>
     <div class="col-sm-10">
         <p class="form-control-static">{{object.comment}}</p>
