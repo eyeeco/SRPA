@@ -1,6 +1,5 @@
 {% load filters %}
 {% load i18n %}
-{% block project_content %}
 <form id="info-form" class="form-horizontal project-form" method="POST" action="{{ form_post_url }}">
 {% csrf_token %}
 <div class="form-group" >
@@ -171,8 +170,6 @@
 {% endif %}
 <div>
     <button type="submit" class="btn btn-primary btn-md">{% trans 'Submit' %}</button>
-    <a href="javascript:history.go(-1)" class="btn btn-primary btn-md">{% trans 'Back' %}</a>
-    
+    <a href="javascript:history.go(-1)" class="btn btn-primary btn-md">{% trans 'Back' %}</a> 
 </div>
 </form>
-{% endblock %}
