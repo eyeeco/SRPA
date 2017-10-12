@@ -66,11 +66,7 @@ class AdminProjectDetail(AdminProBase, PermissionRequiredMixin, DetailView):
             target_uid=self.object.uid)
         form = FeedBackForm({'target_uid': self.object.uid})
         user = User.objects.get(id=self.object.user_id)
-        user_info = user.user_info
-        kwargs['user_name'] = user.first_name
-        kwargs['user_phone'] = user_info.phone
-        kwargs['user_study_id'] = user_info.student_info.student_id
-        kwargs['user_institute'] = user_info.student_info.institute
+        kwargs['user'] = user
         kwargs['feeds'] = feeds
         kwargs['form'] = form
         return super(AdminProjectDetail, self).get_context_data(**kwargs)
