@@ -76,7 +76,7 @@ class ProjectDetail(ProjectBase, PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         feed = FeedBack.objects.filter(
             target_uid=self.object.uid)
-        kwargs['feed'] = feed
+        kwargs['feeds'] = feed
         return super(ProjectDetail, self).get_context_data(**kwargs)
 
 

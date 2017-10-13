@@ -26,6 +26,18 @@ class DateForm(forms.Form):
             'readonly': 'true',
             'class': 'form-control'}))
 
+    def clean(self):
+        cleaned_data = super(DateForm, self).clean()
+        errors = {}
+        t = cleaned_data.get('date')
+
+        if t is not None and t < datetime.now().date():
+            errors['date'] = [('Please choose a future time')]
+
+        if errors:
+            raise forms.ValidationError(errors)
+        return cleaned_data
+
 
 class ReservationForm(ModelForm):
     activity_time_from = forms.DateTimeField(
