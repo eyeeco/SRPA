@@ -65,9 +65,7 @@ class ReservationStatus(FormView):
     def form_valid(self, form):
         uid = self.request.POST.get('site_uid', None)
         date = form.cleaned_data['date']
-        if date < datetime.now().date():
-            return JsonResponse({'status': 2,
-                                 'reason': _('Please choose a future time')})
+        
         start_dt = datetime.combine(date, datetime.min.time())
         start_dt = start_dt.replace(tzinfo=timezone.utc)
         end_dt = start_dt + timedelta(days=1)
