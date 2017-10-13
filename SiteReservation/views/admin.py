@@ -130,4 +130,3 @@ class AdminReservationUpdate(AdminReservationBase, PermissionRequiredMixin,
         obj.save()
         feedback.save()
         return HttpResponseRedirect(self.get_success_url())
-

@@ -18,7 +18,8 @@ from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.urls import reverse, NoReverseMatch
 from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404, redirect, render_to_response, render
+from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import render_to_response, render
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
@@ -79,22 +80,21 @@ class ReservationStatus(FormView):
         reservations = reservations.filter(
             Q(activity_time_from__gte=start_dt) &
             Q(activity_time_from__lt=end_dt))
-        available_status = [True for _ in range(14)]  # 0 -> 08:00 ~ 09:00
+        available_status = [True for i in range(14)]  # 0 -> 08:00 ~ 09:00
         for r in reservations:
             for hour in range(r.activity_time_from.hour,
                               r.activity_time_to.hour):
                 available_status[hour] = False
-        site_option=Site.objects.all().order_by('desc')
+        site_option = Site.objects.all().order_by('desc')
         return render(
-            self.request,self.template_name,
-            {'available_status': available_status,
+            self.request, self.template_name,
+            context={'available_status': available_status,
                      'date_option': date,
                      'site': site,
-                     'sites':site_option,
-                     'form':self.form_class})
-    
+                     'sites': site_option,
+                     'form': self.form_class})
+
     def form_invalid(self, form):
-        print(form.errors)
         return super().form_invalid(form)
 
 
@@ -178,9 +178,6 @@ class ReservationAdd(ReservationBase, PermissionRequiredMixin, CreateView):
         if conflict:
             context = self.get_context_data()
             context['form'] = form
-            html = render_to_string(
-                self.template_name, request=self.request,
-                context=context)
             return HttpResponseForbidden()
 
         form.instance.user = self.request.user
@@ -242,9 +239,6 @@ class ReservationUpdate(ReservationBase, PermissionRequiredMixin, UpdateView):
         if conflict:
             context = self.get_context_data()
             context['form'] = form
-            html = render_to_string(
-                self.template_name, request=self.request,
-                context=context)
             return HttpResponseForbidden()
         self.object.status = RESERVATION_SUBMITTED
         self.object = form.save()

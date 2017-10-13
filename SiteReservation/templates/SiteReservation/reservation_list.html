@@ -6,15 +6,14 @@
 <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 srpa-background">
     <h3>{% trans 'Site Reservation' %}</h3>
     <ul class="nav nav-tabs" role="tablist">
-        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:status' %}" loader-target="#">{% trans 'Reservation Status' %}</a></li>
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:status' %}">{% trans 'Reservation Status' %}</a></li>
         {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
-        <li class="li-page white active"><a type="button" class="btn" href="{% url 'reservation:ordinary:list' page=1 %}" loader-target="#">{% trans 'My Reservations' %}</a></li>
-        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:ordinary:add' %}" loader-target="#">{% trans 'New Reservation' %}</a></li>
+        <li class="li-page white active"><a type="button" class="btn" href="{% url 'reservation:ordinary:list' page=1 %}">{% trans 'My Reservations' %}</a></li>
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:ordinary:add' %}">{% trans 'New Reservation' %}</a></li>
         {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
-        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:admin:list' page=1 %}" loader-target="#">{% trans 'Workshop Reservations' %}</a></li>
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:admin:list' page=1 %}">{% trans 'Workshop Reservations' %}</a></li>
         {% endif %}
     </ul>
-    {% load i18n %}
     <table class="table"> 
         <tr>
             <th>{% trans 'Site' %}</th>
