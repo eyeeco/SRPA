@@ -1,16 +1,12 @@
-{% extends 'base/layout.html' %}
+{% extends 'SiteReservation/base.html' %}
 {% load static %}
 {% load i18n %}
-{% block header_css %}
-{{ block.super }}
-<link rel="stylesheet" href="{% static 'css/reservation.css' %}">
-{% endblock %}
 
 {% block container %}
 <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 srpa-background">
     <h3>{% trans 'Site Reservation' %}</h3>
     <ul class="nav nav-tabs" role="tablist">
-        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:status' %}" loader-target="#">{% trans 'Reservation Status' %}</a></li>
+        <li class="li-page white active"><a type="button" class="btn" href="{% url 'reservation:status' %}" loader-target="#">{% trans 'Reservation Status' %}</a></li>
         {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
         <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:ordinary:list' page=1 %}" loader-target="#">{% trans 'My Reservations' %}</a></li>
         <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:ordinary:add' %}" loader-target="#">{% trans 'New Reservation' %}</a></li>
@@ -19,7 +15,6 @@
         {% endif %}
     </ul>
     <div>
-        {% load i18n %}
         <div class="col-xs-12" style="margin-bottom:2em">
             <form class="form-inline" method="POST" id="search-form" action="{% url 'reservation:status' %}">
                 {% csrf_token %}
@@ -30,24 +25,55 @@
                     <span class="input-group-addon add-on"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                     </div>
+                    {% if form.date.errors %}
+                    <p class="text-danger">{{form.date.errors.as_text}}</p>
+                    {% endif %}
                 </div>
                 <div class="form-group col-sm-3">
-                    <label for="id_site">{% trans 'Select Site' %}</label>
-                    <select class="form-control" id="id_site" placeholder="" name="site_uid">
-                        {% for site in sites %}
-                        <option value="{{site.uid}}">{{site.desc}}</option>
-                        {% endfor %}
-                    </select>
+                        <label for="id_site">{% trans 'Select Site' %}</label>
+                        <select class="form-control" id="id_site" placeholder="" name="site_uid">
+                            {% for site in sites %}
+                            <option value="{{site.uid}}">{{site.desc}}</option>
+                            {% endfor %}
+                        </select>
                 </div>
                 <button type="submit" class="btn btn-default">{% trans 'Retrieve' %}</button>
             </form>
         </div>
         <div id="status_table" class="col-xs-12">
+            <h3>{{site}}{% trans 'Reservation Status' %}</h3>
+            <div class="table-responsive">
+                <table class="table status-table">
+                    <tr>
+                        <th></th>
+                        <th>8-9</th>
+                        <th>9-10</th>
+                        <th>10-11</th>
+                        <th>11-12</th>
+                        <th>12-13</th>
+                        <th>13-14</th>
+                        <th>14-15</th>
+                        <th>15-16</th>
+                        <th>16-17</th>
+                        <th>17-18</th>
+                        <th>18-19</th>
+                        <th>19-20</th>
+                        <th>20-21</th>
+                        <th>21-22</th>
+                    </tr>
+                    <tr>
+                    <td>{{date_option}}</td>
+                        {% for status in available_status %}
+                        {% if status %}
+                        <td class='available'>{% trans 'Available' %}</td>
+                        {% else %}
+                        <td class='not-available'>{% trans 'Not Available' %}</td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>
-{% endblock %}
-{% block footer_js %}
-{{ block.super }}
-<script type="text/javascript" src="{% static 'js/reservation.js' %}"></script>
 {% endblock %}

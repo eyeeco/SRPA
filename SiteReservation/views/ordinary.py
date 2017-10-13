@@ -18,7 +18,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.urls import reverse, NoReverseMatch
 from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render_to_response, render
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
@@ -55,7 +55,6 @@ class ReservationIndex(TemplateView):
 
 class ReservationStatus(FormView):
     template_name = 'SiteReservation/reservation_status.html'
-    status_table_name = 'SiteReservation/status_table.html'
     form_class = DateForm
 
     def get_context_data(self, **kwargs):
@@ -65,9 +64,6 @@ class ReservationStatus(FormView):
     def form_valid(self, form):
         uid = self.request.POST.get('site_uid', None)
         date = form.cleaned_data['date']
-        if date < datetime.now().date():
-            return JsonResponse({'status': 2,
-                                 'reason': _('Please choose a future time')})
         start_dt = datetime.combine(date, datetime.min.time())
         start_dt = start_dt.replace(tzinfo=timezone.utc)
         end_dt = start_dt + timedelta(days=1)
@@ -76,8 +72,7 @@ class ReservationStatus(FormView):
         try:
             uid = UUID(uid)
         except ValueError:
-            return JsonResponse({'status': 3,
-                                 'reason': _('Illegal Input')})
+            return HttpResponseForbidden()
         site = get_object_or_404(Site, uid=uid)
         reservations = Reservation.objects.filter(site=site)
         reservations = reservations.filter(status=RESERVATION_APPROVED)
@@ -89,16 +84,18 @@ class ReservationStatus(FormView):
             for hour in range(r.activity_time_from.hour,
                               r.activity_time_to.hour):
                 available_status[hour] = False
-        status_table = render_to_string(
-            self.status_table_name, request=self.request,
-            context={'available_status': available_status,
-                     'date': date,
-                     'site': site})
-        return JsonResponse({'status': 0, 'html': status_table})
-
+        site_option=Site.objects.all().order_by('desc')
+        return render(
+            self.request,self.template_name,
+            {'available_status': available_status,
+                     'date_option': date,
+                     'site': site,
+                     'sites':site_option,
+                     'form':self.form_class})
+    
     def form_invalid(self, form):
-        return JsonResponse({'status': 1, 'reason': _('Wrong form data, '
-                                                      'Please check again')})
+        print(form.errors)
+        return super().form_invalid(form)
 
 
 class ReservationList(ReservationBase, PermissionListMixin, ListView):
@@ -184,10 +181,7 @@ class ReservationAdd(ReservationBase, PermissionRequiredMixin, CreateView):
             html = render_to_string(
                 self.template_name, request=self.request,
                 context=context)
-            return JsonResponse({'status': 2,
-                                 'reason': _('Conflict with existing '
-                                             'reservation'),
-                                 'html': html})
+            return HttpResponseForbidden()
 
         form.instance.user = self.request.user
         self.object = form.save()
@@ -195,7 +189,7 @@ class ReservationAdd(ReservationBase, PermissionRequiredMixin, CreateView):
                      perms=['update', 'view'])
         assign_perms('reservation', self.object.workshop.group, self.object,
                      perms=['update', 'view'])
-        return JsonResponse({'status': 0, 'redirect': self.success_url})
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_object(self, queryset=None):
         return None
@@ -227,9 +221,8 @@ class ReservationUpdate(ReservationBase, PermissionRequiredMixin, UpdateView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        is_ajax = request.is_ajax()
         allowed_status = self.object.status in RESERVATION_STATUS_CAN_EDIT
-        if not is_ajax or not allowed_status:
+        if not allowed_status:
             return HttpResponseForbidden()
         return self.render_to_response(self.get_context_data())
 
@@ -252,18 +245,7 @@ class ReservationUpdate(ReservationBase, PermissionRequiredMixin, UpdateView):
             html = render_to_string(
                 self.template_name, request=self.request,
                 context=context)
-            return JsonResponse({'status': 2,
-                                 'reason': _('Conflict with existing '
-                                             'reservation'),
-                                 'html': html})
+            return HttpResponseForbidden()
         self.object.status = RESERVATION_SUBMITTED
         self.object = form.save()
-        return JsonResponse({'status': 0, 'redirect': self.success_url})
-
-    def form_invalid(self, form):
-        context = self.get_context_data()
-        context['form'] = form
-        html = render_to_string(
-            self.template_name, request=self.request,
-            context=context)
-        return JsonResponse({'status': 1, 'html': html})
+        return HttpResponseRedirect(self.get_success_url())

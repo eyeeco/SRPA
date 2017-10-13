@@ -13,7 +13,7 @@ from django.forms.extras.widgets import SelectDateWidget
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime, timedelta, timezone
 
-from const.models import CaptchaField
+from const.models import CaptchaField, Site
 from SiteReservation.models import Reservation
 from SiteReservation import RESERVATION_APPROVED
 from django.db.models import Q
@@ -25,6 +25,18 @@ class DateForm(forms.Form):
         widget=forms.TextInput(attrs={
             'readonly': 'true',
             'class': 'form-control'}))
+
+    def clean(self):
+        cleaned_data = super(DateForm, self).clean()
+        errors = {}
+        t = cleaned_data.get('date')
+
+        if t != None and t < datetime.now().date():
+            errors['date'] = [('Please choose a future time')]
+
+        if errors:
+            raise forms.ValidationError(errors)
+        return cleaned_data
 
 
 class ReservationForm(ModelForm):

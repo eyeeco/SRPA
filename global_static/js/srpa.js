@@ -1,3 +1,4 @@
+    /*
 function clean_js()
 {
 }
@@ -41,7 +42,7 @@ $(function(){
             },
         });
     });
-    /*
+
     $(document).on('submit', '#modal_form form', function(e){
         var form = $("#modal_form form");
         e.preventDefault();

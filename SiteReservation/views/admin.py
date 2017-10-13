@@ -9,6 +9,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, UpdateView, DetailView
 from django.http import JsonResponse, HttpResponseForbidden
+from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -94,6 +95,7 @@ class AdminReservationUpdate(AdminReservationBase, PermissionRequiredMixin,
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
     form_class = FeedBackForm
+    success_url = reverse_lazy('reservation:index')
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -111,7 +113,7 @@ class AdminReservationUpdate(AdminReservationBase, PermissionRequiredMixin,
         feedback = form.save(commit=False)
         if obj.uid != feedback.target_uid:
             # Mismatch target_uid
-            return JsonResponse({'status': 2, 'reason': _('Illegal Input')})
+            return HttpResponseForbidden()
         feedback.user = self.request.user
         status = form.cleaned_data['status']
         if status == 'APPROVE':
@@ -119,9 +121,7 @@ class AdminReservationUpdate(AdminReservationBase, PermissionRequiredMixin,
                                    obj.activity_time_to,
                                    obj.site)
             if conflict:
-                return JsonResponse({'status': 3,
-                                     'reason': _('Conflict with existing '
-                                                 'reservation')})
+                return HttpResponseForbidden()
             obj.status = RESERVATION_APPROVED
         elif status == 'EDITTING':
             obj.status = RESERVATION_EDITTING
@@ -129,7 +129,5 @@ class AdminReservationUpdate(AdminReservationBase, PermissionRequiredMixin,
             obj.status = RESERVATION_TERMINATED
         obj.save()
         feedback.save()
-        return JsonResponse({'status': 0})
+        return HttpResponseRedirect(self.get_success_url())
 
-    def form_invalid(self, form):
-        return JsonResponse({'status': 1, 'reason': _('Illegal Input')})
