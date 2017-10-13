@@ -81,6 +81,7 @@ class Budget(models.Model):
     detail = models.CharField(verbose_name=_('Budget Detail'), max_length=50)
 
     class Meta:
+        ordering = ['id']
         verbose_name = _('Budget')
         verbose_name_plural = _('Budget')
         default_permissions = ('add', 'delete', 'update', 'view')

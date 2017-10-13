@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:09
-# Last modified: 2017-10-07 19:29
+# Last modified: 2017-10-12 12:12
 # Filename: forms.py
 # Description:
 from django import forms
@@ -84,10 +84,28 @@ class StudentRegisterForm(RegisterForm):
 
     def clean_student_id(self, *args, **kwargs):
         student_id = self.cleaned_data['student_id']
-        if not settings.DEBUG and student_id not in ALLOW_IDS:
+        if not settings.DEBUG and (settings.INVITED_REGISTRATION and
+                                   student_id not in ALLOW_IDS):
             raise forms.ValidationError(
                 _('Student ID not in the invited list'))
         return student_id
+
+
+class StudentUpdateForm(ModelForm):
+    name = forms.CharField(
+        label=_('First Name'),
+        widget=forms.TextInput())
+    phone = forms.CharField(
+        label=_('Phone'),
+        widget=forms.TextInput(),
+        min_length=11,
+        max_length=11)
+    email = forms.EmailField(
+        label=_('Email'))
+
+    class Meta:
+        model = StudentInfo
+        fields = ['name', 'email', 'phone', 'student_id', 'institute']
 
 
 class TeacherRegisterForm(RegisterForm):

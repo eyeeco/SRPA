@@ -24,7 +24,7 @@ from ProjectApproval import PROJECT_SOCIALFORM_REQUIRED
 from ProjectApproval import PROJECT_CANCELLED, PROJECT_END_SUBMITTED
 from ProjectApproval import PROJECT_STATUS_CAN_END_SUBMIT
 from ProjectApproval.forms import ActivityForm, SocialInvitationForm
-from ProjectApproval.models import Project
+from ProjectApproval.models import Project, Budget
 from const.models import Workshop, FeedBack
 from authentication.models import UserInfo
 from authentication import USER_IDENTITIES
@@ -103,6 +103,20 @@ class ProjectAdd(ProjectBase, PermissionRequiredMixin, CreateView):
         if has_social:
             form.instance.status = PROJECT_SOCIALFORM_REQUIRED
         self.object = form.save()
+        bids = [key.split('_')[1] for key in self.request.POST
+                if key.startswith('item')]
+        bids.sort()
+        for bid in bids:
+            item = self.request.POST.get('item_' + bid, None)
+            amount = self.request.POST.get('amount_' + bid, None)
+            detail = self.request.POST.get('detail_' + bid, None)
+            if not (item and amount):
+                return HttpResponseForbidden()
+            budget = Budget(item=item,
+                            amount=amount,
+                            detail=detail,
+                            project=self.object)
+            budget.save()
         assign_perms(self.info_name, self.request.user, self.object,
                      perms=['update', 'view'])
         assign_perms(self.info_name, self.object.workshop.group, self.object,
@@ -195,6 +209,23 @@ class ProjectUpdate(ProjectBase, PermissionRequiredMixin, UpdateView):
             if social_invitation:
                 social_invitation.delete()
         self.object = form.save()
+        project = Project.objects.get(uid=self.object.uid)
+        for oldbudget in project.budget_set.all():
+            oldbudget.delete()
+        bids = [key.split('_')[1] for key in self.request.POST
+                if key.startswith('item')]
+        bids.sort()
+        for bid in bids:
+            item = self.request.POST.get('item_' + bid, None)
+            amount = self.request.POST.get('amount_' + bid, None)
+            detail = self.request.POST.get('detail_' + bid, None)
+            if not (item and amount):
+                return HttpResponseForbidden()
+            budget = Budget(item=item,
+                            amount=amount,
+                            detail=detail,
+                            project=self.object)
+            budget.save()
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -266,3 +297,15 @@ class ProjectEnd(ProjectBase, PermissionRequiredMixin, UpdateView):
         self.object.status = PROJECT_END_SUBMITTED
         self.object.save()
         return HttpResponseRedirect(success_url)
+
+
+class ProjectGetBudgetRow(TemplateView):
+
+    template_name = 'ProjectApproval/budget.html'
+
+    def get(self, request, *args, **kwargs):
+        bid = self.request.GET.get('id')
+        context = self.get_context_data()
+        context['id'] = str(bid)
+        html = render_to_string(self.template_name, context=context)
+        return JsonResponse({'html': html})

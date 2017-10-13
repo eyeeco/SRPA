@@ -15,17 +15,9 @@ from django.utils.translation import ugettext
 
 from ProjectApproval.models import Project
 from ProjectApproval.models import SocialInvitation
-import re
 
 
 class ActivityForm(ModelForm):
-    budget = forms.CharField(
-        label=_('Budget Detail'),
-        widget=forms.Textarea(attrs={
-            "rows": 3,
-            "placeholder": ' '.join([ugettext('Budget Item'),
-                                     ugettext('Budget Amount'),
-                                     ugettext('Budget Description')])}))
     comment = forms.CharField(
         label=_('Comment'),
         widget=forms.Textarea(attrs={"rows": 3}))
@@ -49,30 +41,24 @@ class ActivityForm(ModelForm):
     has_social = forms.BooleanField(
         label=_('Has Social'),
         widget=forms.CheckboxInput(attrs={}), required=False)
+    contact_info = forms.CharField(
+        label=_('Contact Info'),
+        widget=forms.TextInput(),
+        min_length=11,
+        max_length=11)
 
     class Meta:
         model = Project
         fields = ['title', 'workshop', 'activity_time_from',
                   'activity_time_to', 'site', 'form', 'charger',
                   'contact_info', 'activity_range', 'amount', 'has_social',
-                  'budget', 'comment', 'attachment', 'content']
+                  'comment', 'attachment', 'content', 'contact_info']
 
     def clean(self):
         cleaned_data = super(ActivityForm, self).clean()
         errors = {}
         t1 = cleaned_data.get('activity_time_from')
         t2 = cleaned_data.get('activity_time_to')
-        budget = cleaned_data.get('budget')
-        budgets = [x.strip() for x in budget.split('\n')]
-        for y in budgets:
-            result = re.match(r'^(\S+?)\s(\d+?)\s(\S+?)$', y)
-            if not result:
-                err_msg = _('Please fill the form in specified format')
-                if 'budget' in errors:
-                    errors['budget'].append(err_msg)
-                else:
-                    errors['budget'] = [err_msg]
-                break
         if t2 <= t1:
             if 'activity_time_to' in errors:
                 errors['activity_time_to'].append(
