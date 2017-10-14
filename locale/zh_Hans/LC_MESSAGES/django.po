@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-14 09:54+0800\n"
+"POT-Creation-Date: 2017-10-14 10:22+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -421,6 +421,7 @@ msgstr "确认"
 
 #: ProjectApproval/templates/ProjectApproval/project_list.html:22
 #: SiteReservation/templates/SiteReservation/reservation_list.html:25
+#: authentication/templates/authentication/admin/site_list.html:19
 #: authentication/templates/authentication/admin/teacher_info_list.html:23
 #: authentication/templates/authentication/admin/workshop_list.html:20
 msgid "Action"
@@ -430,6 +431,7 @@ msgstr "操作"
 #: ProjectApproval/templates/ProjectApproval/project_list.html:37
 #: SiteReservation/templates/SiteReservation/reservation_list.html:37
 #: SiteReservation/templates/SiteReservation/reservation_list.html:39
+#: authentication/templates/authentication/admin/site_list.html:25
 #: authentication/templates/authentication/admin/teacher_info_list.html:33
 #: authentication/templates/authentication/admin/workshop_list.html:27
 msgid "Detail"
@@ -471,7 +473,7 @@ msgstr "欢迎"
 msgid "Profile"
 msgstr "个人信息"
 
-#: SRPA/templates/base/layout.html:43
+#: SRPA/templates/base/layout.html:44
 msgid "Update password"
 msgstr "修改密码"
 
@@ -719,21 +721,49 @@ msgid "New Teacher"
 msgstr "新的教师"
 
 #: authentication/templates/authentication/admin/layout.html:7
+#: authentication/templates/authentication/admin/site_add.html:8
+msgid "New Site"
+msgstr "新的场地"
+
+#: authentication/templates/authentication/admin/layout.html:8
 #: authentication/templates/authentication/admin/workshop_add.html:8
 msgid "New Workshop"
 msgstr "新的工社"
 
-#: authentication/templates/authentication/admin/layout.html:8
+#: authentication/templates/authentication/admin/layout.html:9
 #: authentication/templates/authentication/admin/teacher_info_list.html:7
 #: authentication/templates/authentication/admin/teacher_info_list.html:13
 msgid "Teachers List"
 msgstr "教师列表"
 
-#: authentication/templates/authentication/admin/layout.html:9
+#: authentication/templates/authentication/admin/layout.html:10
+#: authentication/templates/authentication/admin/site_list.html:7
+#: authentication/templates/authentication/admin/site_list.html:13
+msgid "Sites List"
+msgstr "场地列表"
+
+#: authentication/templates/authentication/admin/layout.html:11
 #: authentication/templates/authentication/admin/workshop_list.html:7
 #: authentication/templates/authentication/admin/workshop_list.html:13
 msgid "Workshops List"
 msgstr "工社列表"
+
+#: authentication/templates/authentication/admin/site_detail.html:7
+#: authentication/templates/authentication/admin/site_detail.html:13
+msgid "Site Info"
+msgstr "场地信息"
+
+#: authentication/templates/authentication/admin/site_detail.html:18
+#: authentication/templates/authentication/admin/site_list.html:18
+#: authentication/templates/authentication/admin/workshop_detail.html:18
+#: const/models.py:22
+msgid "Site Description"
+msgstr "场地"
+
+#: authentication/templates/authentication/admin/site_detail.html:25
+#: authentication/templates/authentication/admin/site_update.html:8
+msgid "Update Site"
+msgstr "更新场地"
 
 #: authentication/templates/authentication/admin/teacher_info_detail.html:32
 #: authentication/templates/authentication/student_info_detail.html:28
@@ -749,11 +779,6 @@ msgstr "更新教师信息"
 #: authentication/templates/authentication/admin/workshop_detail.html:13
 msgid "Workshop Info"
 msgstr "工社信息"
-
-#: authentication/templates/authentication/admin/workshop_detail.html:18
-#: const/models.py:22
-msgid "Site Description"
-msgstr "场地"
 
 #: authentication/templates/authentication/admin/workshop_detail.html:37
 #: authentication/templates/authentication/admin/workshop_update.html:8

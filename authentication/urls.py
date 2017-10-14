@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-07 09:10
-# Last modified: 2017-10-07 14:56
+# Last modified: 2017-10-14 10:21
 # Filename: urls.py
 # Description:
 from django.conf.urls import url, include
@@ -40,6 +40,17 @@ admin_workshop_patterns = [
         name='list'),
 ]
 
+admin_site_patterns = [
+    url(r'^add/', views.AdminSiteAdd.as_view(), name='add'),
+    url(r'^update/(?P<uid>.+)$', views.AdminSiteUpdate.as_view(),
+        name='update'),
+    url(r'^detail/(?P<uid>.+)$', views.AdminSiteDetail.as_view(),
+        name='detail'),
+    url(r'^list/(?P<page>\d+)$', views.AdminSiteList.as_view(),
+        name='list'),
+]
+
+
 admin_teacher_patterns = [
     url(r'^add/', views.AdminTeacherAdd.as_view(), name='add'),
     url(r'^update/(?P<uid>.+)$', views.AdminTeacherUpdate.as_view(),
@@ -53,6 +64,7 @@ admin_teacher_patterns = [
 admin_patterns = [
     url(r'^$', views.AdminIndex.as_view(), name='index'),
     url(r'^workshop/', include(admin_workshop_patterns, namespace='workshop')),
+    url(r'^site/', include(admin_site_patterns, namespace='site')),
     url(r'^teacher/', include(admin_teacher_patterns, namespace='teacher')),
 ]
 

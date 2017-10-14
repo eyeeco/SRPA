@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-08 20:15
-# Last modified: 2017-10-07 14:56
+# Last modified: 2017-10-14 10:18
 # Filename: __init__.py
 # Description:
 from .auth import IndexView, LoginView, CaptchaRefresh
@@ -14,6 +14,8 @@ from .admin import AdminIndex, AdminWorkshopAdd, AdminWorkshopUpdate
 from .admin import AdminWorkshopDetail, AdminTeacherAdd
 from .admin import AdminTeacherUpdate, AdminTeacherDetail
 from .admin import AdminTeacherList, AdminWorkshopList
+from .admin import AdminSiteAdd, AdminSiteUpdate, AdminSiteDetail
+from .admin import AdminSiteList
 
 __all__ = [
     'IndexView', 'LoginView', 'CaptchaRefresh',
@@ -24,5 +26,7 @@ __all__ = [
     'AdminWorkshopUpdate', 'AdminWorkshopDetail',
     'AdminTeacherAdd', 'AdminTeacherUpdate',
     'AdminTeacherDetail', 'AdminTeacherList',
-    'AdminWorkshopList',
+    'AdminWorkshopList', 'AdminSiteAdd',
+    'AdminSiteUpdate', 'AdminSiteDetail',
+    'AdminSiteList',
 ]
