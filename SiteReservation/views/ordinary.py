@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:03
-# Last modified: 2017-10-05 10:17
+# Last modified: 2017-10-14 10:43
 # Filename: ordinary.py
 # Description:
 from uuid import UUID
@@ -58,23 +58,12 @@ class ReservationStatus(FormView):
     template_name = 'SiteReservation/reservation_status.html'
     form_class = DateForm
 
-    def get_context_data(self, **kwargs):
-        kwargs['sites'] = Site.objects.all().order_by('desc')
-        return super(ReservationStatus, self).get_context_data(**kwargs)
-
     def form_valid(self, form):
-        uid = self.request.POST.get('site_uid', None)
+        site = form.cleaned_data['site']
         date = form.cleaned_data['date']
         start_dt = datetime.combine(date, datetime.min.time())
         start_dt = start_dt.replace(tzinfo=timezone.utc)
         end_dt = start_dt + timedelta(days=1)
-        if not uid:
-            raise Http404()
-        try:
-            uid = UUID(uid)
-        except ValueError:
-            return HttpResponseForbidden()
-        site = get_object_or_404(Site, uid=uid)
         reservations = Reservation.objects.filter(site=site)
         reservations = reservations.filter(status=RESERVATION_APPROVED)
         reservations = reservations.filter(
@@ -85,17 +74,12 @@ class ReservationStatus(FormView):
             for hour in range(r.activity_time_from.hour,
                               r.activity_time_to.hour):
                 available_status[hour] = False
-        site_option = Site.objects.all().order_by('desc')
         return render(
             self.request, self.template_name,
             context={'available_status': available_status,
-                     'date_option': date,
+                     'date': date,
                      'site': site,
-                     'sites': site_option,
-                     'form': self.form_class})
-
-    def form_invalid(self, form):
-        return super().form_invalid(form)
+                     'form': form})
 
 
 class ReservationList(ReservationBase, PermissionListMixin, ListView):
@@ -104,7 +88,7 @@ class ReservationList(ReservationBase, PermissionListMixin, ListView):
     """
     permission_required = 'view_reservation'
     paginate_by = 10
-    ordering = ['status', '-reservation_time']
+    ordering = ['-status', 'reservation_time']
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)

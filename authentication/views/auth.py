@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-08 20:07
-# Last modified: 2017-10-12 10:14
+# Last modified: 2017-10-14 10:06
 # Filename: auth.py
 # Description:
 import json
@@ -70,6 +70,7 @@ class StudentRegisterView(CreateView):
     identity = USER_IDENTITY_STUDENT
     form_post_url = reverse_lazy('auth:register:index')
     info_name = 'studentinfo'
+    success_url = reverse_lazy('index')
 
     def form_valid(self, form):
         username = form.cleaned_data['username']

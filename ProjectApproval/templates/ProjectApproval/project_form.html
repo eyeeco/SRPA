@@ -109,8 +109,8 @@
     <div class="col-sm-3">
         <label class="control-label">{{form.has_social.label}}:</label>
     </div>
-    <div class="col-sm-1">
-        {{form.has_social|addcls:'form-control'}}
+    <div class="col-sm-1 checkbox">
+        {{form.has_social}}
     </div>
     {% if form.has_social.errors %}
         <p class="text-danger">{{form.has_social.errors.as_text}}</p>
@@ -169,7 +169,7 @@
 {% endfor %}
 {% endif %}
 <div>
-    <button type="submit" class="btn btn-primary btn-md">{% trans 'Submit' %}</button>
-    <a href="javascript:history.go(-1)" class="btn btn-primary btn-md">{% trans 'Back' %}</a> 
+    <button type="submit" class="btn btn-info btn-md">{% trans 'Submit' %}</button>
+    <a href="javascript:history.go(-1)" class="btn btn-default btn-md">{% trans 'Back' %}</a> 
 </div>
 </form>

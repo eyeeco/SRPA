@@ -13,21 +13,21 @@
 {% block project_content %}
 <table class="table"> 
     <tr>
-        <th>{% trans 'Workshop' %}</th>
         <th>{% trans 'Project Title' %}</th>
+        <th>{% trans 'Workshop' %}</th>
         <th>{% trans 'Activity Time From' %}</th>
         <th>{% trans 'Activity Time To' %}</th>
-        <th>{% trans 'Person in Charge' %}</th>
-        <th>{% trans 'Project Status' %}</th>
+        <th>{% trans 'Apply Time' %}</th>
+        <th>{% trans 'Status' %}</th>
         <th>{% trans 'Action' %}</th>
     </tr>
     {% for sheet in object_list %}
     <tr>
-        <td>{{sheet.workshop}}</td>
         <td>{{sheet.title}}</td>
+        <td>{{sheet.workshop}}</td>
         <td>{{sheet.activity_time_from}}</td>
         <td>{{sheet.activity_time_to}}</td>
-        <td>{{sheet.charger}}</td>
+        <td>{{sheet.apply_time}}</td>
         <td>{{sheet.get_status_display}}</td>
         <td>
             {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}

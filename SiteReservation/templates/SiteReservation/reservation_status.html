@@ -1,5 +1,4 @@
 {% extends 'SiteReservation/base.html' %}
-{% load static %}
 {% load i18n %}
 
 {% block container %}
@@ -30,12 +29,13 @@
                     {% endif %}
                 </div>
                 <div class="form-group col-sm-3">
-                        <label for="id_site">{% trans 'Select Site' %}</label>
-                        <select class="form-control" id="id_site" placeholder="" name="site_uid">
-                            {% for site in sites %}
-                            <option value="{{site.uid}}">{{site.desc}}</option>
-                            {% endfor %}
-                        </select>
+                    <label for="id_site">{% trans 'Select Site' %}</label>
+                    <div class="input-append input-group">
+                            {{form.site}}
+                    </div>
+                    {% if form.site.errors %}
+                    <p class="text-danger">{{form.site.errors.as_text}}</p>
+                    {% endif %}
                 </div>
                 <button type="submit" class="btn btn-default">{% trans 'Retrieve' %}</button>
             </form>
@@ -62,7 +62,7 @@
                         <th>21-22</th>
                     </tr>
                     <tr>
-                    <td>{{date_option}}</td>
+                    <td>{{date}}</td>
                         {% for status in available_status %}
                         {% if status %}
                         <td class='available'>{% trans 'Available' %}</td>

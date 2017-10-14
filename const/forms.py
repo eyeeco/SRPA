@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-21 16:23
-# Last modified: 2017-09-21 18:31
+# Last modified: 2017-10-14 10:33
 # Filename: forms.py
 # Description:
 from django.forms import ModelForm
@@ -25,7 +25,8 @@ class FeedBackForm(ModelForm):
     desc = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={
-            'class': 'form-control'}))
+            'class': 'form-control',
+            'placeholder': _('(Optional)Feedback Description')}))
 
     class Meta:
         model = FeedBack

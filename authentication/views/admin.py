@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-10-06 14:12
-# Last modified: 2017-10-12 11:04
+# Last modified: 2017-10-14 10:28
 # Filename: admin.py
 # Description:
 from django.views.generic import TemplateView, CreateView, UpdateView
@@ -13,7 +13,7 @@ from django.contrib.auth.models import User, Group
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 
-from const.models import Workshop
+from const.models import Workshop, Site
 from authentication import USER_IDENTITY_TEACHER
 from authentication.forms import TeacherRegisterForm, TeacherUpdateForm
 from authentication.forms import WorkshopUpdateForm
@@ -39,6 +39,7 @@ class AdminTeacherAdd(AdminBase, CreateView):
     identity = USER_IDENTITY_TEACHER
     form_post_url = reverse_lazy('auth:admin:teacher:add')
     info_name = 'teacherinfo'
+    success_url = reverse_lazy('auth:admin:teacher:list', args=(1,))
 
     def form_valid(self, form):
         username = form.cleaned_data['username']
@@ -82,6 +83,10 @@ class AdminTeacherUpdate(AdminBase, UpdateView):
         kwargs['email'] = self.object.user_info.user.email
         return kwargs
 
+    def get_success_url(self):
+        return reverse_lazy('auth:admin:teacher:detail',
+                            args=(self.object.uid,))
+
     def form_valid(self, form):
         self.object = form.save()
         cleaned_data = form.cleaned_data
@@ -113,6 +118,7 @@ class AdminWorkshopAdd(AdminBase, CreateView):
     template_name = 'authentication/admin/workshop_add.html'
     fields = ['desc']
     form_post_url = reverse_lazy('auth:admin:workshop:add')
+    success_url = reverse_lazy('auth:admin:workshop:list', args=(1,))
 
     def get_context_data(self, **kwargs):
         kwargs['back_url'] = reverse_lazy('auth:admin:workshop:list',
@@ -174,5 +180,49 @@ class AdminWorkshopDetail(AdminBase, DetailView):
 class AdminWorkshopList(AdminBase, ListView):
     model = Workshop
     template_name = 'authentication/admin/workshop_list.html'
+    paginate_by = 10
+    ordering = 'desc'
+
+
+class AdminSiteAdd(AdminBase, CreateView):
+    model = Site
+    template_name = 'authentication/admin/site_add.html'
+    fields = ['desc']
+    form_post_url = reverse_lazy('auth:admin:site:add')
+    success_url = reverse_lazy('auth:admin:site:list', args=(1,))
+
+    def get_context_data(self, **kwargs):
+        kwargs['back_url'] = reverse_lazy('auth:admin:site:list',
+                                          args=(1,))
+        return super(AdminSiteAdd, self).get_context_data(**kwargs)
+
+
+class AdminSiteUpdate(AdminBase, UpdateView):
+    model = Site
+    fields = ['desc']
+    template_name = 'authentication/admin/site_update.html'
+    slug_field = 'uid'
+    slug_url_kwarg = 'uid'
+
+    def get_success_url(self):
+        return reverse_lazy('auth:admin:site:detail',
+                            args=(self.object.uid,))
+
+    def get_context_data(self, **kwargs):
+        kwargs['back_url'] = reverse_lazy('auth:admin:site:detail',
+                                          args=(self.object.uid,))
+        return super(AdminSiteUpdate, self).get_context_data(**kwargs)
+
+
+class AdminSiteDetail(AdminBase, DetailView):
+    model = Site
+    template_name = 'authentication/admin/site_detail.html'
+    slug_field = 'uid'
+    slug_url_kwarg = 'uid'
+
+
+class AdminSiteList(AdminBase, ListView):
+    model = Site
+    template_name = 'authentication/admin/site_list.html'
     paginate_by = 10
     ordering = 'desc'

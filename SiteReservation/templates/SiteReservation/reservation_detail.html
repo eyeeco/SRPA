@@ -120,10 +120,12 @@
         {% if object.status == RESERVATION_APPROVED %}
         <a type="button" class="btn btn-info" href="{% url 'reservation:ordinary:export' object.uid %}">{% trans 'Export' %}</a>
         {% endif %}
+        <a href="{% url 'reservation:ordinary:list' page=1 %}" class="btn btn-default btn-md ">{% trans 'Back' %}</a>
         {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
         {% if object.status in RESERVATION_STATUS_CAN_CHECK %}
         <a type="button" class="btn btn-info" href="#" data-toggle="modal" data-target="#modal_form">{% trans 'Audit' %}</a>
         {% endif %}
+        <a href="{% url 'reservation:admin:list' page=1 %}" class="btn btn-default btn-md ">{% trans 'Back' %}</a>
         {% endif %}
     </div>
     {% if request.user.user_info.identity == USER_IDENTITY_TEACHER %}

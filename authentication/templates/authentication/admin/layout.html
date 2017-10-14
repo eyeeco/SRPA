@@ -4,8 +4,10 @@
 {% block navigation %}
 <ul class="nav navbar-nav">
     <li><a href="{% url 'auth:admin:teacher:add' %}">{% trans 'New Teacher' %}</a></li>
+    <li><a href="{% url 'auth:admin:site:add' %}">{% trans 'New Site' %}</a></li>
     <li><a href="{% url 'auth:admin:workshop:add' %}">{% trans 'New Workshop' %}</a></li>
     <li><a href="{% url 'auth:admin:teacher:list' 1 %}">{% trans 'Teachers List' %}</a></li>
+    <li><a href="{% url 'auth:admin:site:list' 1 %}">{% trans 'Sites List' %}</a></li>
     <li><a href="{% url 'auth:admin:workshop:list' 1 %}">{% trans 'Workshops List' %}</a></li>
 </ul>
 {% endblock %}

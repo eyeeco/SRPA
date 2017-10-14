@@ -9,5 +9,7 @@ echo "Collecting static files"
 python manage.py collectstatic -c --noinput
 echo "Migrating databases"
 python manage.py migrate
+echo "Compile messages"
+python manage.py compilemessages
 echo "Starting uwsgi"
 uwsgi --ini web/SRPA_uwsgi.ini

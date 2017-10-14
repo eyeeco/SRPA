@@ -1,0 +1,29 @@
+{% extends "authentication/admin/layout.html" %}
+{% load static %}
+{% load filters %}
+{% load i18n %}
+
+{% block web_title %}
+{{block.super}} - {% trans 'Site Info' %}
+{% endblock %}
+
+{% block container %}
+<div class="col-lg-4 col-lg-offset-4 col-xs-10 col-xs-offset-1 srpa-background">
+    <div class="col-sm-6 col-sm-offset-3">
+        <h1>{% trans 'Site Info' %}</h1>
+    </div>
+    <div class="col-sm-12">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-6 col-xs-6 control-label">{% trans 'Site Description' %}:</label>
+                <div class="col-sm-6 col-xs-6">
+                    <p class="form-control-static">{{object.desc}}</p>
+                </div>
+            </div>
+        </form>
+        <div class="col-sm-6 col-sm-offset-3">
+            <a type="button" class="btn btn-info btn-block" href="{% url 'auth:admin:site:update' object.uid %}">{% trans 'Update Site' %}</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
