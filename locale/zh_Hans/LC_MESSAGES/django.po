@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-13 20:11+0800\n"
+"POT-Creation-Date: 2017-10-14 09:54+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -129,7 +129,7 @@ msgstr "其他"
 #: ProjectApproval/forms.py:22 ProjectApproval/models.py:49
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:172
 #: SiteReservation/models.py:37
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:88
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:87
 msgid "Comment"
 msgstr "备注"
 
@@ -140,18 +140,18 @@ msgstr "活动内容"
 #: ProjectApproval/forms.py:28 ProjectApproval/models.py:34
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:104
 #: ProjectApproval/templates/ProjectApproval/project_list.html:18
-#: SiteReservation/forms.py:44 SiteReservation/models.py:32
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:64
-#: SiteReservation/templates/SiteReservation/reservation_list.html:22
+#: SiteReservation/forms.py:50 SiteReservation/models.py:32
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:63
+#: SiteReservation/templates/SiteReservation/reservation_list.html:21
 msgid "Activity Time From"
 msgstr "活动开始时间"
 
 #: ProjectApproval/forms.py:35 ProjectApproval/models.py:36
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:112
 #: ProjectApproval/templates/ProjectApproval/project_list.html:19
-#: SiteReservation/forms.py:49 SiteReservation/models.py:34
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:70
-#: SiteReservation/templates/SiteReservation/reservation_list.html:23
+#: SiteReservation/forms.py:55 SiteReservation/models.py:34
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:69
+#: SiteReservation/templates/SiteReservation/reservation_list.html:22
 msgid "Activity Time To"
 msgstr "活动结束时间"
 
@@ -167,7 +167,7 @@ msgid "Contact Info"
 msgstr "联系方式"
 
 #: ProjectApproval/forms.py:65 ProjectApproval/forms.py:69
-#: SiteReservation/forms.py:76 SiteReservation/forms.py:80
+#: SiteReservation/forms.py:82 SiteReservation/forms.py:86
 msgid "Activity Time To should be later than Activity Time From"
 msgstr "活动结束时间应晚于活动开始时间"
 
@@ -192,8 +192,8 @@ msgstr "用户"
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:87
 #: ProjectApproval/templates/ProjectApproval/project_list.html:16
 #: SiteReservation/models.py:24
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:26
-#: SiteReservation/templates/SiteReservation/reservation_list.html:21
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:25
+#: SiteReservation/templates/SiteReservation/reservation_list.html:20
 #: const/models.py:41 const/models.py:42
 msgid "Workshop"
 msgstr "工社"
@@ -211,9 +211,9 @@ msgstr "申请时间"
 
 #: ProjectApproval/models.py:37
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:95
-#: SiteReservation/models.py:22
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:20
-#: SiteReservation/templates/SiteReservation/reservation_list.html:20
+#: SiteReservation/forms.py:29 SiteReservation/models.py:22
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:19
+#: SiteReservation/templates/SiteReservation/reservation_list.html:19
 #: const/models.py:25 const/models.py:26
 msgid "Site"
 msgstr "场地"
@@ -309,8 +309,8 @@ msgstr "工社活动"
 #: ProjectApproval/templates/ProjectApproval/project_add_social.html:47
 #: ProjectApproval/templates/ProjectApproval/project_end.html:19
 #: ProjectApproval/templates/ProjectApproval/project_form.html:172
-#: SiteReservation/templates/SiteReservation/reservation_add.html:90
-#: SiteReservation/templates/SiteReservation/reservation_update.html:89
+#: SiteReservation/templates/SiteReservation/reservation_add.html:88
+#: SiteReservation/templates/SiteReservation/reservation_update.html:88
 #: authentication/templates/authentication/info_form.html:19
 #: authentication/templates/authentication/password_change_form.html:36
 msgid "Submit"
@@ -321,32 +321,30 @@ msgstr "提交"
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:246
 #: ProjectApproval/templates/ProjectApproval/project_end.html:20
 #: ProjectApproval/templates/ProjectApproval/project_form.html:173
-#: SiteReservation/templates/SiteReservation/reservation_add.html:91
-#: SiteReservation/templates/SiteReservation/reservation_update.html:90
+#: SiteReservation/templates/SiteReservation/reservation_add.html:89
+#: SiteReservation/templates/SiteReservation/reservation_update.html:89
 #: authentication/templates/authentication/info_form.html:20
 msgid "Back"
 msgstr "返回"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:53
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:33
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:32
 msgid "Student Name"
 msgstr "学生姓名"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:61
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:39
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:38
 #: authentication/models.py:43
 #: authentication/templates/authentication/student_info_detail.html:15
 msgid "Student ID"
 msgstr "学号"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:69
-#, fuzzy
-#| msgid "Institute"
 msgid "Student Institute"
-msgstr "学院"
+msgstr "学生学院"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:77
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:51
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:50
 msgid "Student Phone"
 msgstr "学生电话"
 
@@ -364,7 +362,7 @@ msgstr "预算描述"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:182
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:257
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:137
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:136
 #: const/models.py:56
 msgid "Audit Opinion"
 msgstr "审核意见"
@@ -379,7 +377,7 @@ msgid "Project Status"
 msgstr "活动状态"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:223
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:116
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:115
 msgid "Update"
 msgstr "修改"
 
@@ -389,8 +387,8 @@ msgstr "确定取消该活动申请吗"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:226
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:266
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:119
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:146
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:118
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:145
 msgid "Cancel"
 msgstr "取消"
 
@@ -399,7 +397,7 @@ msgid "Fill Additional Form"
 msgstr "填写附加表单"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:232
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:122
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:121
 msgid "Export"
 msgstr "导出"
 
@@ -408,7 +406,7 @@ msgid "Project End"
 msgstr "活动结题"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:241
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:126
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:125
 msgid "Audit"
 msgstr "审核"
 
@@ -417,12 +415,12 @@ msgid "Ended Audit"
 msgstr "结题审核"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:267
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:147
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:146
 msgid "Confirm"
 msgstr "确认"
 
 #: ProjectApproval/templates/ProjectApproval/project_list.html:22
-#: SiteReservation/templates/SiteReservation/reservation_list.html:26
+#: SiteReservation/templates/SiteReservation/reservation_list.html:25
 #: authentication/templates/authentication/admin/teacher_info_list.html:23
 #: authentication/templates/authentication/admin/workshop_list.html:20
 msgid "Action"
@@ -430,8 +428,8 @@ msgstr "操作"
 
 #: ProjectApproval/templates/ProjectApproval/project_list.html:34
 #: ProjectApproval/templates/ProjectApproval/project_list.html:37
-#: SiteReservation/templates/SiteReservation/reservation_list.html:38
-#: SiteReservation/templates/SiteReservation/reservation_list.html:40
+#: SiteReservation/templates/SiteReservation/reservation_list.html:37
+#: SiteReservation/templates/SiteReservation/reservation_list.html:39
 #: authentication/templates/authentication/admin/teacher_info_list.html:33
 #: authentication/templates/authentication/admin/workshop_list.html:27
 msgid "Detail"
@@ -459,8 +457,8 @@ msgstr "主页"
 #: SiteReservation/templates/SiteReservation/reservation_add.html:7
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:7
 #: SiteReservation/templates/SiteReservation/reservation_list.html:7
-#: SiteReservation/templates/SiteReservation/reservation_status.html:7
-#: SiteReservation/templates/SiteReservation/reservation_update.html:7
+#: SiteReservation/templates/SiteReservation/reservation_status.html:6
+#: SiteReservation/templates/SiteReservation/reservation_update.html:8
 msgid "Site Reservation"
 msgstr "场地预约"
 
@@ -519,31 +517,35 @@ msgstr "预约已终止"
 msgid "Date"
 msgstr "日期"
 
-#: SiteReservation/forms.py:67 SiteReservation/forms.py:71
+#: SiteReservation/forms.py:41
+msgid "Please choose a future time"
+msgstr "请选择一个未来时间"
+
+#: SiteReservation/forms.py:73 SiteReservation/forms.py:77
 msgid "Activity time should between 8 am and 10 pm"
 msgstr "活动时间应在上午8点与晚上10点之间"
 
-#: SiteReservation/forms.py:86 SiteReservation/forms.py:90
+#: SiteReservation/forms.py:92 SiteReservation/forms.py:96
 msgid "Reservation can not be longer than 4 hours"
 msgstr "预约时间不能超过4小时"
 
-#: SiteReservation/forms.py:96 SiteReservation/forms.py:99
+#: SiteReservation/forms.py:102 SiteReservation/forms.py:105
 msgid "Can only reserve later than two days after now"
 msgstr "只能预约两天以后的时间段"
 
-#: SiteReservation/forms.py:104 SiteReservation/forms.py:107
+#: SiteReservation/forms.py:110 SiteReservation/forms.py:113
 msgid "Can only reserve within a day"
 msgstr "只能预约同一天的时间段"
 
 #: SiteReservation/models.py:26
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:82
-#: SiteReservation/templates/SiteReservation/reservation_list.html:25
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:81
+#: SiteReservation/templates/SiteReservation/reservation_list.html:24
 msgid "Status"
 msgstr "状态"
 
 #: SiteReservation/models.py:36
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:76
-#: SiteReservation/templates/SiteReservation/reservation_list.html:24
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:75
+#: SiteReservation/templates/SiteReservation/reservation_list.html:23
 msgid "Reservation Time"
 msgstr "预约时间"
 
@@ -551,9 +553,9 @@ msgstr "预约时间"
 #: SiteReservation/templates/SiteReservation/reservation_add.html:9
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:9
 #: SiteReservation/templates/SiteReservation/reservation_list.html:9
-#: SiteReservation/templates/SiteReservation/reservation_status.html:9
+#: SiteReservation/templates/SiteReservation/reservation_status.html:8
 #: SiteReservation/templates/SiteReservation/reservation_status.html:44
-#: SiteReservation/templates/SiteReservation/reservation_update.html:9
+#: SiteReservation/templates/SiteReservation/reservation_update.html:10
 #: SiteReservation/templates/SiteReservation/status_table.html:2
 msgid "Reservation Status"
 msgstr "场地预约情况"
@@ -562,8 +564,8 @@ msgstr "场地预约情况"
 #: SiteReservation/templates/SiteReservation/reservation_add.html:11
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:11
 #: SiteReservation/templates/SiteReservation/reservation_list.html:11
-#: SiteReservation/templates/SiteReservation/reservation_status.html:11
-#: SiteReservation/templates/SiteReservation/reservation_update.html:11
+#: SiteReservation/templates/SiteReservation/reservation_status.html:10
+#: SiteReservation/templates/SiteReservation/reservation_update.html:12
 msgid "My Reservations"
 msgstr "我的预约"
 
@@ -571,8 +573,8 @@ msgstr "我的预约"
 #: SiteReservation/templates/SiteReservation/reservation_add.html:12
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:12
 #: SiteReservation/templates/SiteReservation/reservation_list.html:12
-#: SiteReservation/templates/SiteReservation/reservation_status.html:12
-#: SiteReservation/templates/SiteReservation/reservation_update.html:12
+#: SiteReservation/templates/SiteReservation/reservation_status.html:11
+#: SiteReservation/templates/SiteReservation/reservation_update.html:13
 msgid "New Reservation"
 msgstr "新的预约"
 
@@ -580,38 +582,38 @@ msgstr "新的预约"
 #: SiteReservation/templates/SiteReservation/reservation_add.html:14
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:14
 #: SiteReservation/templates/SiteReservation/reservation_list.html:14
-#: SiteReservation/templates/SiteReservation/reservation_status.html:14
-#: SiteReservation/templates/SiteReservation/reservation_update.html:14
+#: SiteReservation/templates/SiteReservation/reservation_status.html:13
+#: SiteReservation/templates/SiteReservation/reservation_update.html:15
 msgid "Workshop Reservations"
 msgstr "工社预约"
 
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:45
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:44
 #: authentication/models.py:44
 #: authentication/templates/authentication/student_info_detail.html:21
 msgid "Institute"
 msgstr "学院"
 
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:58
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:57
 msgid "Activity Title"
 msgstr "活动内容"
 
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:95
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:94
 msgid "Feedback"
 msgstr "审核意见"
 
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:119
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:118
 msgid "Are you sure you want to cancel the reservation"
 msgstr "确定取消该预约吗"
 
-#: SiteReservation/templates/SiteReservation/reservation_status.html:21
+#: SiteReservation/templates/SiteReservation/reservation_status.html:20
 msgid "Please select the date you want to check"
 msgstr "请选择欲查询日期"
 
-#: SiteReservation/templates/SiteReservation/reservation_status.html:22
+#: SiteReservation/templates/SiteReservation/reservation_status.html:21
 msgid "Select Date"
 msgstr "选择日期"
 
-#: SiteReservation/templates/SiteReservation/reservation_status.html:33
+#: SiteReservation/templates/SiteReservation/reservation_status.html:32
 msgid "Select Site"
 msgstr "选择场地"
 
@@ -855,32 +857,3 @@ msgstr "审核意见"
 #, python-brace-format
 msgid "Audit Feedback on {target} by {user}"
 msgstr "{user} 对 {target} 的审阅意见"
-
-#, fuzzy
-#~| msgid "Student ID"
-#~ msgid "Student Id"
-#~ msgstr "学号"
-
-#~ msgid "Illegal Input"
-#~ msgstr "无效输入"
-
-#~ msgid "Conflict with existing reservation"
-#~ msgstr "与已存在的预约信息冲突"
-
-#~ msgid "Please choose a future time"
-#~ msgstr "请选择一个未来时间"
-
-#~ msgid "Wrong form data, Please check again"
-#~ msgstr "表达信息有误，请再次核对"
-
-#~ msgid "Please fill the form in specified format"
-#~ msgstr "请按照指定格式填写"
-
-#~ msgid "Please fill the form in format"
-#~ msgstr "请按照格式填写"
-
-#~ msgid "Budget Comment"
-#~ msgstr "预算备注"
-
-#~ msgid "More than 4 reservations have been added"
-#~ msgstr "不能同时预约四个以上时间段"

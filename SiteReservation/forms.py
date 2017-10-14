@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-14 14:39
-# Last modified: 2017-10-04 15:02
+# Last modified: 2017-10-14 09:09
 # Filename: forms.py
 # Description:
 from django import forms
@@ -13,7 +13,7 @@ from django.forms.extras.widgets import SelectDateWidget
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime, timedelta, timezone
 
-from const.models import CaptchaField
+from const.models import CaptchaField, Site
 from SiteReservation.models import Reservation
 from SiteReservation import RESERVATION_APPROVED
 from django.db.models import Q
@@ -25,6 +25,12 @@ class DateForm(forms.Form):
         widget=forms.TextInput(attrs={
             'readonly': 'true',
             'class': 'form-control'}))
+    site = forms.ModelChoiceField(
+        label=_('Site'),
+        queryset=Site.objects.all().order_by('desc'),
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            }))
 
     def clean(self):
         cleaned_data = super(DateForm, self).clean()
@@ -32,7 +38,7 @@ class DateForm(forms.Form):
         t = cleaned_data.get('date')
 
         if t is not None and t < datetime.now().date():
-            errors['date'] = [('Please choose a future time')]
+            errors['date'] = [_('Please choose a future time')]
 
         if errors:
             raise forms.ValidationError(errors)
@@ -60,7 +66,7 @@ class ReservationForm(ModelForm):
         cleaned_data = super(ReservationForm, self).clean()
         errors = {}
         t1 = cleaned_data.get('activity_time_from')
-        t2 = cleaned_data.get('activity_time_to')
+        t2 = cleanmd_data.get('activity_time_to')
 
         if t1.hour < 8 or t1.hour > 22:
             errors['activity_time_from'] = [
