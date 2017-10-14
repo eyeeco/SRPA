@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:03
-# Last modified: 2017-10-05 10:17
+# Last modified: 2017-10-14 10:43
 # Filename: ordinary.py
 # Description:
 from uuid import UUID
@@ -88,7 +88,7 @@ class ReservationList(ReservationBase, PermissionListMixin, ListView):
     """
     permission_required = 'view_reservation'
     paginate_by = 10
-    ordering = ['status', '-reservation_time']
+    ordering = ['-status', 'reservation_time']
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)

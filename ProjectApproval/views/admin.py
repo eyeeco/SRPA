@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:17
-# Last modified: 2017-10-04 15:46
+# Last modified: 2017-10-14 10:48
 # Filename: admin.py
 # Description:
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -42,7 +42,7 @@ class AdminProjectList(AdminProBase, PermissionListMixin, ListView):
     """
     model = Project
     paginate_by = 12
-    ordering = ['status', '-apply_time']
+    ordering = ['-status', 'apply_time']
     raise_exception = True
     permission_required = 'view_project'
 

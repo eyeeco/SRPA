@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:03
-# Last modified: 2017-10-04 15:11
+# Last modified: 2017-10-14 10:43
 # Filename: admin.py
 # Description:
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -51,7 +51,7 @@ class AdminReservationList(AdminReservationBase, PermissionListMixin,
     """
     paginate_by = 12
     permission_required = 'view_reservation'
-    ordering = ['status', '-reservation_time']
+    ordering = ['-status', 'reservation_time']
     template = 'SiteReservation/reservation_list.html'
 
     def get_queryset(self):

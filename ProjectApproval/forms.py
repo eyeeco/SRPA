@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-10-04 13:38
-# Last modified: 2017-10-04 15:51
+# Last modified: 2017-10-14 10:48
 # Filename: forms.py
 # Description:
 from django import forms
@@ -29,15 +29,13 @@ class ActivityForm(ModelForm):
         input_formats=['%Y-%m-%d %H:00:00'],
         widget=forms.DateTimeInput(
             attrs={'class': 'form_datetime_hour form-control'},
-            format='%Y-%m-%d %H:00:00'),
-        required=False)
+            format='%Y-%m-%d %H:00:00'))
     activity_time_to = forms.DateTimeField(
         label=_('Activity Time To'),
         input_formats=['%Y-%m-%d %H:00:00'],
         widget=forms.DateTimeInput(
             attrs={'class': 'form_datetime_hour form-control'},
-            format='%Y-%m-%d %H:00:00'),
-        required=False)
+            format='%Y-%m-%d %H:00:00'))
     has_social = forms.BooleanField(
         label=_('Has Social'),
         widget=forms.CheckboxInput(attrs={}), required=False)

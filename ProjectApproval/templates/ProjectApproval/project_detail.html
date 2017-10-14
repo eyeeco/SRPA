@@ -220,19 +220,19 @@
 <div class="col-sm-6 col-sm-offset-3">
     {% if request.user.user_info.identity == USER_IDENTITY_STUDENT%}
     {% if object.status in PROJECT_STATUS_CAN_EDIT %}
-    <a type="button" class="btn btn-primary" href="{% url 'project:ordinary:update' object.uid %}">{% trans 'Update' %}</a>
-    {% endif %}
-    {% if object.status in PROJECT_STATUS_CAN_CANCEL %}
-    <a type="button" class="btn btn-danger" href="{% url 'project:ordinary:cancel' object.uid %}" onclick="if(confirm('{% trans 'Are you sure you want to cancel the application apply' %}?')==false)return false;">{% trans 'Cancel' %}</a>
+    <a type="button" class="btn btn-info" href="{% url 'project:ordinary:update' object.uid %}">{% trans 'Update' %}</a>
     {% endif %}
     {% if object.status == PROJECT_SOCIALFORM_REQUIRED %}
-    <a type="button" class="btn btn-primary" href="{% url 'project:ordinary:social_add' object.uid %}">{% trans 'Fill Additional Form' %}</a>
+    <a type="button" class="btn btn-info" href="{% url 'project:ordinary:social_add' object.uid %}">{% trans 'Fill Additional Form' %}</a>
     {% endif %}
     {% if object.status in PROJECT_STATUS_CAN_EXPORT %}
     <a type="button" class="btn btn-info btn-md " href="{% url 'project:ordinary:export' object.uid %}">{% trans 'Export' %}</a>
     {% endif %}
     {% if object.status in PROJECT_STATUS_CAN_END_SUBMIT %}
     <a type="button" class="btn btn-success" href="{% url 'project:ordinary:project_end' object.uid %}">{% trans 'Project End' %}</a>
+    {% endif %}
+    {% if object.status in PROJECT_STATUS_CAN_CANCEL %}
+    <a type="button" class="btn btn-danger" href="{% url 'project:ordinary:cancel' object.uid %}" onclick="if(confirm('{% trans 'Are you sure you want to cancel the application apply' %}?')==false)return false;">{% trans 'Cancel' %}</a>
     {% endif %}
     <a href="{% url 'project:ordinary:list' page=1 %}" class="btn btn-default btn-md ">{% trans 'Back' %}</a>
     {% endif %}
@@ -264,7 +264,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
-                    <button type="submit" class="btn btn-primary">{% trans 'Confirm' %}</button>
+                    <button type="submit" class="btn btn-info">{% trans 'Confirm' %}</button>
                 </div>
             </form>
         </div>

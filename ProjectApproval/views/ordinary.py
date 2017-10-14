@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-09 09:17
-# Last modified: 2017-10-05 10:01
+# Last modified: 2017-10-14 11:16
 # Filename: ordinary.py
 # Description:
 from django.views.generic import ListView, CreateView, UpdateView, RedirectView
@@ -55,7 +55,7 @@ class ProjectList(ProjectBase, PermissionListMixin, ListView):
     A view for displaying user-related projects list. GET only.
     """
     paginate_by = 12
-    ordering = ['status', '-apply_time']
+    ordering = ['-status', 'apply_time']
     raise_exception = True
     permission_required = 'view_project'
 
@@ -86,7 +86,6 @@ class ProjectAdd(ProjectBase, PermissionRequiredMixin, CreateView):
     """
     template_name = 'ProjectApproval/project_add.html'
     form_class = ActivityForm
-    success_url = reverse_lazy('project:index')
     form_post_url = 'project:ordinary:add'
     info_name = 'project'
     raise_exception = True
@@ -96,6 +95,9 @@ class ProjectAdd(ProjectBase, PermissionRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         kwargs['form_post_url'] = reverse(self.form_post_url)
         return super(CreateView, self).get_context_data(**kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('project:ordinary:detail', args=(self.object.uid,))
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -121,7 +123,7 @@ class ProjectAdd(ProjectBase, PermissionRequiredMixin, CreateView):
                      perms=['update', 'view'])
         assign_perms(self.info_name, self.object.workshop.group, self.object,
                      perms=['update', 'view'])
-        return HttpResponseRedirect(self.get_success_url())
+        return super().form_valid(form)
 
     def get_object(self, queryset=None):
         return None
@@ -135,9 +137,12 @@ class ProjectSocialAdd(ProjectBase, PermissionRequiredMixin, CreateView):
     slug_url_kwarg = 'uid'
     template_name = 'ProjectApproval/project_add_social.html'
     form_class = SocialInvitationForm
-    success_url = reverse_lazy('project:index')
     raise_exception = True
     permission_required = 'update_project'
+
+    def get_success_url(self):
+        return reverse_lazy('project:ordinary:detail',
+                            args=(self.object.project.uid,))
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -161,7 +166,7 @@ class ProjectSocialAdd(ProjectBase, PermissionRequiredMixin, CreateView):
         form.instance.project = project
         self.object = form.save()
         project.save()
-        return HttpResponseRedirect(self.get_success_url())
+        return super().form_valid(form)
 
 
 class ProjectUpdate(ProjectBase, PermissionRequiredMixin, UpdateView):
@@ -173,10 +178,12 @@ class ProjectUpdate(ProjectBase, PermissionRequiredMixin, UpdateView):
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
     form_class = ActivityForm
-    success_url = reverse_lazy('project:index')
     form_post_url = 'project:ordinary:update'
     raise_exception = True
     permission_required = 'update_project'
+
+    def get_success_url(self):
+        return reverse_lazy('project:ordinary:detail', args=(self.object.uid,))
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -249,7 +256,7 @@ class ProjectCancel(ProjectBase, PermissionRequiredMixin, DetailView):
     """
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
-    success_url = reverse_lazy('project:index')
+    success_url = reverse_lazy('project:ordinary:list', args=(1,))
     raise_exception = True
     permission_required = 'update_project'
 
@@ -291,16 +298,16 @@ class ProjectEnd(ProjectBase, PermissionRequiredMixin, UpdateView):
         kwargs['form_post_url'] = self.form_post_url
         return super(UpdateView, self).get_context_data(**kwargs)
 
+    def get_success_url(self):
+        return reverse_lazy('project:ordinary:detail', args=(self.object.uid,))
+
     def form_valid(self, form):
-        success_url = reverse_lazy('project:ordinary:detail',
-                                   args=(self.object.uid,))
         self.object.status = PROJECT_END_SUBMITTED
         self.object.save()
-        return HttpResponseRedirect(success_url)
+        return super().form_valid(form)
 
 
 class ProjectGetBudgetRow(TemplateView):
-
     template_name = 'ProjectApproval/budget.html'
 
     def get(self, request, *args, **kwargs):

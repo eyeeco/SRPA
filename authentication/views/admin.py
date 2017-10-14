@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-10-06 14:12
-# Last modified: 2017-10-14 10:21
+# Last modified: 2017-10-14 10:28
 # Filename: admin.py
 # Description:
 from django.views.generic import TemplateView, CreateView, UpdateView

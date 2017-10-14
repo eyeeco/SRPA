@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-14 10:22+0800\n"
+"POT-Creation-Date: 2017-10-14 10:32+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -322,6 +322,8 @@ msgstr "提交"
 #: ProjectApproval/templates/ProjectApproval/project_end.html:20
 #: ProjectApproval/templates/ProjectApproval/project_form.html:173
 #: SiteReservation/templates/SiteReservation/reservation_add.html:89
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:123
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:128
 #: SiteReservation/templates/SiteReservation/reservation_update.html:89
 #: authentication/templates/authentication/info_form.html:20
 msgid "Back"
@@ -362,7 +364,7 @@ msgstr "预算描述"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:182
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:257
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:136
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:138
 #: const/models.py:56
 msgid "Audit Opinion"
 msgstr "审核意见"
@@ -388,7 +390,7 @@ msgstr "确定取消该活动申请吗"
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:226
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:266
 #: SiteReservation/templates/SiteReservation/reservation_detail.html:118
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:145
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:147
 msgid "Cancel"
 msgstr "取消"
 
@@ -406,7 +408,7 @@ msgid "Project End"
 msgstr "活动结题"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:241
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:125
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:126
 msgid "Audit"
 msgstr "审核"
 
@@ -415,7 +417,7 @@ msgid "Ended Audit"
 msgstr "结题审核"
 
 #: ProjectApproval/templates/ProjectApproval/project_detail.html:267
-#: SiteReservation/templates/SiteReservation/reservation_detail.html:146
+#: SiteReservation/templates/SiteReservation/reservation_detail.html:148
 msgid "Confirm"
 msgstr "确认"
 
@@ -755,7 +757,6 @@ msgstr "场地信息"
 
 #: authentication/templates/authentication/admin/site_detail.html:18
 #: authentication/templates/authentication/admin/site_list.html:18
-#: authentication/templates/authentication/admin/workshop_detail.html:18
 #: const/models.py:22
 msgid "Site Description"
 msgstr "场地"
@@ -780,15 +781,16 @@ msgstr "更新教师信息"
 msgid "Workshop Info"
 msgstr "工社信息"
 
-#: authentication/templates/authentication/admin/workshop_detail.html:37
-#: authentication/templates/authentication/admin/workshop_update.html:8
-msgid "Update Workshop"
-msgstr "更新工社"
-
+#: authentication/templates/authentication/admin/workshop_detail.html:18
 #: authentication/templates/authentication/admin/workshop_list.html:18
 #: const/models.py:35
 msgid "Workshop Description"
 msgstr "工社"
+
+#: authentication/templates/authentication/admin/workshop_detail.html:37
+#: authentication/templates/authentication/admin/workshop_update.html:8
+msgid "Update Workshop"
+msgstr "更新工社"
 
 #: authentication/templates/authentication/admin/workshop_list.html:19
 msgid "Number of Current Staff"
@@ -857,6 +859,10 @@ msgstr "修改"
 #: const/forms.py:22
 msgid "Feedback teminated"
 msgstr "不通过"
+
+#: const/forms.py:29
+msgid "(Optional)Feedback Description"
+msgstr "(选填)审核意见"
 
 #: const/models.py:37
 msgid "Group"
