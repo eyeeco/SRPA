@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-08 20:06
-# Last modified: 2017-10-12 10:14
+# Last modified: 2017-10-12 12:12
 # Filename: info_update.py
 # Description:
 from django.views.generic import UpdateView

@@ -1,80 +1,97 @@
-{% load filters %}
+{% extends 'SiteReservation/base.html' %}
+{% load static %}
 {% load i18n %}
-<div id="form">
-    <div class="center-block">
-        <div class="col-sm-8 col-sm-offset-2 col-xs-12">
-            <form id="info-form" class="form-horizontal" method="POST" action="{{ form_post_url }}">
-                {% csrf_token %}
-                
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon input-group-addon-wide">{{form.site.label}}:</div>
-                        {{form.site|addcls:'form-control'}}
-                    </div>
-                    {% if form.site.errors %}
-                    <p class="text-danger">{{form.site.errors.as_text}}</p>
-                    {% endif %}
-                </div>
+{% load filters %}
 
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon input-group-addon-wide">{{form.workshop.label}}:</div>
-                        {{form.workshop|addcls:'form-control'}}
+{% block container %}
+<div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 srpa-background">
+    <h3>{% trans 'Site Reservation' %}</h3>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:status' %}">{% trans 'Reservation Status' %}</a></li>
+        {% if request.user.user_info.identity == USER_IDENTITY_STUDENT %}
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:ordinary:list' page=1 %}">{% trans 'My Reservations' %}</a></li>
+        <li class="li-page white active"><a type="button" class="btn" href="{% url 'reservation:ordinary:add' %}">{% trans 'New Reservation' %}</a></li>
+        {% elif request.user.user_info.identity == USER_IDENTITY_TEACHER %}
+        <li class="li-page white"><a type="button" class="btn" href="{% url 'reservation:admin:list' page=1 %}">{% trans 'Workshop Reservations' %}</a></li>
+        {% endif %}
+    </ul>
+    <div id="form">
+        <div class="center-block">
+            <div class="col-sm-8 col-sm-offset-2 col-xs-12">
+                <form id="info-form" class="form-horizontal" method="POST" action="{{ form_post_url }}">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon input-group-addon-wide">{{form.site.label}}:</div>
+                            {{form.site|addcls:'form-control'}}
+                        </div>
+                        {% if form.site.errors %}
+                        <p class="text-danger">{{form.site.errors.as_text}}</p>
+                        {% endif %}
                     </div>
-                    {% if form.workshop.errors %}
-                    <p class="text-danger">{{form.workshop.errors.as_text}}</p>
-                    {% endif %}
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon input-group-addon-wide">{{form.title.label}}:</div>
-                        {{form.title|addcls:'form-control'}}
+    
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon input-group-addon-wide">{{form.workshop.label}}:</div>
+                            {{form.workshop|addcls:'form-control'}}
+                        </div>
+                        {% if form.workshop.errors %}
+                        <p class="text-danger">{{form.workshop.errors.as_text}}</p>
+                        {% endif %}
                     </div>
-                    {% if form.title.errors %}
-                    <p class="text-danger">{{form.title.errors.as_text}}</p>
-                    {% endif %}
-                </div>
-
-                <div class="form-group">
-                    <div class="input-append input-group form_datetime_hour date">
-                        <div class="input-group-addon input-group-addon-wide">{{form.activity_time_from.label}}:</div>
-                        {{form.activity_time_from|addcls:'form-control'}}
-                        <span class="input-group-addon add-on"><span class="glyphicon glyphicon-remove"></span></span>
-                        <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+    
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon input-group-addon-wide">{{form.title.label}}:</div>
+                            {{form.title|addcls:'form-control'}}
+                        </div>
+                        {% if form.title.errors %}
+                        <p class="text-danger">{{form.title.errors.as_text}}</p>
+                        {% endif %}
                     </div>
-                    {% if form.activity_time_from.errors %}
-                    <p class="text-danger">{{form.activity_time_from.errors.as_text}}</p>
-                    {% endif %}
-                </div>
-
-                <div class="form-group">
-                    <div class="input-append input-group form_datetime_hour date">
-                        <div class="input-group-addon input-group-addon-wide">{{form.activity_time_to.label}}:</div>
-                        {{form.activity_time_to|addcls:'form-control'}}
-                        <span class="input-group-addon add-on"><span class="glyphicon glyphicon-remove"></span></span>
-                        <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+    
+                    <div class="form-group">
+                        <div class="input-append input-group form_datetime_hour date">
+                            <div class="input-group-addon input-group-addon-wide">{{form.activity_time_from.label}}:</div>
+                            {{form.activity_time_from|addcls:'form-control'}}
+                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        {% if form.activity_time_from.errors %}
+                        <p class="text-danger">{{form.activity_time_from.errors.as_text}}</p>
+                        {% endif %}
                     </div>
-                    {% if form.activity_time_to.errors %}
-                    <p class="text-danger">{{form.activity_time_to.errors.as_text}}</p>
-                    {% endif %}
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon input-group-addon-wide">{{form.comment.label}}:</div>
-                        {{form.comment|addcls:'form-control'}}
+    
+                    <div class="form-group">
+                        <div class="input-append input-group form_datetime_hour date">
+                            <div class="input-group-addon input-group-addon-wide">{{form.activity_time_to.label}}:</div>
+                            {{form.activity_time_to|addcls:'form-control'}}
+                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        {% if form.activity_time_to.errors %}
+                        <p class="text-danger">{{form.activity_time_to.errors.as_text}}</p>
+                        {% endif %}
                     </div>
-                    {% if form.comment.errors %}
-                    <p class="text-danger">{{form.comment.errors.as_text}}</p>
-                    {% endif %}
-                </div>
-
-                <div class="text-center">
-                    <button type="submit" class="btn btn-info btn-md btn-block">{% trans 'Submit' %}</button>
-                    <a href="{{ view.success_url }}" class="btn btn-default btn-md btn-block">{% trans 'Back' %}</a>
-                </div>
-            </form>
+    
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon input-group-addon-wide">{{form.comment.label}}:</div>
+                            {{form.comment|addcls:'form-control'}}
+                        </div>
+                        {% if form.comment.errors %}
+                        <p class="text-danger">{{form.comment.errors.as_text}}</p>
+                        {% endif %}
+                    </div>
+    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-info btn-md btn-block">{% trans 'Submit' %}</button>
+                        <a href="{{ view.success_url }}" class="btn btn-default btn-md btn-block">{% trans 'Back' %}</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+{% endblock %}
