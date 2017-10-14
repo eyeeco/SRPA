@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-09-14 14:39
-# Last modified: 2017-10-14 09:09
+# Last modified: 2017-10-14 09:57
 # Filename: forms.py
 # Description:
 from django import forms
@@ -30,7 +30,7 @@ class DateForm(forms.Form):
         queryset=Site.objects.all().order_by('desc'),
         widget=forms.Select(attrs={
             'class': 'form-control',
-            }))
+        }))
 
     def clean(self):
         cleaned_data = super(DateForm, self).clean()
@@ -66,7 +66,7 @@ class ReservationForm(ModelForm):
         cleaned_data = super(ReservationForm, self).clean()
         errors = {}
         t1 = cleaned_data.get('activity_time_from')
-        t2 = cleanmd_data.get('activity_time_to')
+        t2 = cleaned_data.get('activity_time_to')
 
         if t1.hour < 8 or t1.hour > 22:
             errors['activity_time_from'] = [
